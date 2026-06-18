@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Monochrome Photography Shop</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap">
+  <style>
+    body { font-family: 'Inter', system-ui, sans-serif; }
+    .bw-img {
+      filter: none;
+      cursor: pointer;
+      transition: filter 0.35s cubic-bezier(.4,0,.2,1), box-shadow 0.4s cubic-bezier(.4,0,.2,1);
+    }
+    .group:hover .bw-img, .group:focus-within .bw-img {
+      filter: none;
+      box-shadow: 0 0 24px 0 rgba(0,200,255,0.25), 0 0 0 4px rgba(0,200,255,0.12);
+      z-index: 1;
+    }
+    .card-clickable {
+      transition: box-shadow 0.28s cubic-bezier(.4,0,.2,1), outline 0.22s;
+      cursor: pointer;
+      outline: 0;
+    }
+    .card-clickable:focus-visible, .group:hover .card-clickable {
+      box-shadow: 0 0 0 2px #fff3, 0 6px 32px 0 #000c;
+      outline: 2px solid #fff2;
+      outline-offset: 2px;
+    }
+    .fade-in { opacity: 0; transform: translateY(30px) scale(0.97); filter: blur(8px); }
+    .visible { opacity: 1 !important; transform: none !important; filter: blur(0) !important; transition: all 0.7s cubic-bezier(.4,0,.2,1); }
+    
+    .hero-bg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: grayscale(1) contrast(1.2) brightness(0.4);
+      opacity: 0;
+      transition: opacity 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .hero-bg.active {
+      opacity: 1;
+    }
+    .hero-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.4) 50%, rgba(0,0,0,0.8) 100%);
+      z-index: 1;
+    }
+    .hero-content {
+      position: relative;
+      z-index: 2;
+    }
+    
+    @media (max-width: 640px) {
+      .modal-img-fullscreen { max-width: 99vw; max-h: 80vh; border-radius: 0.7rem;}
+    }
+
+    @keyframes marquee {
+      from { transform: translateX(0); }
+      to { transform: translateX(-100%); }
+    }
+    .animate-marquee {
+      animation: marquee 40s linear infinite;
+    }
+
+    .carousel-dot.bg-white {
+      background: #fff;
+      border: 2px solid #fff;
+    }
+
+    .special-blusas-card:hover .blusa-img-1:not(.hidden),
+    .special-blusas-card:focus-within .blusa-img-1:not(.hidden) {
+      opacity: 0;
+    }
+    .special-blusas-card:hover .blusa-img-2:not(.hidden),
+    .special-blusas-card:focus-within .blusa-img-2:not(.hidden) {
+      opacity: 1;
+    }
+
+    .blusa-color-btn:focus {
+      outline: none;
+      box-shadow: none;
+    }
+  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=IBM+Plex+Serif:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@300;400;500;600;700&family=Inter&display=swap" rel="stylesheet">
+</head>
+<body class="bg-black text-white antialiased min-h-screen flex flex-col">
+  <!-- Hero Section with Full Width Background -->
+  <section class="relative w-full min-h-screen flex flex-col overflow-hidden">
+    <!-- Background Image -->
+    <!-- Scrolling gallery in hero -->
+    <div class="absolute inset-0 w-full h-full flex overflow-hidden pointer-events-none select-none [mask-image:_linear-gradient(to_right,transparent_0,_black_128px,_black_calc(100%-128px),transparent_100%)] z-0">
+      <div class="flex-none flex animate-marquee space-x-4 pr-4">
+          <img src="https://neompzltxilcimodyvpd.supabase.co/storage/v1/object/public/flou/takeout-1-001/bamon-15.jpg" alt="Gallery image 1" class="h-full max-h-[100vh] rounded-2xl object-cover opacity-70">
+          <img src="https://neompzltxilcimodyvpd.supabase.co/storage/v1/object/public/flou/takeout-1-001/bamon-2.jpg" alt="Gallery image 2" class="h-full max-h-[100vh] rounded-2xl object-cover opacity-70">
+          <img src="https://neompzltxilcimodyvpd.supabase.co/storage/v1/object/public/flou/takeout-1-001/bamon-5.jpg" alt="Gallery image 3" class="h-full max-h-[100vh] rounded-2xl object-cover opacity-70">
+      </div>
+      <div class="flex-none flex animate-marquee space-x-4 pr-4" aria-hidden="true">
+          <img src="https://neompzltxilcimodyvpd.supabase.co/storage/v1/object/public/flou/takeout-1-001/bamon-15.jpg" alt="Gallery image 1" class="h-full max-h-[100vh] rounded-2xl object-cover opacity-70">
+          <img src="https://neompzltxilcimodyvpd.supabase.co/storage/v1/object/public/flou/takeout-1-001/bamon-2.jpg" alt="Gallery image 2" class="h-full max-h-[100vh] rounded-2xl object-cover opacity-70">
+          <img src="https://neompzltxilcimodyvpd.supabase.co/storage/v1/object/public/flou/takeout-1-001/bamon-5.jpg" alt="Gallery image 3" class="h-full max-h-[100vh] rounded-2xl object-cover opacity-70">
+      </div>
+    </div>
+    <!-- Overlay -->
+    <div class="hero-overlay"></div>
+    
+    <!-- Navigation -->
+    <header class="hero-content w-full px-6 py-6 md:px-16 flex flex-col md:flex-row items-center justify-between gap-4 relative z-10">
+      <div class="flex items-center gap-4">
+        <img src="https://neompzltxilcimodyvpd.supabase.co/storage/v1/object/public/flou//Captura%20de%20tela%202025-06-16%20224245.png" alt="logo" class="w-20 h-20 object-contain rounded-2xl">
+      </div>
+      <nav class="flex items-center gap-6">
+        <a href="#galeria" class="text-white/80 hover:text-white transition text-sm font-medium">Fotografias</a>
+        <a href="#montagens" class="text-white/80 hover:text-white transition text-sm font-medium">Montagens</a>
+        <a href="#comprar-obras" class="text-white/80 hover:text-white transition text-sm font-medium">Comprar</a>
+      </nav>
+    </header>
+
+    <!-- Hero Content -->
+    <div class="hero-content flex-1 flex items-center justify-center w-full px-4 sm:px-8 py-8 md:py-16">
+      <div class="w-full max-w-6xl mx-auto text-center">
+        <h1 class="text-5xl md:text-7xl lg:text-8xl font-semibold tracking-tight mb-6 fade-in">
+          Uma câmera, 
+          <span class="block bg-gradient-to-r from-white via-gray-300 to-gray-500 text-transparent bg-clip-text">uma bicicleta</span>
+        </h1>
+        <p class="text-xl md:text-2xl text-white/80 mb-8 max-w-3xl mx-auto fade-in">
+          Navegue pelo olhar de <span class="font-medium text-white">Hugo Carmo</span> ao redor do Brasil em suas ciclo viagens.
+        </p>
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-4 fade-in">
+          <a href="#comprar-obras" class="px-8 py-4 bg-white/10 border border-white/20 rounded-lg font-medium text-white hover:bg-white/20 transition text-lg flex items-center justify-center scroll-smooth">
+            <i data-lucide="arrow-down" class="w-5 h-5 inline-block mr-2"></i>
+            Comprar obras
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Content -->
+  <main class="flex-1 flex flex-col items-center w-full px-4 sm:px-8 py-16 max-w-6xl mx-auto">
+    <!-- Product Gallery -->
+    <section id="comprar-obras" class="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+      <!-- Product Card 1 -->
+      <div class="group fade-in">
+        <div tabindex="0" role="button" aria-label="Ver Louvre Reflections" class="card-clickable bg-gradient-to-br from-white/5 via-black/20 to-black/40 border border-white/10 rounded-2xl overflow-hidden shadow-xl flex flex-col glass relative outline-none transition-all duration-300">
+          <div class="relative">
+            <img src="https://neompzltxilcimodyvpd.supabase.co/storage/v1/object/public/flou//O4Q0iVKJrJTIaD5Bgino07xc7Nk.avif" alt="Monochrome Print 1" class="bw-img w-full h-64 object-cover transition-all duration-400" data-modal-img="Louvre Reflections">
+            <div class="absolute top-2 right-2 px-3 py-1 rounded-full bg-black/80 text-xs tracking-tight font-medium border border-white/10">7 unidades restantes</div>
+          </div>
+          <div class="flex-1 flex flex-col px-5 py-4">
+            <h2 class="text-xl font-semibold tracking-tight mb-1">Print ou Quadro com Moldura</h2>
+            <p class="text-gray-400 text-sm mb-2">Tamanho personalizado</p>
+            <div class="flex items-end justify-between mt-auto">
+              <span class="flex flex-col">
+                <span class="text-xs text-gray-400 leading-tight">A partir de</span>
+                <span class="text-lg font-medium">R$ 150,00</span>
+              </span>
+              <a href="https://api.whatsapp.com/send/?phone=5521999869645&text=Ol%C3%A1%2C+tenho+interesse+no+trabalho+do+Hugo+Carmo&type=phone_number&app_absent=0" target="_blank" rel="noopener" class="fast-buy px-4 py-2 rounded-lg bg-white/10 border border-white/20 font-semibold text-white transition hover:bg-white/20 hover:outline hover:outline-2 hover:outline-white flex items-center gap-2">
+                <i data-lucide="zap" class="w-4 h-4"></i>
+                Mais infos
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Product Card 2 -->
+      <div class="group fade-in">
+        <div tabindex="0" role="button" aria-label="Ver Shadow Tee" class="card-clickable bg-gradient-to-br from-white/5 via-black/30 to-black/60 border border-white/10 rounded-2xl overflow-hidden shadow-xl flex flex-col glass relative outline-none transition-all duration-300">
+          <div class="relative">
+            <img src="https://neompzltxilcimodyvpd.supabase.co/storage/v1/object/public/flou//CAKNHpmOuwd0UrABgtMmGYovZ3U.avif" alt="BW Shirt" class="bw-img w-full h-64 object-cover transition-all duration-400" data-modal-img="Shadow Tee">
+            <div class="absolute top-2 right-2 px-3 py-1 rounded-full bg-black/80 text-xs tracking-tight font-medium border border-white/10">6 unidades restantes</div>
+          </div>
+          <div class="flex-1 flex flex-col px-5 py-4">
+            <h2 class="text-xl font-semibold tracking-tight mb-1">Print ou Quadro com Moldura</h2>
+            <p class="text-gray-400 text-sm mb-2">Tamanho personalizado</p>
+            <div class="flex items-end justify-between mt-auto">
+              <span class="flex flex-col">
+                <span class="text-xs text-gray-400 leading-tight">A partir de</span>
+                <span class="text-lg font-medium">R$ 150,00</span>
+              </span>
+              <a href="https://api.whatsapp.com/send/?phone=5521999869645&text=Ol%C3%A1%2C+tenho+interesse+no+trabalho+do+Hugo+Carmo&type=phone_number&app_absent=0" target="_blank" rel="noopener" class="fast-buy px-4 py-2 rounded-lg bg-white/10 border border-white/20 font-semibold text-white transition hover:bg-white/20 hover:outline hover:outline-2 hover:outline-white flex items-center gap-2">
+                <i data-lucide="zap" class="w-4 h-4"></i>
+                Mais infos
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Product Card 4 -->
+      <div class="group fade-in">
+        <div tabindex="0" role="button" aria-label="Ver Photo Study 1" class="card-clickable bg-gradient-to-br from-white/5 via-black/20 to-black/40 border border-white/10 rounded-2xl overflow-hidden shadow-xl flex flex-col glass relative outline-none transition-all duration-300">
+          <div class="relative">
+            <img src="https://neompzltxilcimodyvpd.supabase.co/storage/v1/object/public/flou/takeout-1-001/013.jpg" alt="Monochrome Print 4" class="bw-img w-full h-64 object-cover transition-all duration-400" data-modal-img="Photo Study 1">
+            <div class="absolute top-2 right-2 px-3 py-1 rounded-full bg-black/80 text-xs tracking-tight font-medium border border-white/10">4 unidades restantes</div>
+          </div>
+          <div class="flex-1 flex flex-col px-5 py-4">
+            <h2 class="text-xl font-semibold tracking-tight mb-1">Print ou Quadro com Moldura</h2>
+            <p class="text-gray-400 text-sm mb-2">Tamanho personalizado</p>
+            <div class="flex items-end justify-between mt-auto">
+              <span class="flex flex-col">
+                <span class="text-xs text-gray-400 leading-tight">A partir de</span>
+                <span class="text-lg font-medium">R$ 150,00</span>
+              </span>
+              <a href="https://api.whatsapp.com/send/?phone=5521999869645&text=Ol%C3%A1%2C+tenho+interesse+no+trabalho+do+Hugo+Carmo&type=phone_number&app_absent=0" target="_blank" rel="noopener" class="fast-buy px-4 py-2 rounded-lg bg-white/10 border border-white/20 font-semibold text-white transition hover:bg-white/20 hover:outline hover:outline-2 hover:outline-white flex items-center gap-2">
+                <i data-lucide="zap" class="w-4 h-4"></i>
+                Mais infos
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Product Card 5 -->
+      <div class="group fade-in">
+        <div tabindex="0" role="button" aria-label="Ver Photo Study 2" class="card-clickable bg-gradient-to-br from-white/5 via-black/20 to-black/40 border border-white/10 rounded-2xl overflow-hidden shadow-xl flex flex-col glass relative outline-none transition-all duration-300">
+          <div class="relative">
+            <img src="https://neompzltxilcimodyvpd.supabase.co/storage/v1/object/public/flou/takeout-1-001/012.jpg" alt="Monochrome Print 5" class="bw-img w-full h-64 object-cover transition-all duration-400" data-modal-img="Photo Study 2">
+            <div class="absolute top-2 right-2 px-3 py-1 rounded-full bg-black/80 text-xs tracking-tight font-medium border border-white/10">3 unidades restantes</div>
+          </div>
+          <div class="flex-1 flex flex-col px-5 py-4">
+            <h2 class="text-xl font-semibold tracking-tight mb-1">Print ou Quadro com Moldura</h2>
+            <p class="text-gray-400 text-sm mb-2">Tamanho personalizado</p>
+            <div class="flex items-end justify-between mt-auto">
+              <span class="flex flex-col">
+                <span class="text-xs text-gray-400 leading-tight">A partir de</span>
+                <span class="text-lg font-medium">R$ 150,00</span>
+              </span>
+              <a href="https://api.whatsapp.com/send/?phone=5521999869645&text=Ol%C3%A1%2C+tenho+interesse+no+trabalho+do+Hugo+Carmo&type=phone_number&app_absent=0" target="_blank" rel="noopener" class="fast-buy px-4 py-2 rounded-lg bg-white/10 border border-white/20 font-semibold text-white transition hover:bg-white/20 hover:outline hover:outline-2 hover:outline-white flex items-center gap-2">
+                <i data-lucide="zap" class="w-4 h-4"></i>
+                Mais infos
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Product Card 6 -->
+      <div class="group fade-in">
+        <div tabindex="0" role="button" aria-label="Ver Photo Study 3" class="card-clickable bg-gradient-to-br from-white/5 via-black/20 to-black/40 border border-white/10 rounded-2xl overflow-hidden shadow-xl flex flex-col glass relative outline-none transition-all duration-300">
+          <div class="relative">
+            <img src="https://neompzltxilcimodyvpd.supabase.co/storage/v1/object/public/flou/takeout-1-001/011.jpg" alt="Monochrome Print 6" class="bw-img w-full h-64 object-cover transition-all duration-400" data-modal-img="Photo Study 3">
+            <div class="absolute top-2 right-2 px-3 py-1 rounded-full bg-black/80 text-xs tracking-tight font-medium border border-white/10">2 unidades restantes</div>
+          </div>
+          <div class="flex-1 flex flex-col px-5 py-4">
+            <h2 class="text-xl font-semibold tracking-tight mb-1">Print ou Quadro com Moldura</h2>
+            <p class="text-gray-400 text-sm mb-2">Tamanho personalizado</p>
+            <div class="flex items-end justify-between mt-auto">
+              <span class="flex flex-col">
+                <span class="text-xs text-gray-400 leading-tight">A partir de</span>
+                <span class="text-lg font-medium">R$ 150,00</span>
+              </span>
+              <a href="https://api.whatsapp.com/send/?phone=5521999869645&text=Ol%C3%A1%2C+tenho+interesse+no+trabalho+do+Hugo+Carmo&type=phone_number&app_absent=0" target="_blank" rel="noopener" class="fast-buy px-4 py-2 rounded-lg bg-white/10 border border-white/20 font-semibold text-white transition hover:bg-white/20 hover:outline hover:outline-2 hover:outline-white flex items-center gap-2">
+                <i data-lucide="zap" class="w-4 h-4"></i>
+                Mais infos
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Product Card 7 -->
+      <div class="group fade-in">
+        <div tabindex="0" role="button" aria-label="Ver Photo Study 4" class="card-clickable bg-gradient-to-br from-white/5 via-black/20 to-black/40 border border-white/10 rounded-2xl overflow-hidden shadow-xl flex flex-col glass relative outline-none transition-all duration-300">
+          <div class="relative">
+            <img src="https://neompzltxilcimodyvpd.supabase.co/storage/v1/object/public/flou/takeout-1-001/010.jpg" alt="Monochrome Print 7" class="bw-img w-full h-64 object-cover transition-all duration-400" data-modal-img="Photo Study 4">
+            <div class="absolute top-2 right-2 px-3 py-1 rounded-full bg-black/80 text-xs tracking-tight font-medium border border-white/10">1 unidade restante</div>
+          </div>
+          <div class="flex-1 flex flex-col px-5 py-4">
+            <h2 class="text-xl font-semibold tracking-tight mb-1">Print ou Quadro com Moldura</h2>
+            <p class="text-gray-400 text-sm mb-2">Tamanho personalizado</p>
+            <div class="flex items-end justify-between mt-auto">
+              <span class="flex flex-col">
+                <span class="text-xs text-gray-400 leading-tight">A partir de</span>
+                <span class="text-lg font-medium">R$ 150,00</span>
+              </span>
+              <a href="https://api.whatsapp.com/send/?phone=5521999869645&text=Ol%C3%A1%2C+tenho+interesse+no+trabalho+do+Hugo+Carmo&type=phone_number&app_absent=0" target="_blank" rel="noopener" class="fast-buy px-4 py-2 rounded-lg bg-white/10 border border-white/20 font-semibold text-white transition hover:bg-white/20 hover:outline hover:outline-2 hover:outline-white flex items-center gap-2">
+                <i data-lucide="zap" class="w-4 h-4"></i>
+                Mais infos
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Product Card 8 -->
+      <div class="group fade-in">
+        <div tabindex="0" role="button" aria-label="Ver Photo Study 5" class="card-clickable bg-gradient-to-br from-white/5 via-black/20 to-black/40 border border-white/10 rounded-2xl overflow-hidden shadow-xl flex flex-col glass relative outline-none transition-all duration-300">
+          <div class="relative">
+            <img src="https://neompzltxilcimodyvpd.supabase.co/storage/v1/object/public/flou/takeout-1-001/009.jpg" alt="Monochrome Print 8" class="bw-img w-full h-64 object-cover transition-all duration-400" data-modal-img="Photo Study 5">
+            <div class="absolute top-2 right-2 px-3 py-1 rounded-full bg-black/80 text-xs tracking-tight font-medium border border-white/10">7 unidades restantes</div>
+          </div>
+          <div class="flex-1 flex flex-col px-5 py-4">
+            <h2 class="text-xl font-semibold tracking-tight mb-1">Print ou Quadro com Moldura</h2>
+            <p class="text-gray-400 text-sm mb-2">Tamanho personalizado</p>
+            <div class="flex items-end justify-between mt-auto">
+              <span class="flex flex-col">
+                <span class="text-xs text-gray-400 leading-tight">A partir de</span>
+                <span class="text-lg font-medium">R$ 150,00</span>
+              </span>
+              <a href="https://api.whatsapp.com/send/?phone=5521999869645&text=Ol%C3%A1%2C+tenho+interesse+no+trabalho+do+Hugo+Carmo&type=phone_number&app_absent=0" target="_blank" rel="noopener" class="fast-buy px-4 py-2 rounded-lg bg-white/10 border border-white/20 font-semibold text-white transition hover:bg-white/20 hover:outline hover:outline-2 hover:outline-white flex items-center gap-2">
+                <i data-lucide="zap" class="w-4 h-4"></i>
+                Mais infos
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Product Card 9 -->
+      <div class="group fade-in">
+        <div tabindex="0" role="button" aria-label="Ver Photo Study 6" class="card-clickable bg-gradient-to-br from-white/5 via-black/20 to-black/40 border border-white/10 rounded-2xl overflow-hidden shadow-xl flex flex-col glass relative outline-none transition-all duration-300">
+          <div class="relative">
+            <img src="https://neompzltxilcimodyvpd.supabase.co/storage/v1/object/public/flou/takeout-1-001/008.jpg" alt="Monochrome Print 9" class="bw-img w-full h-64 object-cover transition-all duration-400" data-modal-img="Photo Study 6">
+            <div class="absolute top-2 right-2 px-3 py-1 rounded-full bg-black/80 text-xs tracking-tight font-medium border border-white/10">6 unidades restantes</div>
+          </div>
+          <div class="flex-1 flex flex-col px-5 py-4">
+            <h2 class="text-xl font-semibold tracking-tight mb-1">Print ou Quadro com Moldura</h2>
+            <p class="text-gray-400 text-sm mb-2">Tamanho personalizado</p>
+            <div class="flex items-end justify-between mt-auto">
+              <span class="flex flex-col">
+                <span class="text-xs text-gray-400 leading-tight">A partir de</span>
+                <span class="text-lg font-medium">R$ 150,00</span>
+              </span>
+              <a href="https://api.whatsapp.com/send/?phone=5521999869645&text=Ol%C3%A1%2C+tenho+interesse+no+trabalho+do+Hugo+Carmo&type=phone_number&app_absent=0" target="_blank" rel="noopener" class="fast-buy px-4 py-2 rounded-lg bg-white/10 border border-white/20 font-semibold text-white transition hover:bg-white/20 hover:outline hover:outline-2 hover:outline-white flex items-center gap-2">
+                <i data-lucide="zap" class="w-4 h-4"></i>
+                Mais infos
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Novo Card Especial -->
+      <div class="group fade-in">
+        <div tabindex="0" role="button" aria-label="Ver Blusa Especial" class="card-clickable bg-gradient-to-br from-white/5 via-black/20 to-black/40 border border-white/10 rounded-2xl overflow-hidden shadow-xl flex flex-col glass relative outline-none transition-all duration-300 special-blusas-card">
+          <div class="flex gap-2 absolute left-4 top-4 z-10">
+            <button class="blusa-color-btn w-6 h-6 rounded-full border-2 border-white bg-white ring-2 ring-white ring-offset-2 ring-offset-black focus:outline-none" data-color="branco" aria-label="Blusa branca"></button>
+            <button class="blusa-color-btn w-6 h-6 rounded-full border-2 border-white bg-black focus:outline-none" data-color="preto" aria-label="Blusa preta"></button>
+          </div>
+          <div class="relative">
+            <!-- Blusa branca -->
+            <img src="https://itlpvpdwgiwbdpqheemw.supabase.co/storage/v1/object/public/contratos//WhatsApp%20Image%202025-06-20%20at%2009.57.57.jpeg" alt="Blusa branca frente" class="bw-img w-full h-64 object-cover transition-all duration-400 blusa-img-1 blusa-branca">
+            <img src="https://itlpvpdwgiwbdpqheemw.supabase.co/storage/v1/object/public/contratos//WhatsApp%20Image%202025-06-20%20at%2009.57.56.jpeg" alt="Blusa branca costas" class="bw-img w-full h-64 object-cover transition-all duration-400 blusa-img-2 blusa-branca absolute inset-0 opacity-0 pointer-events-none">
+            <!-- Blusa preta -->
+            <img src="https://itlpvpdwgiwbdpqheemw.supabase.co/storage/v1/object/public/contratos//WhatsApp%20Image%202025-06-20%20at%2009%20(1).54" alt="Blusa preta frente" class="bw-img w-full h-64 object-cover transition-all duration-400 blusa-img-1 blusa-preta hidden">
+            <img src="https://itlpvpdwgiwbdpqheemw.supabase.co/storage/v1/object/public/contratos//WhatsApp%20Image%202025-06-20%20at%2009%20(1).54" alt="Blusa preta costas" class="bw-img w-full h-64 object-cover transition-all duration-400 blusa-img-2 blusa-preta absolute inset-0 opacity-0 pointer-events-none hidden">
+            <div class="absolute top-2 right-2 px-3 py-1 rounded-full bg-black/80 text-xs tracking-tight font-medium border border-white/10">3 unidades restantes</div>
+          </div>
+          <div class="flex-1 flex flex-col px-5 py-4">
+            <h2 class="text-xl font-semibold tracking-tight mb-1">Blusa especial</h2>
+            <p class="text-gray-400 text-sm mb-2">Tamanho personalizado</p>
+            <div class="flex items-end justify-between mt-auto">
+              <span class="flex flex-col">
+                <span class="text-xs text-gray-400 leading-tight">A partir de</span>
+                <span class="text-lg font-medium">R$ 150,00</span>
+              </span>
+              <a href="https://api.whatsapp.com/send/?phone=5521999869645&text=Ol%C3%A1%2C+tenho+interesse+no+trabalho+do+Hugo+Carmo&type=phone_number&app_absent=0" target="_blank" rel="noopener" class="fast-buy px-4 py-2 rounded-lg bg-white/10 border border-white/20 font-semibold text-white transition hover:bg-white/20 hover:outline hover:outline-2 hover:outline-white flex items-center gap-2">
+                <i data-lucide="zap" class="w-4 h-4"></i>
+                Mais infos
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Galeria de Fotografias (showcase) -->
+  <section id="galeria" class="w-full max-w-6xl mx-auto px-4 sm:px-8 py-16 fade-in">
+    <div class="mb-10 text-center">
+      <h2 class="text-4xl md:text-6xl font-semibold tracking-tight mb-3">Fotografias</h2>
+      <p class="text-white/70 max-w-2xl mx-auto">Uma jornada visual pelo Brasil e além — natureza, cotidiano e as histórias encontradas pelo caminho. Clique para ampliar.</p>
+    </div>
+    <div class="columns-1 sm:columns-2 lg:columns-3 gap-4">
+        <figure class="group card-clickable relative mb-4 break-inside-avoid overflow-hidden rounded-xl bg-white/5">
+          <img src="images/foto-01-rio-sao-francisco-2015.jpg" alt="Rio São Francisco, 2015" loading="lazy" class="bw-img w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]">
+          <figcaption class="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent px-4 pt-10 pb-3 text-sm text-white/90 opacity-0 translate-y-2 transition-all duration-300 group-hover:opacity-100 group-hover:translate-y-0">Rio São Francisco, 2015</figcaption>
+        </figure>
+        <figure class="group card-clickable relative mb-4 break-inside-avoid overflow-hidden rounded-xl bg-white/5">
+          <img src="images/foto-02-alagoas-2015.jpg" alt="Alagoas, 2015" loading="lazy" class="bw-img w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]">
+          <figcaption class="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent px-4 pt-10 pb-3 text-sm text-white/90 opacity-0 translate-y-2 transition-all duration-300 group-hover:opacity-100 group-hover:translate-y-0">Alagoas, 2015</figcaption>
+        </figure>
+        <figure class="group card-clickable relative mb-4 break-inside-avoid overflow-hidden rounded-xl bg-white/5">
+          <img src="images/foto-03-pernambuco-2017.jpg" alt="Pernambuco, 2017" loading="lazy" class="bw-img w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]">
+          <figcaption class="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent px-4 pt-10 pb-3 text-sm text-white/90 opacity-0 translate-y-2 transition-all duration-300 group-hover:opacity-100 group-hover:translate-y-0">Pernambuco, 2017</figcaption>
+        </figure>
+        <figure class="group card-clickable relative mb-4 break-inside-avoid overflow-hidden rounded-xl bg-white/5">
+          <img src="images/foto-04-alagoas-2016.jpg" alt="Alagoas, 2016" loading="lazy" class="bw-img w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]">
+          <figcaption class="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent px-4 pt-10 pb-3 text-sm text-white/90 opacity-0 translate-y-2 transition-all duration-300 group-hover:opacity-100 group-hover:translate-y-0">Alagoas, 2016</figcaption>
+        </figure>
+        <figure class="group card-clickable relative mb-4 break-inside-avoid overflow-hidden rounded-xl bg-white/5">
+          <img src="images/foto-05-alagoas-2015.jpg" alt="Alagoas, 2015" loading="lazy" class="bw-img w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]">
+          <figcaption class="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent px-4 pt-10 pb-3 text-sm text-white/90 opacity-0 translate-y-2 transition-all duration-300 group-hover:opacity-100 group-hover:translate-y-0">Alagoas, 2015</figcaption>
+        </figure>
+        <figure class="group card-clickable relative mb-4 break-inside-avoid overflow-hidden rounded-xl bg-white/5">
+          <img src="images/foto-06-rio-de-janeiro-2014.jpg" alt="Rio de Janeiro, 2014" loading="lazy" class="bw-img w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]">
+          <figcaption class="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent px-4 pt-10 pb-3 text-sm text-white/90 opacity-0 translate-y-2 transition-all duration-300 group-hover:opacity-100 group-hover:translate-y-0">Rio de Janeiro, 2014</figcaption>
+        </figure>
+        <figure class="group card-clickable relative mb-4 break-inside-avoid overflow-hidden rounded-xl bg-white/5">
+          <img src="images/foto-07-rio-sao-francisco-2017.jpg" alt="Rio São Francisco, 2017" loading="lazy" class="bw-img w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]">
+          <figcaption class="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent px-4 pt-10 pb-3 text-sm text-white/90 opacity-0 translate-y-2 transition-all duration-300 group-hover:opacity-100 group-hover:translate-y-0">Rio São Francisco, 2017</figcaption>
+        </figure>
+        <figure class="group card-clickable relative mb-4 break-inside-avoid overflow-hidden rounded-xl bg-white/5">
+          <img src="images/foto-08-alagoas-2016.jpg" alt="Alagoas, 2016" loading="lazy" class="bw-img w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]">
+          <figcaption class="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent px-4 pt-10 pb-3 text-sm text-white/90 opacity-0 translate-y-2 transition-all duration-300 group-hover:opacity-100 group-hover:translate-y-0">Alagoas, 2016</figcaption>
+        </figure>
+        <figure class="group card-clickable relative mb-4 break-inside-avoid overflow-hidden rounded-xl bg-white/5">
+          <img src="images/foto-09-alagoas-2016.jpg" alt="Alagoas, 2016" loading="lazy" class="bw-img w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]">
+          <figcaption class="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent px-4 pt-10 pb-3 text-sm text-white/90 opacity-0 translate-y-2 transition-all duration-300 group-hover:opacity-100 group-hover:translate-y-0">Alagoas, 2016</figcaption>
+        </figure>
+        <figure class="group card-clickable relative mb-4 break-inside-avoid overflow-hidden rounded-xl bg-white/5">
+          <img src="images/foto-10-alagoas-2016.jpg" alt="Alagoas, 2016" loading="lazy" class="bw-img w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]">
+          <figcaption class="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent px-4 pt-10 pb-3 text-sm text-white/90 opacity-0 translate-y-2 transition-all duration-300 group-hover:opacity-100 group-hover:translate-y-0">Alagoas, 2016</figcaption>
+        </figure>
+        <figure class="group card-clickable relative mb-4 break-inside-avoid overflow-hidden rounded-xl bg-white/5">
+          <img src="images/foto-11-sertao-de-pernambuco-2015.jpg" alt="Sertão de Pernambuco, 2015" loading="lazy" class="bw-img w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]">
+          <figcaption class="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent px-4 pt-10 pb-3 text-sm text-white/90 opacity-0 translate-y-2 transition-all duration-300 group-hover:opacity-100 group-hover:translate-y-0">Sertão de Pernambuco, 2015</figcaption>
+        </figure>
+        <figure class="group card-clickable relative mb-4 break-inside-avoid overflow-hidden rounded-xl bg-white/5">
+          <img src="images/foto-12-alagoas-2015.jpg" alt="Alagoas, 2015" loading="lazy" class="bw-img w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]">
+          <figcaption class="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent px-4 pt-10 pb-3 text-sm text-white/90 opacity-0 translate-y-2 transition-all duration-300 group-hover:opacity-100 group-hover:translate-y-0">Alagoas, 2015</figcaption>
+        </figure>
+        <figure class="group card-clickable relative mb-4 break-inside-avoid overflow-hidden rounded-xl bg-white/5">
+          <img src="images/foto-13-alagoas-2015.jpg" alt="Alagoas, 2015" loading="lazy" class="bw-img w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]">
+          <figcaption class="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent px-4 pt-10 pb-3 text-sm text-white/90 opacity-0 translate-y-2 transition-all duration-300 group-hover:opacity-100 group-hover:translate-y-0">Alagoas, 2015</figcaption>
+        </figure>
+        <figure class="group card-clickable relative mb-4 break-inside-avoid overflow-hidden rounded-xl bg-white/5">
+          <img src="images/foto-14-alagoas-2015.jpg" alt="Alagoas, 2015" loading="lazy" class="bw-img w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]">
+          <figcaption class="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent px-4 pt-10 pb-3 text-sm text-white/90 opacity-0 translate-y-2 transition-all duration-300 group-hover:opacity-100 group-hover:translate-y-0">Alagoas, 2015</figcaption>
+        </figure>
+        <figure class="group card-clickable relative mb-4 break-inside-avoid overflow-hidden rounded-xl bg-white/5">
+          <img src="images/foto-15-3-irmaos-rio-de-janeiro-2015.jpg" alt="3 irmãos, Rio de Janeiro, 2015" loading="lazy" class="bw-img w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]">
+          <figcaption class="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent px-4 pt-10 pb-3 text-sm text-white/90 opacity-0 translate-y-2 transition-all duration-300 group-hover:opacity-100 group-hover:translate-y-0">3 irmãos, Rio de Janeiro, 2015</figcaption>
+        </figure>
+        <figure class="group card-clickable relative mb-4 break-inside-avoid overflow-hidden rounded-xl bg-white/5">
+          <img src="images/foto-16-3-irmaos-rio-de-janeiro-2015.jpg" alt="3 irmãos, Rio de Janeiro, 2015" loading="lazy" class="bw-img w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]">
+          <figcaption class="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent px-4 pt-10 pb-3 text-sm text-white/90 opacity-0 translate-y-2 transition-all duration-300 group-hover:opacity-100 group-hover:translate-y-0">3 irmãos, Rio de Janeiro, 2015</figcaption>
+        </figure>
+        <figure class="group card-clickable relative mb-4 break-inside-avoid overflow-hidden rounded-xl bg-white/5">
+          <img src="images/foto-17-3-irmaos-rio-de-janeiro-2015.jpg" alt="3 irmãos, Rio de Janeiro, 2015" loading="lazy" class="bw-img w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]">
+          <figcaption class="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent px-4 pt-10 pb-3 text-sm text-white/90 opacity-0 translate-y-2 transition-all duration-300 group-hover:opacity-100 group-hover:translate-y-0">3 irmãos, Rio de Janeiro, 2015</figcaption>
+        </figure>
+        <figure class="group card-clickable relative mb-4 break-inside-avoid overflow-hidden rounded-xl bg-white/5">
+          <img src="images/foto-18-alagoas-2017.jpg" alt="Alagoas, 2017" loading="lazy" class="bw-img w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]">
+          <figcaption class="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent px-4 pt-10 pb-3 text-sm text-white/90 opacity-0 translate-y-2 transition-all duration-300 group-hover:opacity-100 group-hover:translate-y-0">Alagoas, 2017</figcaption>
+        </figure>
+        <figure class="group card-clickable relative mb-4 break-inside-avoid overflow-hidden rounded-xl bg-white/5">
+          <img src="images/foto-19-curral-2018.jpg" alt="Curral, 2018" loading="lazy" class="bw-img w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]">
+          <figcaption class="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent px-4 pt-10 pb-3 text-sm text-white/90 opacity-0 translate-y-2 transition-all duration-300 group-hover:opacity-100 group-hover:translate-y-0">Curral, 2018</figcaption>
+        </figure>
+        <figure class="group card-clickable relative mb-4 break-inside-avoid overflow-hidden rounded-xl bg-white/5">
+          <img src="images/foto-20-alagoas-2014.jpg" alt="Alagoas, 2014" loading="lazy" class="bw-img w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]">
+          <figcaption class="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent px-4 pt-10 pb-3 text-sm text-white/90 opacity-0 translate-y-2 transition-all duration-300 group-hover:opacity-100 group-hover:translate-y-0">Alagoas, 2014</figcaption>
+        </figure>
+        <figure class="group card-clickable relative mb-4 break-inside-avoid overflow-hidden rounded-xl bg-white/5">
+          <img src="images/foto-21-alagoas-2015.jpg" alt="Alagoas, 2015" loading="lazy" class="bw-img w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]">
+          <figcaption class="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent px-4 pt-10 pb-3 text-sm text-white/90 opacity-0 translate-y-2 transition-all duration-300 group-hover:opacity-100 group-hover:translate-y-0">Alagoas, 2015</figcaption>
+        </figure>
+        <figure class="group card-clickable relative mb-4 break-inside-avoid overflow-hidden rounded-xl bg-white/5">
+          <img src="images/foto-22-rio-sao-francisco-2015.jpg" alt="Rio São Francisco, 2015" loading="lazy" class="bw-img w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]">
+          <figcaption class="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent px-4 pt-10 pb-3 text-sm text-white/90 opacity-0 translate-y-2 transition-all duration-300 group-hover:opacity-100 group-hover:translate-y-0">Rio São Francisco, 2015</figcaption>
+        </figure>
+        <figure class="group card-clickable relative mb-4 break-inside-avoid overflow-hidden rounded-xl bg-white/5">
+          <img src="images/foto-23-parque-estadual-terra-ronca-2015.jpg" alt="Parque Estadual Terra Ronca, 2015" loading="lazy" class="bw-img w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]">
+          <figcaption class="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent px-4 pt-10 pb-3 text-sm text-white/90 opacity-0 translate-y-2 transition-all duration-300 group-hover:opacity-100 group-hover:translate-y-0">Parque Estadual Terra Ronca, 2015</figcaption>
+        </figure>
+        <figure class="group card-clickable relative mb-4 break-inside-avoid overflow-hidden rounded-xl bg-white/5">
+          <img src="images/foto-24-rio-de-janeiro-2014.jpg" alt="Rio de Janeiro, 2014" loading="lazy" class="bw-img w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]">
+          <figcaption class="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent px-4 pt-10 pb-3 text-sm text-white/90 opacity-0 translate-y-2 transition-all duration-300 group-hover:opacity-100 group-hover:translate-y-0">Rio de Janeiro, 2014</figcaption>
+        </figure>
+        <figure class="group card-clickable relative mb-4 break-inside-avoid overflow-hidden rounded-xl bg-white/5">
+          <img src="images/foto-25-alagoas-2013.jpg" alt="Alagoas, 2013" loading="lazy" class="bw-img w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]">
+          <figcaption class="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent px-4 pt-10 pb-3 text-sm text-white/90 opacity-0 translate-y-2 transition-all duration-300 group-hover:opacity-100 group-hover:translate-y-0">Alagoas, 2013</figcaption>
+        </figure>
+        <figure class="group card-clickable relative mb-4 break-inside-avoid overflow-hidden rounded-xl bg-white/5">
+          <img src="images/foto-26-rio-sao-francisco-2015.jpg" alt="Rio São Francisco, 2015" loading="lazy" class="bw-img w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]">
+          <figcaption class="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent px-4 pt-10 pb-3 text-sm text-white/90 opacity-0 translate-y-2 transition-all duration-300 group-hover:opacity-100 group-hover:translate-y-0">Rio São Francisco, 2015</figcaption>
+        </figure>
+        <figure class="group card-clickable relative mb-4 break-inside-avoid overflow-hidden rounded-xl bg-white/5">
+          <img src="images/foto-27-uruguai-2022.jpg" alt="Uruguai, 2022" loading="lazy" class="bw-img w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]">
+          <figcaption class="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent px-4 pt-10 pb-3 text-sm text-white/90 opacity-0 translate-y-2 transition-all duration-300 group-hover:opacity-100 group-hover:translate-y-0">Uruguai, 2022</figcaption>
+        </figure>
+        <figure class="group card-clickable relative mb-4 break-inside-avoid overflow-hidden rounded-xl bg-white/5">
+          <img src="images/foto-28-alagoas-2015.jpg" alt="Alagoas, 2015" loading="lazy" class="bw-img w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]">
+          <figcaption class="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent px-4 pt-10 pb-3 text-sm text-white/90 opacity-0 translate-y-2 transition-all duration-300 group-hover:opacity-100 group-hover:translate-y-0">Alagoas, 2015</figcaption>
+        </figure>
+        <figure class="group card-clickable relative mb-4 break-inside-avoid overflow-hidden rounded-xl bg-white/5">
+          <img src="images/foto-29-alagoas-2015.jpg" alt="Alagoas, 2015" loading="lazy" class="bw-img w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]">
+          <figcaption class="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent px-4 pt-10 pb-3 text-sm text-white/90 opacity-0 translate-y-2 transition-all duration-300 group-hover:opacity-100 group-hover:translate-y-0">Alagoas, 2015</figcaption>
+        </figure>
+        <figure class="group card-clickable relative mb-4 break-inside-avoid overflow-hidden rounded-xl bg-white/5">
+          <img src="images/foto-30-alagoas-2015.jpg" alt="Alagoas, 2015" loading="lazy" class="bw-img w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]">
+          <figcaption class="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent px-4 pt-10 pb-3 text-sm text-white/90 opacity-0 translate-y-2 transition-all duration-300 group-hover:opacity-100 group-hover:translate-y-0">Alagoas, 2015</figcaption>
+        </figure>
+        <figure class="group card-clickable relative mb-4 break-inside-avoid overflow-hidden rounded-xl bg-white/5">
+          <img src="images/foto-31-alagoas-2016.jpg" alt="Alagoas, 2016" loading="lazy" class="bw-img w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]">
+          <figcaption class="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent px-4 pt-10 pb-3 text-sm text-white/90 opacity-0 translate-y-2 transition-all duration-300 group-hover:opacity-100 group-hover:translate-y-0">Alagoas, 2016</figcaption>
+        </figure>
+        <figure class="group card-clickable relative mb-4 break-inside-avoid overflow-hidden rounded-xl bg-white/5">
+          <img src="images/foto-32-alagoas-2014.jpg" alt="Alagoas, 2014" loading="lazy" class="bw-img w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]">
+          <figcaption class="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent px-4 pt-10 pb-3 text-sm text-white/90 opacity-0 translate-y-2 transition-all duration-300 group-hover:opacity-100 group-hover:translate-y-0">Alagoas, 2014</figcaption>
+        </figure>
+        <figure class="group card-clickable relative mb-4 break-inside-avoid overflow-hidden rounded-xl bg-white/5">
+          <img src="images/foto-33-alagoas-2014.jpg" alt="Alagoas, 2014" loading="lazy" class="bw-img w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]">
+          <figcaption class="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent px-4 pt-10 pb-3 text-sm text-white/90 opacity-0 translate-y-2 transition-all duration-300 group-hover:opacity-100 group-hover:translate-y-0">Alagoas, 2014</figcaption>
+        </figure>
+        <figure class="group card-clickable relative mb-4 break-inside-avoid overflow-hidden rounded-xl bg-white/5">
+          <img src="images/foto-34-alagoas-2014.jpg" alt="Alagoas, 2014" loading="lazy" class="bw-img w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]">
+          <figcaption class="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent px-4 pt-10 pb-3 text-sm text-white/90 opacity-0 translate-y-2 transition-all duration-300 group-hover:opacity-100 group-hover:translate-y-0">Alagoas, 2014</figcaption>
+        </figure>
+    </div>
+  </section>
+
+  <!-- Sugestões de montagem (na sua parede) -->
+  <section id="montagens" class="w-full max-w-6xl mx-auto px-4 sm:px-8 pb-16 fade-in">
+    <div class="mb-10 text-center">
+      <h2 class="text-3xl md:text-5xl font-semibold tracking-tight mb-3">Na sua parede</h2>
+      <p class="text-white/70 max-w-2xl mx-auto">Sugestões de montagem para inspirar a escolha certa e deixar sua casa mais charmosa.</p>
+    </div>
+    <div class="columns-1 sm:columns-2 lg:columns-3 gap-4">
+        <figure class="group card-clickable relative mb-4 break-inside-avoid overflow-hidden rounded-xl bg-white/5">
+          <img src="images/montagem-01.jpg" alt="Sugestão de montagem - obra emoldurada na parede" loading="lazy" class="bw-img w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]">
+        </figure>
+        <figure class="group card-clickable relative mb-4 break-inside-avoid overflow-hidden rounded-xl bg-white/5">
+          <img src="images/montagem-02.jpg" alt="Sugestão de montagem - obra emoldurada na parede" loading="lazy" class="bw-img w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]">
+        </figure>
+        <figure class="group card-clickable relative mb-4 break-inside-avoid overflow-hidden rounded-xl bg-white/5">
+          <img src="images/montagem-03.jpg" alt="Sugestão de montagem - obra emoldurada na parede" loading="lazy" class="bw-img w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]">
+        </figure>
+        <figure class="group card-clickable relative mb-4 break-inside-avoid overflow-hidden rounded-xl bg-white/5">
+          <img src="images/montagem-04.jpg" alt="Sugestão de montagem - obra emoldurada na parede" loading="lazy" class="bw-img w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]">
+        </figure>
+        <figure class="group card-clickable relative mb-4 break-inside-avoid overflow-hidden rounded-xl bg-white/5">
+          <img src="images/montagem-05.jpg" alt="Sugestão de montagem - obra emoldurada na parede" loading="lazy" class="bw-img w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]">
+        </figure>
+        <figure class="group card-clickable relative mb-4 break-inside-avoid overflow-hidden rounded-xl bg-white/5">
+          <img src="images/montagem-06.jpg" alt="Sugestão de montagem - obra emoldurada na parede" loading="lazy" class="bw-img w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]">
+        </figure>
+        <figure class="group card-clickable relative mb-4 break-inside-avoid overflow-hidden rounded-xl bg-white/5">
+          <img src="images/montagem-07.jpg" alt="Sugestão de montagem - obra emoldurada na parede" loading="lazy" class="bw-img w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]">
+        </figure>
+        <figure class="group card-clickable relative mb-4 break-inside-avoid overflow-hidden rounded-xl bg-white/5">
+          <img src="images/montagem-08.jpg" alt="Sugestão de montagem - obra emoldurada na parede" loading="lazy" class="bw-img w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]">
+        </figure>
+        <figure class="group card-clickable relative mb-4 break-inside-avoid overflow-hidden rounded-xl bg-white/5">
+          <img src="images/montagem-09.jpg" alt="Sugestão de montagem - obra emoldurada na parede" loading="lazy" class="bw-img w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]">
+        </figure>
+    </div>
+  </section>
+
+  <!-- Scrolling gallery (penúltima sessão) -->
+  <div class="w-full flex overflow-hidden [mask-image:_linear-gradient(to_right,transparent_0,_black_128px,_black_calc(100%-128px),transparent_100%)]">
+    <div class="flex-none flex animate-marquee space-x-4 pr-4">
+        <img src="https://neompzltxilcimodyvpd.supabase.co/storage/v1/object/public/flou/takeout-1-001/bamon-15.jpg" alt="Gallery image 1" class="h-80 rounded-2xl object-cover">
+        <img src="https://neompzltxilcimodyvpd.supabase.co/storage/v1/object/public/flou/takeout-1-001/bamon-2.jpg" alt="Gallery image 2" class="h-80 rounded-2xl object-cover">
+        <img src="https://neompzltxilcimodyvpd.supabase.co/storage/v1/object/public/flou/takeout-1-001/bamon-5.jpg" alt="Gallery image 3" class="h-80 rounded-2xl object-cover">
+    </div>
+    <div class="flex-none flex animate-marquee space-x-4 pr-4" aria-hidden="true">
+        <img src="https://neompzltxilcimodyvpd.supabase.co/storage/v1/object/public/flou/takeout-1-001/bamon-15.jpg" alt="Gallery image 1" class="h-80 rounded-2xl object-cover">
+        <img src="https://neompzltxilcimodyvpd.supabase.co/storage/v1/object/public/flou/takeout-1-001/bamon-2.jpg" alt="Gallery image 2" class="h-80 rounded-2xl object-cover">
+        <img src="https://neompzltxilcimodyvpd.supabase.co/storage/v1/object/public/flou/takeout-1-001/bamon-5.jpg" alt="Gallery image 3" class="h-80 rounded-2xl object-cover">
+    </div>
+  </div>
+
+  <!-- CTA Section -->
+  <section class="relative w-full my-16 fade-in">
+    <div class="max-w-6xl mx-auto px-4 sm:px-8">
+      <div class="relative rounded-2xl overflow-hidden bg-black py-24 sm:py-32 px-6">
+        <img src="https://neompzltxilcimodyvpd.supabase.co/storage/v1/object/public/flou/takeout-1-001/007.jpg" alt="Sea landscape" class="absolute inset-0 w-full h-full object-cover opacity-40 scale-[2.5]">
+        <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
+        <div class="relative text-center">
+          <h2 class="text-4xl md:text-5xl font-semibold tracking-tight text-white mb-4">
+            Gostou do que viu?
+          </h2>
+          <p class="text-lg md:text-xl text-white/80 mb-8 max-w-2xl mx-auto">
+            Acompanhe minhas ciclo-viagens e projetos fotográficos pelo Brasil e pelo mundo.
+          </p>
+          <a href="https://api.whatsapp.com/send/?phone=5521999869645&text=Ol%C3%A1%2C+tenho+interesse+no+trabalho+do+Hugo+Carmo&type=phone_number&app_absent=0" target="_blank" rel="noopener" class="px-8 py-4 bg-white text-black rounded-lg font-medium hover:bg-white/90 transition-transform hover:scale-105 text-lg inline-flex items-center gap-2 group">
+            Confira meu trabalho
+            <i data-lucide="arrow-right" class="w-5 h-5 transition-transform group-hover:translate-x-1"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Seção de Impacto Visual: Exposições -->
+  <section class="relative w-full my-16 fade-in">
+    <div class="max-w-5xl mx-auto px-4 sm:px-8">
+      <div class="relative rounded-2xl overflow-hidden bg-black py-24 sm:py-32 px-6 flex items-center justify-center min-h-[420px]">
+        <img src="https://neompzltxilcimodyvpd.supabase.co/storage/v1/object/public/flou/takeout-1-001/bamon-15.jpg" alt="Exposição Hugo Carmo" class="absolute inset-0 w-full h-full object-cover opacity-50 scale-125">
+        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
+        <div class="relative text-center w-full">
+          <h2 class="text-3xl md:text-5xl font-normal text-white mb-8 drop-shadow-lg">Exposições</h2>
+          <ul class="space-y-4 text-lg md:text-2xl text-white/90 font-medium max-w-2xl mx-auto">
+            <li>Exposição Raiding Projetc - Raiding, Áustria. <span class="text-white/70 font-normal">2017</span></li>
+            <li>Exposição Artlab Munich - Munique, Alemanha. <span class="text-white/70 font-normal">2017</span></li>
+            <li>Ocupação EAV - Escolas de Artes Visuais, Rio de Janeiro. <span class="text-white/70 font-normal">2022</span><br><span class="text-white/60 text-base">(Curadoria Denise Cathilina)</span></li>
+            <li>Primeiro Salão de Fotografia - Museu de Arte Moderna de Resende. <span class="text-white/70 font-normal">2023</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="w-full border-t border-white/10 pt-12 pb-6 px-4 md:px-16 flex flex-col md:flex-row items-center justify-between gap-4 text-white/60 text-sm">
+    <div>
+      2025 Hugo Carmo
+    </div>
+    <div class="flex items-center gap-4">
+      <a href="https://www.instagram.com/kina.com.br/" target="_blank" rel="noopener" class="hover:text-white hover:bg-white/10 transition rounded px-3 py-1">@kina.com.br</a>
+    </div>
+  </footer>
+
+  <!-- Modal fullscreen image only -->
+  <div id="modal-bg" class="fixed inset-0 flex items-center justify-center modal-bg hidden" aria-modal="true" aria-hidden="true" role="dialog" tabindex="-1" style="background: rgba(0,0,0,0.9); z-index: 1000;">
+    <button id="modal-close" class="modal-close absolute top-4 right-4 w-11 h-11 rounded-full flex items-center justify-center bg-white/10 hover:bg-white/20 z-50 focus:outline-none" aria-label="Fechar imagem">
+      <i data-lucide="x" class="w-6 h-6 text-white"></i>
+    </button>
+    <img id="modal-img" src="" alt="" class="modal-img-fullscreen max-w-[90vw] max-h-[90vh] object-contain rounded-lg" tabindex="0" />
+  </div>
+
+  <!-- Adicionar ao modal a lógica para carrossel de imagens ao clicar nesse card -->
+  <div id="blusas-carousel-modal" class="fixed inset-0 flex items-center justify-center modal-bg hidden" aria-modal="true" aria-hidden="true" role="dialog" tabindex="-1" style="background: rgba(0,0,0,0.9); z-index: 1001;">
+    <button id="blusas-modal-close" class="modal-close absolute top-4 right-4 w-11 h-11 rounded-full flex items-center justify-center bg-white/10 hover:bg-white/20 z-50 focus:outline-none" aria-label="Fechar imagem">
+      <i data-lucide="x" class="w-6 h-6 text-white"></i>
+    </button>
+    <div class="flex items-center justify-center gap-4">
+      <img id="blusas-carousel-img" src="https://itlpvpdwgiwbdpqheemw.supabase.co/storage/v1/object/public/contratos//WhatsApp%20Image%202025-06-20%20at%2009.57.57.jpeg" alt="Blusa 1" class="modal-img-fullscreen max-w-[90vw] max-h-[90vh] object-contain rounded-lg" tabindex="0" />
+    </div>
+    <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-2">
+      <button class="carousel-dot" data-img="https://itlpvpdwgiwbdpqheemw.supabase.co/storage/v1/object/public/contratos//WhatsApp%20Image%202025-06-20%20at%2009.57.57.jpeg"></button>
+      <button class="carousel-dot" data-img="https://itlpvpdwgiwbdpqheemw.supabase.co/storage/v1/object/public/contratos//WhatsApp%20Image%202025-06-20%20at%2009.57.56.jpeg"></button>
+    </div>
+  </div>
+
+  <script>
+    lucide.createIcons();
+
+    // Background image motion animation
+    const bgImage = document.getElementById('hero-bg-1');
+
+    function animateBgMotion() {
+      // Set initial state
+      gsap.set(bgImage, {
+        scale: 1.05,
+        x: 0,
+        y: 0
+      });
+      
+      // Continuous motion animation
+      gsap.to(bgImage, {
+        scale: 1.2,
+        x: '2vw',
+        y: '-1.5vw',
+        duration: 8,
+        ease: "power1.inOut",
+        yoyo: true,
+        repeat: -1
+      });
+    }
+
+    // Animations
+    window.addEventListener('DOMContentLoaded', () => {
+      // Fade in animations
+      gsap.utils.toArray('.fade-in').forEach((el, i) => {
+        gsap.to(el, {
+          opacity: 1,
+          y: 0,
+          scale: 1,
+          filter: "blur(0px)",
+          delay: 0.3 + i * 0.1,
+          duration: 1,
+          ease: "power3.out"
+        });
+        el.classList.add('visible');
+      });
+
+      // Start background motion
+      animateBgMotion();
+    });
+
+    // Modal logic
+    const modalBg = document.getElementById('modal-bg');
+    const modalImg = document.getElementById('modal-img');
+    const closeBtn = document.getElementById('modal-close');
+    let lastActive = null;
+    let zoomAnim = null;
+
+    document.querySelectorAll('.card-clickable').forEach(card => {
+      if(card.classList.contains('special-blusas-card')) return;
+      card.addEventListener('click', function(e) {
+        let img = card.querySelector('.bw-img');
+        modalImg.src = img.src;
+        modalImg.alt = img.alt;
+        modalBg.classList.remove('hidden');
+        modalBg.setAttribute('aria-hidden', 'false');
+        setTimeout(() => modalImg.focus(), 120);
+
+        // Animate image only: subtle pan+zoom
+        gsap.set(modalImg, {scale:1.01, x:0, y:0, opacity:0});
+        gsap.to(modalImg, {opacity:1, duration:0.5, ease:"power2.out"});
+        // Kill previous, then animate pan+zoom
+        if (zoomAnim) zoomAnim.kill();
+        zoomAnim = gsap.to(modalImg, {
+          scale:1.1,
+          x: '1vw',
+          y: '-0.5vw',
+          duration: 8,
+          ease: "power1.inOut",
+          yoyo: true,
+          repeat: -1
+        });
+      });
+      card.addEventListener('keydown', function(e){
+        if(e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          card.click();
+        }
+      });
+      card.addEventListener('click', () => lastActive = card);
+    });
+
+    function closeModal() {
+      gsap.to(modalImg, {opacity:0, scale:0.98, y:20, duration:0.28, ease:"power2.in", onComplete:()=> {
+        modalBg.classList.add('hidden');
+        modalBg.setAttribute('aria-hidden', 'true');
+        modalImg.src='';
+        if (zoomAnim) zoomAnim.kill();
+        setTimeout(()=>{ if(lastActive) lastActive.focus(); }, 180);
+      }});
+    }
+
+    closeBtn.addEventListener('click', closeModal);
+    modalBg.addEventListener('click', function(e){
+      if(e.target === modalBg) closeModal();
+    });
+    document.addEventListener('keydown', function(e){
+      if(!modalBg.classList.contains('hidden') && (e.key === 'Escape' || e.key === 'Esc')) closeModal();
+    });
+    // Fechar clicando na imagem
+    modalImg.addEventListener('click', closeModal);
+
+    // Acessibilidade: fecha com tecla Enter na imagem
+    modalImg.addEventListener('keydown', function(e){
+      if(e.key === 'Escape' || e.key === 'Enter' || e.key === ' ') closeModal();
+    });
+
+    // Carrossel especial para o card de blusas
+    const specialBlusasCard = document.querySelector('.special-blusas-card');
+    const blusasModal = document.getElementById('blusas-carousel-modal');
+    const blusasModalClose = document.getElementById('blusas-modal-close');
+    const blusasCarouselImg = document.getElementById('blusas-carousel-img');
+    const blusasDots = document.querySelectorAll('.carousel-dot');
+    const blusasImgs = [
+      "https://itlpvpdwgiwbdpqheemw.supabase.co/storage/v1/object/public/contratos//WhatsApp%20Image%202025-06-20%20at%2009.57.57.jpeg",
+      "https://itlpvpdwgiwbdpqheemw.supabase.co/storage/v1/object/public/contratos//WhatsApp%20Image%202025-06-20%20at%2009.57.56.jpeg"
+    ];
+    if (specialBlusasCard && blusasModal && blusasModalClose && blusasCarouselImg && blusasDots.length) {
+      specialBlusasCard.addEventListener('click', function(e) {
+        blusasModal.classList.remove('hidden');
+        blusasModal.setAttribute('aria-hidden', 'false');
+        // Sempre mostrar a primeira imagem ao abrir
+        blusasCarouselImg.src = blusasImgs[0];
+        blusasDots.forEach((dot, idx) => {
+          dot.classList.toggle('bg-white', idx === 0);
+          dot.classList.toggle('border', idx === 0);
+        });
+        setTimeout(() => blusasCarouselImg.focus(), 120);
+      });
+      specialBlusasCard.addEventListener('keydown', function(e){
+        if(e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          specialBlusasCard.click();
+        }
+      });
+      blusasModalClose.addEventListener('click', function() {
+        blusasModal.classList.add('hidden');
+        blusasModal.setAttribute('aria-hidden', 'true');
+      });
+      blusasDots.forEach((dot, idx) => {
+        dot.addEventListener('click', function(e) {
+          e.stopPropagation();
+          blusasCarouselImg.src = dot.getAttribute('data-img');
+          blusasDots.forEach((d, i) => {
+            d.classList.toggle('bg-white', i === idx);
+            d.classList.toggle('border', i === idx);
+          });
+        });
+      });
+      document.addEventListener('keydown', function(e){
+        if(!blusasModal.classList.contains('hidden') && (e.key === 'Escape' || e.key === 'Esc')) {
+          blusasModal.classList.add('hidden');
+          blusasModal.setAttribute('aria-hidden', 'true');
+        }
+      });
+    }
+
+    document.querySelectorAll('.blusa-color-btn').forEach(btn => {
+      btn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        const color = btn.getAttribute('data-color');
+        document.querySelectorAll('.blusa-branca').forEach(img => {
+          img.classList.toggle('hidden', color !== 'branco');
+        });
+        document.querySelectorAll('.blusa-preta').forEach(img => {
+          img.classList.toggle('hidden', color !== 'preto');
+        });
+        // Atualiza o destaque do botão
+        document.querySelectorAll('.blusa-color-btn').forEach(b => b.classList.remove('ring-2', 'ring-white', 'ring-offset-2', 'ring-offset-black'));
+        btn.classList.add('ring-2', 'ring-white', 'ring-offset-2', 'ring-offset-black');
+      });
+    });
+  </script>
+</body>
+</html>
