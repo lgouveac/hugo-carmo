@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin — Hugo Carmo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: 'Inter', system-ui, sans-serif; }
+    input, textarea { background:#0b0b0b; }
+    .tabbtn.active { background:#fff; color:#000; }
+    .card { background:#111; border:1px solid #ffffff14; }
+    ::placeholder { color:#ffffff55; }
+  </style>
+</head>
+<body class="bg-black text-white min-h-screen">
+
+  <!-- LOGIN -->
+  <div id="login" class="min-h-screen flex items-center justify-center px-4">
+    <form id="login-form" class="w-full max-w-sm card rounded-2xl p-8 space-y-4">
+      <h1 class="text-2xl font-semibold">Painel Hugo Carmo</h1>
+      <p class="text-white/50 text-sm">Entre para editar o site.</p>
+      <input id="password" type="password" placeholder="Senha" autocomplete="current-password" required
+             class="w-full rounded-lg border border-white/15 px-4 py-3 outline-none focus:border-white/40">
+      <button type="submit" class="w-full rounded-lg bg-white text-black font-semibold py-3 hover:bg-white/90">Entrar</button>
+      <p id="login-error" class="text-red-400 text-sm hidden"></p>
+    </form>
+  </div>
+
+  <!-- APP -->
+  <div id="app" class="hidden">
+    <header class="sticky top-0 z-30 bg-black/90 backdrop-blur border-b border-white/10 px-4 md:px-8 py-3 flex items-center gap-3 flex-wrap">
+      <strong class="text-lg">Hugo Carmo · Admin</strong>
+      <span id="dirty" class="text-amber-400 text-xs hidden">• alterações não salvas</span>
+      <div class="ml-auto flex items-center gap-2">
+        <a href="/" target="_blank" class="text-sm px-3 py-2 rounded-lg border border-white/15 hover:bg-white/10">Ver site ↗</a>
+        <button id="save" class="text-sm px-4 py-2 rounded-lg bg-emerald-500 text-black font-semibold hover:bg-emerald-400">Salvar alterações</button>
+        <button id="logout" class="text-sm px-3 py-2 rounded-lg border border-white/15 hover:bg-white/10">Sair</button>
+      </div>
+    </header>
+
+    <nav class="px-4 md:px-8 pt-4 flex gap-2 flex-wrap">
+      <button data-tab="textos"    class="tabbtn active px-4 py-2 rounded-lg border border-white/15 text-sm">Textos</button>
+      <button data-tab="fotografias" class="tabbtn px-4 py-2 rounded-lg border border-white/15 text-sm">Fotografias</button>
+      <button data-tab="montagens" class="tabbtn px-4 py-2 rounded-lg border border-white/15 text-sm">Montagens</button>
+      <button data-tab="produtos"  class="tabbtn px-4 py-2 rounded-lg border border-white/15 text-sm">Produtos</button>
+      <button data-tab="exposicoes" class="tabbtn px-4 py-2 rounded-lg border border-white/15 text-sm">Exposições</button>
+      <button data-tab="contato"   class="tabbtn px-4 py-2 rounded-lg border border-white/15 text-sm">Contato</button>
+    </nav>
+
+    <main id="panel" class="px-4 md:px-8 py-6 max-w-5xl"></main>
+  </div>
+
+  <div id="toast" class="fixed bottom-6 left-1/2 -translate-x-1/2 px-5 py-3 rounded-lg text-sm font-medium hidden z-50"></div>
+
+  <script>
+    const SUPA = "https://gobslzsggskllmhzasti.supabase.co";
+    const CONTENT_URL = SUPA + "/storage/v1/object/public/photos/content.json";
+    const TKEY = "hc_token";
+    let content = null, dirty = false, currentTab = "textos";
+
+    const $ = s => document.querySelector(s);
+    const esc = s => (s==null?"":String(s)).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+    const token = () => localStorage.getItem(TKEY);
+    const imgUrl = p => /^https?:\/\//.test(p) ? p : (content.bucket_base + "/" + p);
+    function toast(msg, ok=true){ const t=$("#toast"); t.textContent=msg; t.className="fixed bottom-6 left-1/2 -translate-x-1/2 px-5 py-3 rounded-lg text-sm font-medium z-50 "+(ok?"bg-emerald-500 text-black":"bg-red-500 text-white"); t.classList.remove("hidden"); clearTimeout(t._t); t._t=setTimeout(()=>t.classList.add("hidden"),3000); }
+    function setDirty(v){ dirty=v; $("#dirty").classList.toggle("hidden", !v); }
+
+    // ---- Auth ----
+    $("#login-form").addEventListener("submit", async e=>{
+      e.preventDefault();
+      $("#login-error").classList.add("hidden");
+      try{
+        const r = await fetch("/api/login", {method:"POST", headers:{"Content-Type":"application/json"}, body: JSON.stringify({password: $("#password").value})});
+        const d = await r.json();
+        if(!r.ok) throw new Error(d.error||"Falha no login");
+        localStorage.setItem(TKEY, d.token);
+        await boot();
+      }catch(err){ const el=$("#login-error"); el.textContent=err.message; el.classList.remove("hidden"); }
+    });
+    $("#logout").addEventListener("click", ()=>{ localStorage.removeItem(TKEY); location.reload(); });
+
+    async function boot(){
+      const r = await fetch(CONTENT_URL + "?v=" + Date.now(), {cache:"no-store"});
+      content = await r.json();
+      content.photos = content.photos || [];
+      content.products = content.products || [];
+      $("#login").classList.add("hidden");
+      $("#app").classList.remove("hidden");
+      renderTab(currentTab);
+    }
+
+    // ---- Tabs ----
+    document.querySelectorAll(".tabbtn").forEach(b=> b.addEventListener("click", ()=>{
+      document.querySelectorAll(".tabbtn").forEach(x=>x.classList.remove("active"));
+      b.classList.add("active"); currentTab=b.dataset.tab; renderTab(currentTab);
+    }));
+
+    function field(label, value, oninput, opts={}){
+      const id = "f"+Math.random().toString(36).slice(2);
+      const el = opts.textarea
+        ? `<textarea id="${id}" rows="${opts.rows||4}" class="w-full rounded-lg border border-white/15 px-3 py-2 outline-none focus:border-white/40">${esc(value)}</textarea>`
+        : `<input id="${id}" value="${esc(value)}" class="w-full rounded-lg border border-white/15 px-3 py-2 outline-none focus:border-white/40">`;
+      setTimeout(()=>{ const node=document.getElementById(id); if(node) node.addEventListener("input", ev=>{ oninput(ev.target.value); setDirty(true); }); },0);
+      return `<label class="block mb-4"><span class="block text-sm text-white/60 mb-1">${esc(label)}</span>${el}</label>`;
+    }
+
+    function renderTab(tab){
+      const p = $("#panel");
+      if(tab==="textos") p.innerHTML = tplTextos();
+      else if(tab==="fotografias") p.innerHTML = tplPhotos("fotografias","Fotografias");
+      else if(tab==="montagens") p.innerHTML = tplPhotos("montagens","Montagens (na sua parede)");
+      else if(tab==="produtos") p.innerHTML = tplProdutos();
+      else if(tab==="exposicoes") p.innerHTML = tplExpos();
+      else if(tab==="contato") p.innerHTML = tplContato();
+      bindFields();
+    }
+
+    // ---- TEXTOS ----
+    function tplTextos(){
+      const c=content;
+      const H=(t)=>`<h2 class="text-lg font-semibold mt-6 mb-3 text-white/90">${t}</h2>`;
+      return `<div class="card rounded-2xl p-5">
+        ${H("Topo (hero)")}
+        ${field("Título — linha 1", c.hero.title1, v=>c.hero.title1=v)}
+        ${field("Título — linha 2 (destaque)", c.hero.title2, v=>c.hero.title2=v)}
+        ${field("Subtítulo (aceita HTML, ex: <strong>)", c.hero.subtitle, v=>c.hero.subtitle=v, {textarea:true, rows:2})}
+        ${field("Texto do botão", c.hero.cta, v=>c.hero.cta=v)}
+        ${field("URL do logo", c.logo, v=>c.logo=v)}
+        ${H("Seção Fotografias")}
+        ${field("Título", c.gallery.title, v=>c.gallery.title=v)}
+        ${field("Subtítulo", c.gallery.subtitle, v=>c.gallery.subtitle=v, {textarea:true, rows:2})}
+        ${H("Seção Montagens")}
+        ${field("Título", c.montagens.title, v=>c.montagens.title=v)}
+        ${field("Subtítulo", c.montagens.subtitle, v=>c.montagens.subtitle=v, {textarea:true, rows:2})}
+        ${H("Seção Comprar obras")}
+        ${field("Título", c.shop.title, v=>c.shop.title=v)}
+        ${field("Subtítulo", c.shop.subtitle, v=>c.shop.subtitle=v, {textarea:true, rows:2})}
+        ${H("Chamada (CTA)")}
+        ${field("Título", c.cta.title, v=>c.cta.title=v)}
+        ${field("Texto", c.cta.text, v=>c.cta.text=v, {textarea:true, rows:2})}
+        ${field("Texto do botão", c.cta.button, v=>c.cta.button=v)}
+        ${H("Sobre")}
+        ${field("Título", c.about.title, v=>c.about.title=v)}
+        ${field("Texto", c.about.text, v=>c.about.text=v, {textarea:true, rows:6})}
+      </div>`;
+    }
+
+    // ---- PHOTOS (fotografias / montagens) ----
+    function photosOf(section){ return content.photos.filter(p=>p.section===section).sort((a,b)=>a.order-b.order); }
+    function nextOrder(section){ const l=photosOf(section); return l.length? Math.max(...l.map(p=>p.order))+1 : 1; }
+
+    function tplPhotos(section, label){
+      const list = photosOf(section);
+      const cards = list.map((p,i)=>`
+        <div class="card rounded-xl overflow-hidden flex flex-col" data-id="${esc(p.id)}">
+          <img src="${imgUrl(p.path)}" class="w-full h-44 object-cover bg-black">
+          <div class="p-3 space-y-2">
+            <input value="${esc(p.caption)}" placeholder="Legenda (local, ano)" data-cap="${esc(p.id)}"
+                   class="w-full rounded-lg border border-white/15 px-2 py-1.5 text-sm outline-none focus:border-white/40">
+            <div class="flex items-center justify-between gap-1">
+              <div class="flex gap-1">
+                <button data-move="up" data-id="${esc(p.id)}" class="px-2 py-1 rounded border border-white/15 text-xs hover:bg-white/10" ${i===0?'disabled style=opacity:.3':''}>↑</button>
+                <button data-move="down" data-id="${esc(p.id)}" class="px-2 py-1 rounded border border-white/15 text-xs hover:bg-white/10" ${i===list.length-1?'disabled style=opacity:.3':''}>↓</button>
+              </div>
+              <button data-del="${esc(p.id)}" class="px-2 py-1 rounded border border-red-500/40 text-red-400 text-xs hover:bg-red-500/10">Remover</button>
+            </div>
+          </div>
+        </div>`).join("");
+      return `<div class="card rounded-2xl p-5">
+        <div class="flex items-center justify-between mb-4 flex-wrap gap-3">
+          <h2 class="text-lg font-semibold">${esc(label)} <span class="text-white/40 text-sm">(${list.length})</span></h2>
+          <label class="cursor-pointer text-sm px-4 py-2 rounded-lg bg-white text-black font-semibold hover:bg-white/90">
+            + Adicionar fotos
+            <input type="file" accept="image/jpeg,image/png,image/webp" multiple class="hidden" data-upload="${section}">
+          </label>
+        </div>
+        <div class="grid grid-cols-2 md:grid-cols-3 gap-3">${cards || '<p class="text-white/40 text-sm">Nenhuma foto ainda.</p>'}</div>
+      </div>`;
+    }
+
+    // ---- PRODUTOS ----
+    function tplProdutos(){
+      const cards = content.products.map((p,i)=>`
+        <div class="card rounded-xl p-3 flex gap-3" data-pi="${i}">
+          <div class="w-28 shrink-0">
+            <img src="${esc(p.image)}" class="w-28 h-28 object-cover rounded-lg bg-black">
+            <label class="block mt-2 text-center cursor-pointer text-xs px-2 py-1 rounded border border-white/15 hover:bg-white/10">Trocar imagem
+              <input type="file" accept="image/jpeg,image/png,image/webp" class="hidden" data-pimg="${i}"></label>
+          </div>
+          <div class="flex-1 grid grid-cols-2 gap-2">
+            <input value="${esc(p.title)}" placeholder="Título" data-pf="title" data-pi="${i}" class="col-span-2 rounded-lg border border-white/15 px-2 py-1.5 text-sm">
+            <input value="${esc(p.subtitle)}" placeholder="Subtítulo" data-pf="subtitle" data-pi="${i}" class="col-span-2 rounded-lg border border-white/15 px-2 py-1.5 text-sm">
+            <input value="${esc(p.price)}" placeholder="Preço" data-pf="price" data-pi="${i}" class="rounded-lg border border-white/15 px-2 py-1.5 text-sm">
+            <input value="${esc(p.stock)}" placeholder="Estoque (texto)" data-pf="stock" data-pi="${i}" class="rounded-lg border border-white/15 px-2 py-1.5 text-sm">
+            <div class="col-span-2 text-right"><button data-pdel="${i}" class="text-red-400 text-xs hover:underline">Remover produto</button></div>
+          </div>
+        </div>`).join("");
+      return `<div class="card rounded-2xl p-5">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="text-lg font-semibold">Produtos <span class="text-white/40 text-sm">(${content.products.length})</span></h2>
+          <button id="add-product" class="text-sm px-4 py-2 rounded-lg bg-white text-black font-semibold hover:bg-white/90">+ Novo produto</button>
+        </div>
+        <div class="space-y-3">${cards || '<p class="text-white/40 text-sm">Nenhum produto.</p>'}</div>
+      </div>`;
+    }
+
+    // ---- EXPOSIÇÕES ----
+    function tplExpos(){
+      const items = (content.exposicoes.items||[]).map((e,i)=>`
+        <div class="card rounded-xl p-3 grid grid-cols-12 gap-2 items-start" data-ei="${i}">
+          <input value="${esc(e.text)}" placeholder="Descrição" data-ef="text" data-ei="${i}" class="col-span-12 md:col-span-6 rounded-lg border border-white/15 px-2 py-1.5 text-sm">
+          <input value="${esc(e.year)}" placeholder="Ano" data-ef="year" data-ei="${i}" class="col-span-3 md:col-span-2 rounded-lg border border-white/15 px-2 py-1.5 text-sm">
+          <input value="${esc(e.note)}" placeholder="Nota (ex: curadoria)" data-ef="note" data-ei="${i}" class="col-span-7 md:col-span-3 rounded-lg border border-white/15 px-2 py-1.5 text-sm">
+          <button data-edel="${i}" class="col-span-2 md:col-span-1 text-red-400 text-xs hover:underline">×</button>
+        </div>`).join("");
+      return `<div class="card rounded-2xl p-5">
+        ${field("Título da seção", content.exposicoes.title, v=>content.exposicoes.title=v)}
+        <div class="flex items-center justify-between mb-3 mt-2">
+          <h2 class="text-sm text-white/60">Itens</h2>
+          <button id="add-expo" class="text-sm px-3 py-1.5 rounded-lg bg-white text-black font-semibold hover:bg-white/90">+ Item</button>
+        </div>
+        <div class="space-y-2">${items || '<p class="text-white/40 text-sm">Nenhuma exposição.</p>'}</div>
+      </div>`;
+    }
+
+    // ---- CONTATO ----
+    function tplContato(){
+      const c=content.contact;
+      return `<div class="card rounded-2xl p-5">
+        ${field("WhatsApp (só números, com DDI/DDD — ex: 5521999999999)", c.whatsapp, v=>c.whatsapp=v)}
+        ${field("Mensagem padrão do WhatsApp", c.whatsapp_msg, v=>c.whatsapp_msg=v, {textarea:true, rows:2})}
+        ${field("Instagram — texto exibido", c.instagram_label, v=>c.instagram_label=v)}
+        ${field("Instagram — link", c.instagram_url, v=>c.instagram_url=v)}
+      </div>`;
+    }
+
+    // ---- Event delegation (panel) ----
+    function bindFields(){
+      const panel = $("#panel");
+      // captions
+      panel.querySelectorAll("[data-cap]").forEach(inp=> inp.addEventListener("input", e=>{
+        const ph = content.photos.find(p=>p.id===inp.dataset.cap); if(ph){ ph.caption=e.target.value; setDirty(true); }
+      }));
+      // move
+      panel.querySelectorAll("[data-move]").forEach(btn=> btn.addEventListener("click", ()=>{
+        movePhoto(btn.dataset.id, btn.dataset.move); renderTab(currentTab); setDirty(true);
+      }));
+      // delete photo
+      panel.querySelectorAll("[data-del]").forEach(btn=> btn.addEventListener("click", ()=>{
+        if(!confirm("Remover esta foto do site?")) return;
+        content.photos = content.photos.filter(p=>p.id!==btn.dataset.del); renderTab(currentTab); setDirty(true);
+      }));
+      // upload photos
+      panel.querySelectorAll("[data-upload]").forEach(inp=> inp.addEventListener("change", e=> uploadPhotos(e.target.files, inp.dataset.upload)));
+      // products fields
+      panel.querySelectorAll("[data-pf]").forEach(inp=> inp.addEventListener("input", e=>{
+        content.products[+inp.dataset.pi][inp.dataset.pf]=e.target.value; setDirty(true);
+      }));
+      panel.querySelectorAll("[data-pdel]").forEach(btn=> btn.addEventListener("click", ()=>{
+        if(!confirm("Remover este produto?")) return;
+        content.products.splice(+btn.dataset.pdel,1); renderTab(currentTab); setDirty(true);
+      }));
+      panel.querySelectorAll("[data-pimg]").forEach(inp=> inp.addEventListener("change", e=> uploadProductImg(e.target.files[0], +inp.dataset.pimg)));
+      const addP = panel.querySelector("#add-product");
+      if(addP) addP.addEventListener("click", ()=>{ content.products.push({id:"p"+Date.now(),title:"Novo produto",subtitle:"",price:"R$ 0,00",stock:"",image:""}); renderTab(currentTab); setDirty(true); });
+      // expos
+      panel.querySelectorAll("[data-ef]").forEach(inp=> inp.addEventListener("input", e=>{
+        content.exposicoes.items[+inp.dataset.ei][inp.dataset.ef]=e.target.value; setDirty(true);
+      }));
+      panel.querySelectorAll("[data-edel]").forEach(btn=> btn.addEventListener("click", ()=>{
+        content.exposicoes.items.splice(+btn.dataset.edel,1); renderTab(currentTab); setDirty(true);
+      }));
+      const addE = panel.querySelector("#add-expo");
+      if(addE) addE.addEventListener("click", ()=>{ (content.exposicoes.items=content.exposicoes.items||[]).push({text:"",year:"",note:""}); renderTab(currentTab); setDirty(true); });
+    }
+
+    function movePhoto(id, dir){
+      const ph = content.photos.find(p=>p.id===id); if(!ph) return;
+      const list = photosOf(ph.section);
+      const idx = list.findIndex(p=>p.id===id);
+      const swap = dir==="up" ? list[idx-1] : list[idx+1];
+      if(!swap) return;
+      const t = ph.order; ph.order = swap.order; swap.order = t;
+    }
+
+    async function uploadPhotos(files, section){
+      if(!files || !files.length) return;
+      toast("Enviando "+files.length+" foto(s)…");
+      for(const f of files){
+        try{
+          const buf = await f.arrayBuffer();
+          const r = await fetch("/api/upload", {method:"POST", headers:{"Authorization":"Bearer "+token(), "Content-Type":f.type, "x-filename":f.name}, body: buf});
+          const d = await r.json();
+          if(!r.ok) throw new Error(d.error||"falha");
+          content.photos.push({id:d.path, path:d.path, caption:"", section, order: nextOrder(section)});
+        }catch(err){ toast("Erro ao enviar "+f.name+": "+err.message, false); }
+      }
+      setDirty(true); renderTab(currentTab); toast("Fotos adicionadas. Não esqueça de Salvar.");
+    }
+
+    async function uploadProductImg(file, i){
+      if(!file) return;
+      try{
+        toast("Enviando imagem…");
+        const buf = await file.arrayBuffer();
+        const r = await fetch("/api/upload", {method:"POST", headers:{"Authorization":"Bearer "+token(), "Content-Type":file.type, "x-filename":file.name}, body: buf});
+        const d = await r.json();
+        if(!r.ok) throw new Error(d.error||"falha");
+        content.products[i].image = d.url;
+        setDirty(true); renderTab(currentTab); toast("Imagem trocada. Não esqueça de Salvar.");
+      }catch(err){ toast("Erro: "+err.message, false); }
+    }
+
+    // ---- Save ----
+    $("#save").addEventListener("click", async ()=>{
+      const btn=$("#save"); btn.disabled=true; const old=btn.textContent; btn.textContent="Salvando…";
+      try{
+        const r = await fetch("/api/save", {method:"POST", headers:{"Authorization":"Bearer "+token(), "Content-Type":"application/json"}, body: JSON.stringify(content)});
+        const d = await r.json();
+        if(!r.ok){ if(r.status===401){ toast("Sessão expirada, entre novamente.", false); localStorage.removeItem(TKEY); setTimeout(()=>location.reload(),1200); return; } throw new Error(d.error||"falha"); }
+        content.version = d.version; setDirty(false); toast("Salvo! O site já está atualizado.");
+      }catch(err){ toast("Erro ao salvar: "+err.message, false); }
+      finally{ btn.disabled=false; btn.textContent=old; }
+    });
+
+    window.addEventListener("beforeunload", e=>{ if(dirty){ e.preventDefault(); e.returnValue=""; } });
+
+    // ---- Init ----
+    if(token()){ boot().catch(()=>{ /* token may be valid but show app anyway via public content */ }); }
+  </script>
+</body>
+</html>

@@ -1,0 +1,8 @@
+{
+  "name": "hugo-carmo",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Site e CMS do artista visual Hugo Carmo",
+  "engines": { "node": ">=18" }
+}

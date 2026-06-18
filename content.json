@@ -1,0 +1,432 @@
+{
+  "version": 1,
+  "logo": "https://neompzltxilcimodyvpd.supabase.co/storage/v1/object/public/flou//Captura%20de%20tela%202025-06-16%20224245.png",
+  "hero": {
+    "title1": "Uma câmera,",
+    "title2": "uma bicicleta",
+    "subtitle": "Navegue pelo olhar de <strong>Hugo Carmo</strong> ao redor do Brasil em suas ciclo viagens.",
+    "cta": "Comprar obras"
+  },
+  "about": {
+    "title": "Sobre",
+    "text": "Através da fotografia, busco capturar momentos e transmitir emoções. Meu olhar se volta para a beleza da natureza e para o cotidiano urbano, permitindo-me conectar com as histórias que se desenrolam ao meu redor. Quero transportar o espectador para o local, fazendo com que experienciem a essência do momento registrado. Cada imagem é um convite para explorar, apreciar e preservar a natureza, assim como valorizar as relações humanas que encontramos pelo caminho."
+  },
+  "gallery": {
+    "title": "Fotografias",
+    "subtitle": "Uma jornada visual pelo Brasil e além — natureza, cotidiano e as histórias encontradas pelo caminho. Clique para ampliar."
+  },
+  "montagens": {
+    "title": "Na sua parede",
+    "subtitle": "Sugestões de montagem para inspirar a escolha certa e deixar sua casa mais charmosa."
+  },
+  "shop": {
+    "title": "Comprar obras",
+    "subtitle": "Prints e quadros com moldura, em tamanho personalizado."
+  },
+  "cta": {
+    "title": "Gostou do que viu?",
+    "text": "Acompanhe minhas ciclo-viagens e projetos fotográficos pelo Brasil e pelo mundo.",
+    "button": "Confira meu trabalho"
+  },
+  "exposicoes": {
+    "title": "Exposições",
+    "items": [
+      {
+        "text": "Exposição Raiding Projetc - Raiding, Áustria.",
+        "year": "2017",
+        "note": ""
+      },
+      {
+        "text": "Exposição Artlab Munich - Munique, Alemanha.",
+        "year": "2017",
+        "note": ""
+      },
+      {
+        "text": "Ocupação EAV - Escolas de Artes Visuais, Rio de Janeiro.",
+        "year": "2022",
+        "note": "Curadoria Denise Cathilina"
+      },
+      {
+        "text": "Primeiro Salão de Fotografia - Museu de Arte Moderna de Resende.",
+        "year": "2023",
+        "note": ""
+      }
+    ]
+  },
+  "contact": {
+    "whatsapp": "5521999869645",
+    "whatsapp_msg": "Olá, tenho interesse no trabalho do Hugo Carmo",
+    "instagram_label": "@kina.com.br",
+    "instagram_url": "https://www.instagram.com/kina.com.br/"
+  },
+  "products": [
+    {
+      "id": "p1",
+      "title": "Print ou Quadro com Moldura",
+      "subtitle": "Tamanho personalizado",
+      "price": "R$ 150,00",
+      "stock": "7 unidades restantes",
+      "image": "https://neompzltxilcimodyvpd.supabase.co/storage/v1/object/public/flou//O4Q0iVKJrJTIaD5Bgino07xc7Nk.avif"
+    },
+    {
+      "id": "p2",
+      "title": "Print ou Quadro com Moldura",
+      "subtitle": "Tamanho personalizado",
+      "price": "R$ 150,00",
+      "stock": "6 unidades restantes",
+      "image": "https://neompzltxilcimodyvpd.supabase.co/storage/v1/object/public/flou//CAKNHpmOuwd0UrABgtMmGYovZ3U.avif"
+    },
+    {
+      "id": "p3",
+      "title": "Print ou Quadro com Moldura",
+      "subtitle": "Tamanho personalizado",
+      "price": "R$ 150,00",
+      "stock": "4 unidades restantes",
+      "image": "https://neompzltxilcimodyvpd.supabase.co/storage/v1/object/public/flou/takeout-1-001/013.jpg"
+    },
+    {
+      "id": "p4",
+      "title": "Print ou Quadro com Moldura",
+      "subtitle": "Tamanho personalizado",
+      "price": "R$ 150,00",
+      "stock": "3 unidades restantes",
+      "image": "https://neompzltxilcimodyvpd.supabase.co/storage/v1/object/public/flou/takeout-1-001/012.jpg"
+    },
+    {
+      "id": "p5",
+      "title": "Print ou Quadro com Moldura",
+      "subtitle": "Tamanho personalizado",
+      "price": "R$ 150,00",
+      "stock": "2 unidades restantes",
+      "image": "https://neompzltxilcimodyvpd.supabase.co/storage/v1/object/public/flou/takeout-1-001/011.jpg"
+    },
+    {
+      "id": "p6",
+      "title": "Print ou Quadro com Moldura",
+      "subtitle": "Tamanho personalizado",
+      "price": "R$ 150,00",
+      "stock": "1 unidade restante",
+      "image": "https://neompzltxilcimodyvpd.supabase.co/storage/v1/object/public/flou/takeout-1-001/010.jpg"
+    },
+    {
+      "id": "p7",
+      "title": "Print ou Quadro com Moldura",
+      "subtitle": "Tamanho personalizado",
+      "price": "R$ 150,00",
+      "stock": "7 unidades restantes",
+      "image": "https://neompzltxilcimodyvpd.supabase.co/storage/v1/object/public/flou/takeout-1-001/009.jpg"
+    },
+    {
+      "id": "p8",
+      "title": "Print ou Quadro com Moldura",
+      "subtitle": "Tamanho personalizado",
+      "price": "R$ 150,00",
+      "stock": "6 unidades restantes",
+      "image": "https://neompzltxilcimodyvpd.supabase.co/storage/v1/object/public/flou/takeout-1-001/008.jpg"
+    }
+  ],
+  "photos": [
+    {
+      "id": "foto-01-rio-sao-francisco-2015.jpg",
+      "path": "foto-01-rio-sao-francisco-2015.jpg",
+      "caption": "Rio São Francisco, 2015",
+      "section": "fotografias",
+      "order": 1
+    },
+    {
+      "id": "foto-02-alagoas-2015.jpg",
+      "path": "foto-02-alagoas-2015.jpg",
+      "caption": "Alagoas, 2015",
+      "section": "fotografias",
+      "order": 2
+    },
+    {
+      "id": "foto-03-pernambuco-2017.jpg",
+      "path": "foto-03-pernambuco-2017.jpg",
+      "caption": "Pernambuco, 2017",
+      "section": "fotografias",
+      "order": 3
+    },
+    {
+      "id": "foto-04-alagoas-2016.jpg",
+      "path": "foto-04-alagoas-2016.jpg",
+      "caption": "Alagoas, 2016",
+      "section": "fotografias",
+      "order": 4
+    },
+    {
+      "id": "foto-05-alagoas-2015.jpg",
+      "path": "foto-05-alagoas-2015.jpg",
+      "caption": "Alagoas, 2015",
+      "section": "fotografias",
+      "order": 5
+    },
+    {
+      "id": "foto-06-rio-de-janeiro-2014.jpg",
+      "path": "foto-06-rio-de-janeiro-2014.jpg",
+      "caption": "Rio de Janeiro, 2014",
+      "section": "fotografias",
+      "order": 6
+    },
+    {
+      "id": "foto-07-rio-sao-francisco-2017.jpg",
+      "path": "foto-07-rio-sao-francisco-2017.jpg",
+      "caption": "Rio São Francisco, 2017",
+      "section": "fotografias",
+      "order": 7
+    },
+    {
+      "id": "foto-08-alagoas-2016.jpg",
+      "path": "foto-08-alagoas-2016.jpg",
+      "caption": "Alagoas, 2016",
+      "section": "fotografias",
+      "order": 8
+    },
+    {
+      "id": "foto-09-alagoas-2016.jpg",
+      "path": "foto-09-alagoas-2016.jpg",
+      "caption": "Alagoas, 2016",
+      "section": "fotografias",
+      "order": 9
+    },
+    {
+      "id": "foto-10-alagoas-2016.jpg",
+      "path": "foto-10-alagoas-2016.jpg",
+      "caption": "Alagoas, 2016",
+      "section": "fotografias",
+      "order": 10
+    },
+    {
+      "id": "foto-11-sertao-de-pernambuco-2015.jpg",
+      "path": "foto-11-sertao-de-pernambuco-2015.jpg",
+      "caption": "Sertão de Pernambuco, 2015",
+      "section": "fotografias",
+      "order": 11
+    },
+    {
+      "id": "foto-12-alagoas-2015.jpg",
+      "path": "foto-12-alagoas-2015.jpg",
+      "caption": "Alagoas, 2015",
+      "section": "fotografias",
+      "order": 12
+    },
+    {
+      "id": "foto-13-alagoas-2015.jpg",
+      "path": "foto-13-alagoas-2015.jpg",
+      "caption": "Alagoas, 2015",
+      "section": "fotografias",
+      "order": 13
+    },
+    {
+      "id": "foto-14-alagoas-2015.jpg",
+      "path": "foto-14-alagoas-2015.jpg",
+      "caption": "Alagoas, 2015",
+      "section": "fotografias",
+      "order": 14
+    },
+    {
+      "id": "foto-15-3-irmaos-rio-de-janeiro-2015.jpg",
+      "path": "foto-15-3-irmaos-rio-de-janeiro-2015.jpg",
+      "caption": "3 irmãos, Rio de Janeiro, 2015",
+      "section": "fotografias",
+      "order": 15
+    },
+    {
+      "id": "foto-16-3-irmaos-rio-de-janeiro-2015.jpg",
+      "path": "foto-16-3-irmaos-rio-de-janeiro-2015.jpg",
+      "caption": "3 irmãos, Rio de Janeiro, 2015",
+      "section": "fotografias",
+      "order": 16
+    },
+    {
+      "id": "foto-17-3-irmaos-rio-de-janeiro-2015.jpg",
+      "path": "foto-17-3-irmaos-rio-de-janeiro-2015.jpg",
+      "caption": "3 irmãos, Rio de Janeiro, 2015",
+      "section": "fotografias",
+      "order": 17
+    },
+    {
+      "id": "foto-18-alagoas-2017.jpg",
+      "path": "foto-18-alagoas-2017.jpg",
+      "caption": "Alagoas, 2017",
+      "section": "fotografias",
+      "order": 18
+    },
+    {
+      "id": "foto-19-curral-2018.jpg",
+      "path": "foto-19-curral-2018.jpg",
+      "caption": "Curral, 2018",
+      "section": "fotografias",
+      "order": 19
+    },
+    {
+      "id": "foto-20-alagoas-2014.jpg",
+      "path": "foto-20-alagoas-2014.jpg",
+      "caption": "Alagoas, 2014",
+      "section": "fotografias",
+      "order": 20
+    },
+    {
+      "id": "foto-21-alagoas-2015.jpg",
+      "path": "foto-21-alagoas-2015.jpg",
+      "caption": "Alagoas, 2015",
+      "section": "fotografias",
+      "order": 21
+    },
+    {
+      "id": "foto-22-rio-sao-francisco-2015.jpg",
+      "path": "foto-22-rio-sao-francisco-2015.jpg",
+      "caption": "Rio São Francisco, 2015",
+      "section": "fotografias",
+      "order": 22
+    },
+    {
+      "id": "foto-23-parque-estadual-terra-ronca-2015.jpg",
+      "path": "foto-23-parque-estadual-terra-ronca-2015.jpg",
+      "caption": "Parque Estadual Terra Ronca, 2015",
+      "section": "fotografias",
+      "order": 23
+    },
+    {
+      "id": "foto-24-rio-de-janeiro-2014.jpg",
+      "path": "foto-24-rio-de-janeiro-2014.jpg",
+      "caption": "Rio de Janeiro, 2014",
+      "section": "fotografias",
+      "order": 24
+    },
+    {
+      "id": "foto-25-alagoas-2013.jpg",
+      "path": "foto-25-alagoas-2013.jpg",
+      "caption": "Alagoas, 2013",
+      "section": "fotografias",
+      "order": 25
+    },
+    {
+      "id": "foto-26-rio-sao-francisco-2015.jpg",
+      "path": "foto-26-rio-sao-francisco-2015.jpg",
+      "caption": "Rio São Francisco, 2015",
+      "section": "fotografias",
+      "order": 26
+    },
+    {
+      "id": "foto-27-uruguai-2022.jpg",
+      "path": "foto-27-uruguai-2022.jpg",
+      "caption": "Uruguai, 2022",
+      "section": "fotografias",
+      "order": 27
+    },
+    {
+      "id": "foto-28-alagoas-2015.jpg",
+      "path": "foto-28-alagoas-2015.jpg",
+      "caption": "Alagoas, 2015",
+      "section": "fotografias",
+      "order": 28
+    },
+    {
+      "id": "foto-29-alagoas-2015.jpg",
+      "path": "foto-29-alagoas-2015.jpg",
+      "caption": "Alagoas, 2015",
+      "section": "fotografias",
+      "order": 29
+    },
+    {
+      "id": "foto-30-alagoas-2015.jpg",
+      "path": "foto-30-alagoas-2015.jpg",
+      "caption": "Alagoas, 2015",
+      "section": "fotografias",
+      "order": 30
+    },
+    {
+      "id": "foto-31-alagoas-2016.jpg",
+      "path": "foto-31-alagoas-2016.jpg",
+      "caption": "Alagoas, 2016",
+      "section": "fotografias",
+      "order": 31
+    },
+    {
+      "id": "foto-32-alagoas-2014.jpg",
+      "path": "foto-32-alagoas-2014.jpg",
+      "caption": "Alagoas, 2014",
+      "section": "fotografias",
+      "order": 32
+    },
+    {
+      "id": "foto-33-alagoas-2014.jpg",
+      "path": "foto-33-alagoas-2014.jpg",
+      "caption": "Alagoas, 2014",
+      "section": "fotografias",
+      "order": 33
+    },
+    {
+      "id": "foto-34-alagoas-2014.jpg",
+      "path": "foto-34-alagoas-2014.jpg",
+      "caption": "Alagoas, 2014",
+      "section": "fotografias",
+      "order": 34
+    },
+    {
+      "id": "montagem-01.jpg",
+      "path": "montagem-01.jpg",
+      "caption": "",
+      "section": "montagens",
+      "order": 1
+    },
+    {
+      "id": "montagem-02.jpg",
+      "path": "montagem-02.jpg",
+      "caption": "",
+      "section": "montagens",
+      "order": 2
+    },
+    {
+      "id": "montagem-03.jpg",
+      "path": "montagem-03.jpg",
+      "caption": "",
+      "section": "montagens",
+      "order": 3
+    },
+    {
+      "id": "montagem-04.jpg",
+      "path": "montagem-04.jpg",
+      "caption": "",
+      "section": "montagens",
+      "order": 4
+    },
+    {
+      "id": "montagem-05.jpg",
+      "path": "montagem-05.jpg",
+      "caption": "",
+      "section": "montagens",
+      "order": 5
+    },
+    {
+      "id": "montagem-06.jpg",
+      "path": "montagem-06.jpg",
+      "caption": "",
+      "section": "montagens",
+      "order": 6
+    },
+    {
+      "id": "montagem-07.jpg",
+      "path": "montagem-07.jpg",
+      "caption": "",
+      "section": "montagens",
+      "order": 7
+    },
+    {
+      "id": "montagem-08.jpg",
+      "path": "montagem-08.jpg",
+      "caption": "",
+      "section": "montagens",
+      "order": 8
+    },
+    {
+      "id": "montagem-09.jpg",
+      "path": "montagem-09.jpg",
+      "caption": "",
+      "section": "montagens",
+      "order": 9
+    }
+  ],
+  "bucket_base": "https://gobslzsggskllmhzasti.supabase.co/storage/v1/object/public/photos"
+}
