@@ -3,15 +3,16 @@
 <head>
   <meta charset="UTF-8">
   <title>Hugo Carmo — Artista Visual</title>
+  <meta name="description" id="meta-desc" content="Portfólio e obras do artista visual Hugo Carmo.">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Portfólio e obras do artista visual Hugo Carmo — fotografias do Brasil e do mundo.">
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/lucide@latest"></script>
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
   <style>
-    body { font-family: 'Inter', system-ui, sans-serif; }
+    :root { --accent:#d1d5db; --bg:#000000; }
+    body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg); }
     .bw-img { cursor: pointer; transition: filter .35s cubic-bezier(.4,0,.2,1), box-shadow .4s cubic-bezier(.4,0,.2,1); }
     .card-clickable { transition: box-shadow .28s cubic-bezier(.4,0,.2,1), outline .22s; cursor: pointer; outline: 0; }
     .card-clickable:focus-visible, .group:hover .card-clickable { box-shadow: 0 0 0 2px #fff3, 0 6px 32px 0 #000c; outline: 2px solid #fff2; outline-offset: 2px; }
@@ -21,6 +22,7 @@
     .hero-content { position: relative; z-index: 2; }
     @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-100%); } }
     .animate-marquee { animation: marquee 40s linear infinite; }
+    .accent-text { background: linear-gradient(to right, #fff, var(--accent) 60%, #6b7280); -webkit-background-clip: text; background-clip: text; color: transparent; }
     @media (max-width: 640px) { .modal-img-fullscreen { max-width: 99vw; border-radius: .7rem; } }
   </style>
 </head>
@@ -34,18 +36,13 @@
       <div class="flex items-center gap-4">
         <img id="logo" src="" alt="Hugo Carmo" class="w-20 h-20 object-contain rounded-2xl">
       </div>
-      <nav class="flex items-center gap-6">
-        <a href="#galeria" class="text-white/80 hover:text-white transition text-sm font-medium">Fotografias</a>
-        <a href="#montagens" class="text-white/80 hover:text-white transition text-sm font-medium">Montagens</a>
-        <a href="#comprar-obras" class="text-white/80 hover:text-white transition text-sm font-medium">Comprar</a>
-        <a href="#sobre" class="text-white/80 hover:text-white transition text-sm font-medium">Sobre</a>
-      </nav>
+      <nav id="nav" class="flex items-center gap-6 flex-wrap justify-center"></nav>
     </header>
     <div class="hero-content flex-1 flex items-center justify-center w-full px-4 sm:px-8 py-8 md:py-16">
       <div class="w-full max-w-6xl mx-auto text-center">
         <h1 class="text-5xl md:text-7xl lg:text-8xl font-semibold tracking-tight mb-6 fade-in">
           <span id="hero-title1"></span>
-          <span id="hero-title2" class="block bg-gradient-to-r from-white via-gray-300 to-gray-500 text-transparent bg-clip-text"></span>
+          <span id="hero-title2" class="block accent-text"></span>
         </h1>
         <p id="hero-subtitle" class="text-xl md:text-2xl text-white/80 mb-8 max-w-3xl mx-auto fade-in"></p>
         <div class="flex flex-col sm:flex-row items-center justify-center gap-4 fade-in">
@@ -58,67 +55,8 @@
     </div>
   </section>
 
-  <!-- Shop -->
-  <main class="flex-1 flex flex-col items-center w-full px-4 sm:px-8 py-16 max-w-6xl mx-auto">
-    <div id="shop-head" class="mb-10 text-center w-full"></div>
-    <section id="comprar-obras" class="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"></section>
-  </main>
-
-  <!-- Galeria de Fotografias -->
-  <section id="galeria" class="w-full max-w-6xl mx-auto px-4 sm:px-8 py-16 fade-in">
-    <div class="mb-10 text-center">
-      <h2 id="gallery-title" class="text-4xl md:text-6xl font-semibold tracking-tight mb-3"></h2>
-      <p id="gallery-subtitle" class="text-white/70 max-w-2xl mx-auto"></p>
-    </div>
-    <div id="gallery-grid" class="columns-1 sm:columns-2 lg:columns-3 gap-4"></div>
-  </section>
-
-  <!-- Montagens -->
-  <section id="montagens" class="w-full max-w-6xl mx-auto px-4 sm:px-8 pb-16 fade-in">
-    <div class="mb-10 text-center">
-      <h2 id="montagens-title" class="text-3xl md:text-5xl font-semibold tracking-tight mb-3"></h2>
-      <p id="montagens-subtitle" class="text-white/70 max-w-2xl mx-auto"></p>
-    </div>
-    <div id="montagens-grid" class="columns-1 sm:columns-2 lg:columns-3 gap-4"></div>
-  </section>
-
-  <!-- CTA -->
-  <section class="relative w-full my-16 fade-in">
-    <div class="max-w-6xl mx-auto px-4 sm:px-8">
-      <div class="relative rounded-2xl overflow-hidden bg-black py-24 sm:py-32 px-6">
-        <img id="cta-bg" src="" alt="" class="absolute inset-0 w-full h-full object-cover opacity-40 scale-[1.6]">
-        <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
-        <div class="relative text-center">
-          <h2 id="cta-title" class="text-4xl md:text-5xl font-semibold tracking-tight text-white mb-4"></h2>
-          <p id="cta-text" class="text-lg md:text-xl text-white/80 mb-8 max-w-2xl mx-auto"></p>
-          <a id="cta-button" href="#" target="_blank" rel="noopener" class="px-8 py-4 bg-white text-black rounded-lg font-medium hover:bg-white/90 transition-transform hover:scale-105 text-lg inline-flex items-center gap-2 group">
-            <span></span>
-            <i data-lucide="arrow-right" class="w-5 h-5 transition-transform group-hover:translate-x-1"></i>
-          </a>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Sobre -->
-  <section id="sobre" class="w-full max-w-3xl mx-auto px-4 sm:px-8 my-16 fade-in text-center">
-    <h2 id="about-title" class="text-3xl md:text-4xl font-semibold tracking-tight mb-6"></h2>
-    <p id="about-text" class="text-white/75 text-lg leading-relaxed"></p>
-  </section>
-
-  <!-- Exposições -->
-  <section class="relative w-full my-16 fade-in">
-    <div class="max-w-5xl mx-auto px-4 sm:px-8">
-      <div class="relative rounded-2xl overflow-hidden bg-black py-24 sm:py-32 px-6 flex items-center justify-center min-h-[420px]">
-        <img id="expo-bg" src="" alt="" class="absolute inset-0 w-full h-full object-cover opacity-50 scale-125">
-        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
-        <div class="relative text-center w-full">
-          <h2 id="expo-title" class="text-3xl md:text-5xl font-normal text-white mb-8 drop-shadow-lg"></h2>
-          <ul id="expo-list" class="space-y-4 text-lg md:text-2xl text-white/90 font-medium max-w-2xl mx-auto"></ul>
-        </div>
-      </div>
-    </div>
-  </section>
+  <!-- Seções dinâmicas (ordem e visibilidade controladas pelo CMS) -->
+  <div id="sections" class="flex-1 w-full"></div>
 
   <footer class="w-full border-t border-white/10 pt-12 pb-6 px-4 md:px-16 flex flex-col md:flex-row items-center justify-between gap-4 text-white/60 text-sm">
     <div id="footer-copy"></div>
@@ -146,129 +84,138 @@
     const SUPA = "https://gobslzsggskllmhzasti.supabase.co";
     const CONTENT_URL = SUPA + "/storage/v1/object/public/photos/content.json";
     const esc = s => (s==null?"":String(s)).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
-    const imgUrl = (c, path) => /^https?:\/\//.test(path) ? path : (c.bucket_base + "/" + path);
+    let C = null;
+    const imgUrl = path => /^https?:\/\//.test(path) ? path : (C.bucket_base + "/" + path);
+    const fotos = () => C.photos.filter(p => p.section === 'fotografias').sort((a,b)=>a.order-b.order);
+    const monts = () => C.photos.filter(p => p.section === 'montagens').sort((a,b)=>a.order-b.order);
+    const waLink = () => "https://api.whatsapp.com/send/?phone="+(C.contact?.whatsapp||'')+"&text="+encodeURIComponent(C.contact?.whatsapp_msg||'Olá')+"&type=phone_number&app_absent=0";
 
-    function render(c) {
-      // Logo
+    const figHTML = p => `
+      <figure class="group card-clickable relative mb-4 break-inside-avoid overflow-hidden rounded-xl bg-white/5">
+        <img src="${imgUrl(p.path)}" alt="${esc(p.caption)}" loading="lazy" data-lightbox data-caption="${esc(p.caption)}" class="bw-img w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]">
+        ${p.caption?`<figcaption class="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent px-4 pt-10 pb-3 text-sm text-white/90 opacity-0 translate-y-2 transition-all duration-300 group-hover:opacity-100 group-hover:translate-y-0">${esc(p.caption)}</figcaption>`:''}
+      </figure>`;
+
+    // ---- Templates por seção ----
+    const SECTIONS = {
+      shop(){
+        const items = (C.products||[]).map(p=>`
+          <div class="group fade-in">
+            <div class="card-clickable bg-gradient-to-br from-white/5 via-black/20 to-black/40 border border-white/10 rounded-2xl overflow-hidden shadow-xl flex flex-col relative">
+              <div class="relative">
+                <img src="${esc(p.image)}" alt="${esc(p.title)}" class="bw-img w-full h-64 object-cover" data-lightbox data-caption="${esc(p.title)}">
+                ${p.stock?`<div class="absolute top-2 right-2 px-3 py-1 rounded-full bg-black/80 text-xs font-medium border border-white/10">${esc(p.stock)}</div>`:''}
+              </div>
+              <div class="flex-1 flex flex-col px-5 py-4">
+                <h3 class="text-xl font-semibold tracking-tight mb-1">${esc(p.title)}</h3>
+                <p class="text-gray-400 text-sm mb-2">${esc(p.subtitle)}</p>
+                <div class="flex items-end justify-between mt-auto">
+                  <span class="flex flex-col"><span class="text-xs text-gray-400 leading-tight">A partir de</span><span class="text-lg font-medium">${esc(p.price)}</span></span>
+                  <a href="${p.whatsapp||waLink()}" target="_blank" rel="noopener" class="px-4 py-2 rounded-lg bg-white/10 border border-white/20 font-semibold text-white transition hover:bg-white/20 flex items-center gap-2"><i data-lucide="zap" class="w-4 h-4"></i> Mais infos</a>
+                </div>
+              </div>
+            </div>
+          </div>`).join('');
+        return `<section id="comprar-obras" class="w-full max-w-6xl mx-auto px-4 sm:px-8 py-16">
+          <div class="mb-10 text-center fade-in"><h2 class="text-4xl md:text-6xl font-semibold tracking-tight mb-3">${esc(C.shop?.title||'Comprar obras')}</h2><p class="text-white/70 max-w-2xl mx-auto">${esc(C.shop?.subtitle||'')}</p></div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">${items}</div>
+        </section>`;
+      },
+      fotografias(){
+        return `<section id="galeria" class="w-full max-w-6xl mx-auto px-4 sm:px-8 py-16 fade-in">
+          <div class="mb-10 text-center"><h2 class="text-4xl md:text-6xl font-semibold tracking-tight mb-3">${esc(C.gallery?.title||'Fotografias')}</h2><p class="text-white/70 max-w-2xl mx-auto">${esc(C.gallery?.subtitle||'')}</p></div>
+          <div class="columns-1 sm:columns-2 lg:columns-3 gap-4">${fotos().map(figHTML).join('')}</div>
+        </section>`;
+      },
+      montagens(){
+        const list = monts(); if(!list.length) return '';
+        return `<section id="montagens" class="w-full max-w-6xl mx-auto px-4 sm:px-8 pb-16 fade-in">
+          <div class="mb-10 text-center"><h2 class="text-3xl md:text-5xl font-semibold tracking-tight mb-3">${esc(C.montagens?.title||'Na sua parede')}</h2><p class="text-white/70 max-w-2xl mx-auto">${esc(C.montagens?.subtitle||'')}</p></div>
+          <div class="columns-1 sm:columns-2 lg:columns-3 gap-4">${list.map(figHTML).join('')}</div>
+        </section>`;
+      },
+      cta(){
+        const bg = C.backgrounds?.cta ? imgUrl(C.backgrounds.cta) : (fotos()[6]||fotos()[0]) ? imgUrl((fotos()[6]||fotos()[0]).path) : '';
+        return `<section class="relative w-full my-16 fade-in"><div class="max-w-6xl mx-auto px-4 sm:px-8">
+          <div class="relative rounded-2xl overflow-hidden bg-black py-24 sm:py-32 px-6">
+            <img src="${bg}" alt="" class="absolute inset-0 w-full h-full object-cover opacity-40 scale-[1.6]">
+            <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
+            <div class="relative text-center">
+              <h2 class="text-4xl md:text-5xl font-semibold tracking-tight text-white mb-4">${esc(C.cta?.title||'')}</h2>
+              <p class="text-lg md:text-xl text-white/80 mb-8 max-w-2xl mx-auto">${esc(C.cta?.text||'')}</p>
+              <a href="${waLink()}" target="_blank" rel="noopener" class="px-8 py-4 bg-white text-black rounded-lg font-medium hover:bg-white/90 transition-transform hover:scale-105 text-lg inline-flex items-center gap-2 group">${esc(C.cta?.button||'Fale comigo')}<i data-lucide="arrow-right" class="w-5 h-5 transition-transform group-hover:translate-x-1"></i></a>
+            </div>
+          </div></div></section>`;
+      },
+      sobre(){
+        if(!(C.about?.text)) return '';
+        return `<section id="sobre" class="w-full max-w-3xl mx-auto px-4 sm:px-8 my-16 fade-in text-center">
+          <h2 class="text-3xl md:text-4xl font-semibold tracking-tight mb-6">${esc(C.about?.title||'Sobre')}</h2>
+          <p class="text-white/75 text-lg leading-relaxed">${esc(C.about?.text||'')}</p></section>`;
+      },
+      exposicoes(){
+        const items = (C.exposicoes?.items||[]); if(!items.length) return '';
+        const bg = C.backgrounds?.expo ? imgUrl(C.backgrounds.expo) : (fotos()[0]?imgUrl(fotos()[0].path):'');
+        return `<section class="relative w-full my-16 fade-in"><div class="max-w-5xl mx-auto px-4 sm:px-8">
+          <div class="relative rounded-2xl overflow-hidden bg-black py-24 sm:py-32 px-6 flex items-center justify-center min-h-[420px]">
+            <img src="${bg}" alt="" class="absolute inset-0 w-full h-full object-cover opacity-50 scale-125">
+            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
+            <div class="relative text-center w-full">
+              <h2 class="text-3xl md:text-5xl font-normal text-white mb-8 drop-shadow-lg">${esc(C.exposicoes?.title||'Exposições')}</h2>
+              <ul class="space-y-4 text-lg md:text-2xl text-white/90 font-medium max-w-2xl mx-auto">
+                ${items.map(e=>`<li>${esc(e.text)} <span class="text-white/70 font-normal">${esc(e.year)}</span>${e.note?`<br><span class="text-white/60 text-base">(${esc(e.note)})</span>`:''}</li>`).join('')}
+              </ul>
+            </div>
+          </div></div></section>`;
+      }
+    };
+    const NAV_LABELS = { fotografias:['#galeria','Fotografias'], montagens:['#montagens','Montagens'], shop:['#comprar-obras','Comprar'], sobre:['#sobre','Sobre'] };
+
+    function render(c){
+      C = c;
+      // Theme
+      const r = document.documentElement.style;
+      r.setProperty('--accent', c.theme?.accent || '#d1d5db');
+      r.setProperty('--bg', c.theme?.bg || '#000000');
+      // SEO
+      if(c.seo?.title){ document.title = c.seo.title; }
+      if(c.seo?.description){ document.getElementById('meta-desc').setAttribute('content', c.seo.description); }
+      // Logo + hero
       document.getElementById('logo').src = c.logo || '';
-      // Hero
       document.getElementById('hero-title1').textContent = c.hero.title1 || '';
       document.getElementById('hero-title2').textContent = c.hero.title2 || '';
       document.getElementById('hero-subtitle').innerHTML = c.hero.subtitle || '';
       document.getElementById('hero-cta').textContent = c.hero.cta || 'Comprar obras';
-
-      const fotos = c.photos.filter(p => p.section === 'fotografias').sort((a,b)=>a.order-b.order);
-      const monts = c.photos.filter(p => p.section === 'montagens').sort((a,b)=>a.order-b.order);
-
-      // Hero marquee (primeiras fotos)
-      const marqueeImgs = fotos.slice(0,5);
-      const strip = arrHidden => `<div class="flex-none flex animate-marquee space-x-4 pr-4"${arrHidden?' aria-hidden="true"':''}>` +
-        marqueeImgs.map(p=>`<img src="${imgUrl(c,p.path)}" alt="" class="h-full max-h-[100vh] rounded-2xl object-cover opacity-70">`).join('') + `</div>`;
-      document.getElementById('hero-marquee').innerHTML = marqueeImgs.length ? strip(false)+strip(true) : '';
-
-      // Shop
-      document.getElementById('shop-head').innerHTML =
-        `<h2 class="text-4xl md:text-6xl font-semibold tracking-tight mb-3">${esc(c.shop?.title||'Comprar obras')}</h2>
-         <p class="text-white/70 max-w-2xl mx-auto">${esc(c.shop?.subtitle||'')}</p>`;
-      const wa = (c.contact?.whatsapp)||'';
-      const waLink = "https://api.whatsapp.com/send/?phone="+wa+"&text="+encodeURIComponent(c.contact?.whatsapp_msg||'Olá')+"&type=phone_number&app_absent=0";
-      document.getElementById('comprar-obras').innerHTML = (c.products||[]).map(p=>`
-        <div class="group fade-in">
-          <div class="card-clickable bg-gradient-to-br from-white/5 via-black/20 to-black/40 border border-white/10 rounded-2xl overflow-hidden shadow-xl flex flex-col relative">
-            <div class="relative">
-              <img src="${esc(p.image)}" alt="${esc(p.title)}" class="bw-img w-full h-64 object-cover" data-lightbox data-caption="${esc(p.title)}">
-              ${p.stock?`<div class="absolute top-2 right-2 px-3 py-1 rounded-full bg-black/80 text-xs font-medium border border-white/10">${esc(p.stock)}</div>`:''}
-            </div>
-            <div class="flex-1 flex flex-col px-5 py-4">
-              <h2 class="text-xl font-semibold tracking-tight mb-1">${esc(p.title)}</h2>
-              <p class="text-gray-400 text-sm mb-2">${esc(p.subtitle)}</p>
-              <div class="flex items-end justify-between mt-auto">
-                <span class="flex flex-col"><span class="text-xs text-gray-400 leading-tight">A partir de</span><span class="text-lg font-medium">${esc(p.price)}</span></span>
-                <a href="${p.whatsapp||waLink}" target="_blank" rel="noopener" class="px-4 py-2 rounded-lg bg-white/10 border border-white/20 font-semibold text-white transition hover:bg-white/20 flex items-center gap-2">
-                  <i data-lucide="zap" class="w-4 h-4"></i> Mais infos
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>`).join('');
-
-      // Galeria
-      document.getElementById('gallery-title').textContent = c.gallery?.title || 'Fotografias';
-      document.getElementById('gallery-subtitle').textContent = c.gallery?.subtitle || '';
-      const figHTML = p => `
-        <figure class="group card-clickable relative mb-4 break-inside-avoid overflow-hidden rounded-xl bg-white/5">
-          <img src="${imgUrl(c,p.path)}" alt="${esc(p.caption)}" loading="lazy" data-lightbox data-caption="${esc(p.caption)}" class="bw-img w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]">
-          ${p.caption?`<figcaption class="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent px-4 pt-10 pb-3 text-sm text-white/90 opacity-0 translate-y-2 transition-all duration-300 group-hover:opacity-100 group-hover:translate-y-0">${esc(p.caption)}</figcaption>`:''}
-        </figure>`;
-      document.getElementById('gallery-grid').innerHTML = fotos.map(figHTML).join('');
-
-      // Montagens
-      document.getElementById('montagens-title').textContent = c.montagens?.title || 'Na sua parede';
-      document.getElementById('montagens-subtitle').textContent = c.montagens?.subtitle || '';
-      document.getElementById('montagens-grid').innerHTML = monts.map(figHTML).join('');
-      document.getElementById('montagens').style.display = monts.length ? '' : 'none';
-
-      // CTA
-      const ctaBg = fotos[6] || fotos[0];
-      if (ctaBg) document.getElementById('cta-bg').src = imgUrl(c, ctaBg.path);
-      document.getElementById('cta-title').textContent = c.cta?.title || '';
-      document.getElementById('cta-text').textContent = c.cta?.text || '';
-      const ctaBtn = document.getElementById('cta-button');
-      ctaBtn.href = waLink; ctaBtn.querySelector('span').textContent = c.cta?.button || 'Fale comigo';
-
-      // Sobre
-      document.getElementById('about-title').textContent = c.about?.title || 'Sobre';
-      document.getElementById('about-text').textContent = c.about?.text || '';
-      document.getElementById('sobre').style.display = (c.about?.text) ? '' : 'none';
-
-      // Exposições
-      const expoBg = fotos[0];
-      if (expoBg) document.getElementById('expo-bg').src = imgUrl(c, expoBg.path);
-      document.getElementById('expo-title').textContent = c.exposicoes?.title || 'Exposições';
-      document.getElementById('expo-list').innerHTML = (c.exposicoes?.items||[]).map(e=>
-        `<li>${esc(e.text)} <span class="text-white/70 font-normal">${esc(e.year)}</span>${e.note?`<br><span class="text-white/60 text-base">(${esc(e.note)})</span>`:''}</li>`).join('');
-
+      // Hero marquee
+      const hi = (c.backgrounds?.hero_mode==='custom' && (c.backgrounds.hero_images||[]).length) ? c.backgrounds.hero_images.map(p=>({path:p})) : fotos().slice(0,5);
+      const strip = h => `<div class="flex-none flex animate-marquee space-x-4 pr-4"${h?' aria-hidden="true"':''}>`+hi.map(p=>`<img src="${imgUrl(p.path)}" alt="" class="h-full max-h-[100vh] rounded-2xl object-cover opacity-70">`).join('')+`</div>`;
+      document.getElementById('hero-marquee').innerHTML = hi.length ? strip(false)+strip(true) : '';
+      // Nav (apenas seções visíveis com link)
+      const secs = (c.sections||[]).filter(s=>s.visible);
+      document.getElementById('nav').innerHTML = secs.filter(s=>NAV_LABELS[s.key]).map(s=>`<a href="${NAV_LABELS[s.key][0]}" class="text-white/80 hover:text-white transition text-sm font-medium">${NAV_LABELS[s.key][1]}</a>`).join('');
+      // Seções na ordem definida
+      document.getElementById('sections').innerHTML = secs.map(s => (SECTIONS[s.key]?SECTIONS[s.key]():'')).join('');
       // Footer
-      document.getElementById('footer-copy').textContent = (new Date().getFullYear()) + ' Hugo Carmo';
+      document.getElementById('footer-copy').textContent = (new Date().getFullYear()) + ' ' + (c.footer?.text || 'Hugo Carmo');
       const insta = document.getElementById('footer-insta');
-      insta.href = c.contact?.instagram_url || '#';
-      insta.textContent = c.contact?.instagram_label || '';
+      insta.href = c.contact?.instagram_url || '#'; insta.textContent = c.contact?.instagram_label || '';
 
-      if (window.lucide) lucide.createIcons();
-      // Animações
-      gsap.utils.toArray('.fade-in').forEach((el,i)=>{ gsap.to(el,{opacity:1,y:0,scale:1,filter:"blur(0px)",delay:.2+i*.06,duration:1,ease:"power3.out"}); el.classList.add('visible'); });
+      if(window.lucide) lucide.createIcons();
+      gsap.utils.toArray('.fade-in').forEach((el,i)=>{ gsap.to(el,{opacity:1,y:0,scale:1,filter:"blur(0px)",delay:.15+i*.05,duration:1,ease:"power3.out"}); el.classList.add('visible'); });
       bindLightbox();
     }
 
     // Lightbox
-    const modalBg = document.getElementById('modal-bg');
-    const modalImg = document.getElementById('modal-img');
-    const modalCap = document.getElementById('modal-caption');
-    let zoomAnim = null;
-    function openLightbox(src, cap){
-      modalImg.src = src; modalImg.alt = cap||''; modalCap.textContent = cap||'';
-      modalBg.classList.remove('hidden'); modalBg.setAttribute('aria-hidden','false');
-      setTimeout(()=>modalImg.focus(),120);
-      gsap.set(modalImg,{scale:1.01,opacity:0}); gsap.to(modalImg,{opacity:1,duration:.5,ease:"power2.out"});
-      if (zoomAnim) zoomAnim.kill();
-      zoomAnim = gsap.to(modalImg,{scale:1.1,x:'1vw',y:'-.5vw',duration:8,ease:"power1.inOut",yoyo:true,repeat:-1});
-    }
-    function closeLightbox(){
-      gsap.to(modalImg,{opacity:0,scale:.98,y:20,duration:.28,ease:"power2.in",onComplete:()=>{
-        modalBg.classList.add('hidden'); modalBg.setAttribute('aria-hidden','true'); modalImg.src=''; if(zoomAnim) zoomAnim.kill();
-      }});
-    }
-    function bindLightbox(){
-      document.querySelectorAll('[data-lightbox]').forEach(img=>{
-        img.addEventListener('click', ()=> openLightbox(img.src, img.getAttribute('data-caption')));
-      });
-    }
+    const modalBg=document.getElementById('modal-bg'), modalImg=document.getElementById('modal-img'), modalCap=document.getElementById('modal-caption');
+    let zoomAnim=null;
+    function openLightbox(src,cap){ modalImg.src=src; modalImg.alt=cap||''; modalCap.textContent=cap||''; modalBg.classList.remove('hidden'); modalBg.setAttribute('aria-hidden','false'); setTimeout(()=>modalImg.focus(),120); gsap.set(modalImg,{scale:1.01,opacity:0}); gsap.to(modalImg,{opacity:1,duration:.5,ease:"power2.out"}); if(zoomAnim)zoomAnim.kill(); zoomAnim=gsap.to(modalImg,{scale:1.1,x:'1vw',y:'-.5vw',duration:8,ease:"power1.inOut",yoyo:true,repeat:-1}); }
+    function closeLightbox(){ gsap.to(modalImg,{opacity:0,scale:.98,y:20,duration:.28,ease:"power2.in",onComplete:()=>{ modalBg.classList.add('hidden'); modalBg.setAttribute('aria-hidden','true'); modalImg.src=''; if(zoomAnim)zoomAnim.kill(); }}); }
+    function bindLightbox(){ document.querySelectorAll('[data-lightbox]').forEach(img=> img.addEventListener('click', ()=>openLightbox(img.src, img.getAttribute('data-caption')))); }
     document.getElementById('modal-close').addEventListener('click', closeLightbox);
     modalBg.addEventListener('click', e=>{ if(e.target===modalBg) closeLightbox(); });
     modalImg.addEventListener('click', closeLightbox);
     document.addEventListener('keydown', e=>{ if(!modalBg.classList.contains('hidden') && (e.key==='Escape'||e.key==='Enter'||e.key===' ')) closeLightbox(); });
 
-    // Load
     fetch(CONTENT_URL + "?v=" + Date.now(), {cache:"no-store"})
       .then(r=>{ if(!r.ok) throw new Error(r.status); return r.json(); })
       .then(render)

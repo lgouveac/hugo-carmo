@@ -43,14 +43,19 @@ vercel.json       # cleanUrls (faz /admin servir admin.html)
    |---|---|
    | `SUPABASE_URL` | `https://gobslzsggskllmhzasti.supabase.co` |
    | `SUPABASE_SERVICE_ROLE` | a chave **service_role** do Supabase (Settings → API) |
-   | `ADMIN_PASSWORD` | a senha que o Hugo vai usar no `/admin` |
+   | `ADMIN_EMAIL` | `hugo.gcarmo@gmail.com` |
+   | `ADMIN_PASSWORD` | a senha do Hugo (combinada à parte — não fica no repositório) |
 3. Deploy. O site fica na URL da Vercel e o painel em **`/admin`**.
+
+> `ADMIN_EMAIL` é opcional — se não definir, o login pede só a senha.
 
 > Sem framework — a Vercel detecta os arquivos estáticos na raiz e transforma a pasta `api/` em funções automaticamente.
 
 ## Usando o painel (Hugo)
-Acesse `seu-site.com/admin`, entre com a senha e edite:
+Acesse `seu-site.com/admin`, entre com email + senha e edite:
 - **Textos** — títulos, subtítulos, sobre, CTA.
+- **Visual** — logo, cores (destaque/fundo), imagens de fundo (hero/CTA/exposições), SEO e rodapé.
+- **Seções** — ligar/desligar e reordenar as seções do site.
 - **Fotografias / Montagens** — adicionar (upload), legenda, reordenar (↑ ↓), remover.
 - **Produtos** — título, preço, estoque, trocar imagem.
 - **Exposições** e **Contato** (WhatsApp, Instagram).

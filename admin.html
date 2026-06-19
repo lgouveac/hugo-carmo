@@ -21,6 +21,8 @@
     <form id="login-form" class="w-full max-w-sm card rounded-2xl p-8 space-y-4">
       <h1 class="text-2xl font-semibold">Painel Hugo Carmo</h1>
       <p class="text-white/50 text-sm">Entre para editar o site.</p>
+      <input id="email" type="email" placeholder="Email" autocomplete="username"
+             class="w-full rounded-lg border border-white/15 px-4 py-3 outline-none focus:border-white/40">
       <input id="password" type="password" placeholder="Senha" autocomplete="current-password" required
              class="w-full rounded-lg border border-white/15 px-4 py-3 outline-none focus:border-white/40">
       <button type="submit" class="w-full rounded-lg bg-white text-black font-semibold py-3 hover:bg-white/90">Entrar</button>
@@ -42,6 +44,8 @@
 
     <nav class="px-4 md:px-8 pt-4 flex gap-2 flex-wrap">
       <button data-tab="textos"    class="tabbtn active px-4 py-2 rounded-lg border border-white/15 text-sm">Textos</button>
+      <button data-tab="visual"    class="tabbtn px-4 py-2 rounded-lg border border-white/15 text-sm">Visual</button>
+      <button data-tab="secoes"    class="tabbtn px-4 py-2 rounded-lg border border-white/15 text-sm">Seções</button>
       <button data-tab="fotografias" class="tabbtn px-4 py-2 rounded-lg border border-white/15 text-sm">Fotografias</button>
       <button data-tab="montagens" class="tabbtn px-4 py-2 rounded-lg border border-white/15 text-sm">Montagens</button>
       <button data-tab="produtos"  class="tabbtn px-4 py-2 rounded-lg border border-white/15 text-sm">Produtos</button>
@@ -72,7 +76,7 @@
       e.preventDefault();
       $("#login-error").classList.add("hidden");
       try{
-        const r = await fetch("/api/login", {method:"POST", headers:{"Content-Type":"application/json"}, body: JSON.stringify({password: $("#password").value})});
+        const r = await fetch("/api/login", {method:"POST", headers:{"Content-Type":"application/json"}, body: JSON.stringify({email: $("#email").value, password: $("#password").value})});
         const d = await r.json();
         if(!r.ok) throw new Error(d.error||"Falha no login");
         localStorage.setItem(TKEY, d.token);
@@ -86,6 +90,21 @@
       content = await r.json();
       content.photos = content.photos || [];
       content.products = content.products || [];
+      // Defaults para conteúdo antigo (compatibilidade)
+      content.seo = content.seo || {title:"Hugo Carmo — Artista Visual", description:""};
+      content.theme = content.theme || {accent:"#d1d5db", bg:"#000000"};
+      content.footer = content.footer || {text:"Hugo Carmo"};
+      content.backgrounds = content.backgrounds || {hero_mode:"gallery", hero_images:[], cta:"", expo:""};
+      content.backgrounds.hero_images = content.backgrounds.hero_images || [];
+      content.exposicoes = content.exposicoes || {title:"Exposições", items:[]};
+      if(!content.sections || !content.sections.length) content.sections = [
+        {key:"shop",label:"Comprar obras",visible:true},
+        {key:"fotografias",label:"Fotografias",visible:true},
+        {key:"montagens",label:"Na sua parede",visible:true},
+        {key:"cta",label:"Chamada (CTA)",visible:true},
+        {key:"sobre",label:"Sobre",visible:true},
+        {key:"exposicoes",label:"Exposições",visible:true},
+      ];
       $("#login").classList.add("hidden");
       $("#app").classList.remove("hidden");
       renderTab(currentTab);
@@ -109,6 +128,8 @@
     function renderTab(tab){
       const p = $("#panel");
       if(tab==="textos") p.innerHTML = tplTextos();
+      else if(tab==="visual") p.innerHTML = tplVisual();
+      else if(tab==="secoes") p.innerHTML = tplSecoes();
       else if(tab==="fotografias") p.innerHTML = tplPhotos("fotografias","Fotografias");
       else if(tab==="montagens") p.innerHTML = tplPhotos("montagens","Montagens (na sua parede)");
       else if(tab==="produtos") p.innerHTML = tplProdutos();
@@ -145,6 +166,83 @@
         ${field("Título", c.about.title, v=>c.about.title=v)}
         ${field("Texto", c.about.text, v=>c.about.text=v, {textarea:true, rows:6})}
       </div>`;
+    }
+
+    // ---- VISUAL ----
+    function bgControl(label, key, current){
+      const prev = current ? `<img src="${imgUrl(current)}" class="w-full h-32 object-cover rounded-lg bg-black mb-2">` : `<div class="w-full h-32 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-white/30 text-xs mb-2">usando imagem padrão</div>`;
+      return `<div class="mb-5"><span class="block text-sm text-white/60 mb-1">${esc(label)}</span>${prev}
+        <div class="flex gap-2">
+          <label class="cursor-pointer text-xs px-3 py-1.5 rounded border border-white/15 hover:bg-white/10">Enviar imagem<input type="file" accept="image/jpeg,image/png,image/webp" class="hidden" data-bgupload="${key}"></label>
+          ${current?`<button data-bgclear="${key}" class="text-xs px-3 py-1.5 rounded border border-white/15 hover:bg-white/10">Usar padrão</button>`:''}
+        </div></div>`;
+    }
+    function tplVisual(){
+      const c=content, H=t=>`<h2 class="text-lg font-semibold mt-6 mb-3 text-white/90">${t}</h2>`;
+      const heroCustom = (c.backgrounds.hero_mode==='custom');
+      const heroThumbs = (c.backgrounds.hero_images||[]).map((p,i)=>`
+        <div class="relative w-24 h-24"><img src="${imgUrl(p)}" class="w-24 h-24 object-cover rounded-lg bg-black">
+          <button data-heroremove="${i}" class="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-red-500 text-white text-xs">×</button></div>`).join('');
+      return `<div class="card rounded-2xl p-5">
+        ${H("Logo")}
+        <div class="flex items-center gap-4 mb-4">
+          <img src="${esc(c.logo)}" class="w-16 h-16 object-contain rounded-lg bg-white/5">
+          <label class="cursor-pointer text-sm px-3 py-2 rounded-lg border border-white/15 hover:bg-white/10">Enviar logo<input type="file" accept="image/png,image/jpeg,image/webp" class="hidden" data-logoupload></label>
+        </div>
+        ${field("URL do logo (ou envie acima)", c.logo, v=>c.logo=v)}
+
+        ${H("Cores")}
+        <div class="flex gap-6 mb-2">
+          <label class="text-sm text-white/60">Cor de destaque<br><input type="color" value="${esc(c.theme.accent||'#d1d5db')}" data-theme="accent" class="mt-1 w-16 h-10 rounded bg-transparent border border-white/15"></label>
+          <label class="text-sm text-white/60">Cor de fundo<br><input type="color" value="${esc(c.theme.bg||'#000000')}" data-theme="bg" class="mt-1 w-16 h-10 rounded bg-transparent border border-white/15"></label>
+        </div>
+
+        ${H("Fundo do topo (hero)")}
+        <label class="block mb-3"><span class="block text-sm text-white/60 mb-1">Modo</span>
+          <select data-heromode class="w-full rounded-lg border border-white/15 px-3 py-2 bg-black">
+            <option value="gallery" ${!heroCustom?'selected':''}>Usar as primeiras fotos da galeria</option>
+            <option value="custom" ${heroCustom?'selected':''}>Imagens personalizadas</option>
+          </select></label>
+        ${heroCustom?`<div class="flex flex-wrap gap-3 mb-2">${heroThumbs||'<span class="text-white/30 text-xs">Nenhuma imagem. Envie abaixo.</span>'}</div>
+          <label class="cursor-pointer text-xs px-3 py-1.5 rounded border border-white/15 hover:bg-white/10">+ Adicionar imagem<input type="file" accept="image/jpeg,image/png,image/webp" multiple class="hidden" data-bgupload="hero"></label>`:''}
+
+        ${H("Fundos de seção")}
+        ${bgControl("Fundo da Chamada (CTA)", "cta", c.backgrounds.cta)}
+        ${bgControl("Fundo das Exposições", "expo", c.backgrounds.expo)}
+
+        ${H("SEO (Google / aba do navegador)")}
+        ${field("Título da página", c.seo.title, v=>c.seo.title=v)}
+        ${field("Descrição da página", c.seo.description, v=>c.seo.description=v, {textarea:true, rows:2})}
+
+        ${H("Rodapé")}
+        ${field("Texto do rodapé (nome ao lado do ano)", c.footer.text, v=>c.footer.text=v)}
+      </div>`;
+    }
+
+    // ---- SEÇÕES (ordem + visibilidade) ----
+    function tplSecoes(){
+      const rows = content.sections.map((s,i)=>`
+        <div class="card rounded-xl p-3 flex items-center gap-3" data-si="${i}">
+          <div class="flex gap-1">
+            <button data-secmove="up" data-i="${i}" class="px-2 py-1 rounded border border-white/15 text-xs hover:bg-white/10" ${i===0?'disabled style=opacity:.3':''}>↑</button>
+            <button data-secmove="down" data-i="${i}" class="px-2 py-1 rounded border border-white/15 text-xs hover:bg-white/10" ${i===content.sections.length-1?'disabled style=opacity:.3':''}>↓</button>
+          </div>
+          <span class="flex-1 font-medium">${esc(s.label||s.key)}</span>
+          <label class="flex items-center gap-2 text-sm text-white/70 cursor-pointer">
+            <input type="checkbox" data-secvis="${i}" ${s.visible?'checked':''}> Mostrar
+          </label>
+        </div>`).join("");
+      return `<div class="card rounded-2xl p-5">
+        <h2 class="text-lg font-semibold mb-1">Seções do site</h2>
+        <p class="text-white/50 text-sm mb-4">Arraste a ordem com ↑ ↓ e ligue/desligue cada seção. (O topo e o rodapé são fixos.)</p>
+        <div class="space-y-2">${rows}</div>
+      </div>`;
+    }
+
+    async function uploadFile(file){
+      const buf = await file.arrayBuffer();
+      const r = await fetch("/api/upload", {method:"POST", headers:{"Authorization":"Bearer "+token(), "Content-Type":file.type, "x-filename":file.name}, body: buf});
+      const d = await r.json(); if(!r.ok) throw new Error(d.error||"falha"); return d;
     }
 
     // ---- PHOTOS (fotografias / montagens) ----
@@ -274,6 +372,33 @@
       }));
       const addE = panel.querySelector("#add-expo");
       if(addE) addE.addEventListener("click", ()=>{ (content.exposicoes.items=content.exposicoes.items||[]).push({text:"",year:"",note:""}); renderTab(currentTab); setDirty(true); });
+
+      // ---- Visual ----
+      panel.querySelectorAll("[data-theme]").forEach(inp=> inp.addEventListener("input", e=>{ content.theme[inp.dataset.theme]=e.target.value; setDirty(true); }));
+      panel.querySelectorAll("[data-seo]").forEach(inp=> inp.addEventListener("input", e=>{ content.seo[inp.dataset.seo]=e.target.value; setDirty(true); }));
+      const foot = panel.querySelector("[data-foot]");
+      if(foot) foot.addEventListener("input", e=>{ content.footer.text=e.target.value; setDirty(true); });
+      const logoUp = panel.querySelector("[data-logoupload]");
+      if(logoUp) logoUp.addEventListener("change", async e=>{ const f=e.target.files[0]; if(!f) return; try{ toast("Enviando logo…"); const d=await uploadFile(f); content.logo=d.url; setDirty(true); renderTab(currentTab); toast("Logo trocado. Salve para publicar."); }catch(err){ toast("Erro: "+err.message,false); } });
+      const heroMode = panel.querySelector("[data-heromode]");
+      if(heroMode) heroMode.addEventListener("change", e=>{ content.backgrounds.hero_mode=e.target.value; setDirty(true); renderTab(currentTab); });
+      panel.querySelectorAll("[data-heroremove]").forEach(btn=> btn.addEventListener("click", ()=>{ content.backgrounds.hero_images.splice(+btn.dataset.heroremove,1); setDirty(true); renderTab(currentTab); }));
+      panel.querySelectorAll("[data-bgupload]").forEach(inp=> inp.addEventListener("change", async e=>{
+        const key=inp.dataset.bgupload, files=[...e.target.files]; if(!files.length) return;
+        try{ toast("Enviando…");
+          for(const f of files){ const d=await uploadFile(f); if(key==='hero') content.backgrounds.hero_images.push(d.path); else content.backgrounds[key]=d.path; }
+          setDirty(true); renderTab(currentTab); toast("Imagem aplicada. Salve para publicar.");
+        }catch(err){ toast("Erro: "+err.message,false); }
+      }));
+      panel.querySelectorAll("[data-bgclear]").forEach(btn=> btn.addEventListener("click", ()=>{ content.backgrounds[btn.dataset.bgclear]=""; setDirty(true); renderTab(currentTab); }));
+
+      // ---- Seções ----
+      panel.querySelectorAll("[data-secvis]").forEach(cb=> cb.addEventListener("change", e=>{ content.sections[+cb.dataset.secvis].visible=e.target.checked; setDirty(true); }));
+      panel.querySelectorAll("[data-secmove]").forEach(btn=> btn.addEventListener("click", ()=>{
+        const i=+btn.dataset.i, j=btn.dataset.secmove==='up'?i-1:i+1;
+        if(j<0||j>=content.sections.length) return;
+        const s=content.sections; [s[i],s[j]]=[s[j],s[i]]; setDirty(true); renderTab(currentTab);
+      }));
     }
 
     function movePhoto(id, dir){

@@ -428,5 +428,54 @@
       "order": 9
     }
   ],
-  "bucket_base": "https://gobslzsggskllmhzasti.supabase.co/storage/v1/object/public/photos"
+  "bucket_base": "https://gobslzsggskllmhzasti.supabase.co/storage/v1/object/public/photos",
+  "seo": {
+    "title": "Hugo Carmo — Artista Visual",
+    "description": "Portfólio e obras do artista visual Hugo Carmo — fotografias do Brasil e do mundo."
+  },
+  "theme": {
+    "accent": "#d1d5db",
+    "bg": "#000000"
+  },
+  "footer": {
+    "text": "Hugo Carmo"
+  },
+  "backgrounds": {
+    "hero_mode": "gallery",
+    "hero_images": [],
+    "cta": "",
+    "expo": ""
+  },
+  "sections": [
+    {
+      "key": "shop",
+      "label": "Comprar obras",
+      "visible": true
+    },
+    {
+      "key": "fotografias",
+      "label": "Fotografias",
+      "visible": true
+    },
+    {
+      "key": "montagens",
+      "label": "Na sua parede",
+      "visible": true
+    },
+    {
+      "key": "cta",
+      "label": "Chamada (CTA)",
+      "visible": true
+    },
+    {
+      "key": "sobre",
+      "label": "Sobre",
+      "visible": true
+    },
+    {
+      "key": "exposicoes",
+      "label": "Exposições",
+      "visible": true
+    }
+  ]
 }
