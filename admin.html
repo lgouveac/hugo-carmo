@@ -50,6 +50,7 @@
       <button data-tab="montagens" class="tabbtn px-4 py-2 rounded-lg border border-white/15 text-sm">Montagens</button>
       <button data-tab="produtos"  class="tabbtn px-4 py-2 rounded-lg border border-white/15 text-sm">Produtos</button>
       <button data-tab="exposicoes" class="tabbtn px-4 py-2 rounded-lg border border-white/15 text-sm">Exposições</button>
+      <button data-tab="faq"       class="tabbtn px-4 py-2 rounded-lg border border-white/15 text-sm">FAQ</button>
       <button data-tab="contato"   class="tabbtn px-4 py-2 rounded-lg border border-white/15 text-sm">Contato</button>
     </nav>
 
@@ -97,14 +98,17 @@
       content.backgrounds = content.backgrounds || {hero_mode:"gallery", hero_images:[], cta:"", expo:""};
       content.backgrounds.hero_images = content.backgrounds.hero_images || [];
       content.exposicoes = content.exposicoes || {title:"Exposições", items:[]};
+      content.faq = content.faq || {title:"Perguntas frequentes", items:[]};
       if(!content.sections || !content.sections.length) content.sections = [
         {key:"shop",label:"Comprar obras",visible:true},
         {key:"fotografias",label:"Fotografias",visible:true},
         {key:"montagens",label:"Na sua parede",visible:true},
         {key:"cta",label:"Chamada (CTA)",visible:true},
         {key:"sobre",label:"Sobre",visible:true},
+        {key:"faq",label:"Perguntas frequentes",visible:true},
         {key:"exposicoes",label:"Exposições",visible:true},
       ];
+      if(!content.sections.some(s=>s.key==="faq")){ const i=content.sections.findIndex(s=>s.key==="sobre"); content.sections.splice(i<0?content.sections.length:i+1,0,{key:"faq",label:"Perguntas frequentes",visible:true}); }
       $("#login").classList.add("hidden");
       $("#app").classList.remove("hidden");
       renderTab(currentTab);
@@ -134,6 +138,7 @@
       else if(tab==="montagens") p.innerHTML = tplPhotos("montagens","Montagens (na sua parede)");
       else if(tab==="produtos") p.innerHTML = tplProdutos();
       else if(tab==="exposicoes") p.innerHTML = tplExpos();
+      else if(tab==="faq") p.innerHTML = tplFaq();
       else if(tab==="contato") p.innerHTML = tplContato();
       bindFields();
     }
@@ -213,6 +218,11 @@
         ${H("SEO (Google / aba do navegador)")}
         ${field("Título da página", c.seo.title, v=>c.seo.title=v)}
         ${field("Descrição da página", c.seo.description, v=>c.seo.description=v, {textarea:true, rows:2})}
+        <div class="mb-4">
+          <span class="block text-sm text-white/60 mb-1">Imagem de compartilhamento (aparece no WhatsApp/Instagram ao enviar o link)</span>
+          ${c.seo.og_image?`<img src="${esc(c.seo.og_image)}" class="w-full max-w-xs h-32 object-cover rounded-lg mb-2 bg-black">`:''}
+          <label class="cursor-pointer text-xs px-3 py-1.5 rounded border border-white/15 hover:bg-white/10 inline-block">Enviar imagem<input type="file" accept="image/jpeg,image/png,image/webp" class="hidden" data-ogupload></label>
+        </div>
 
         ${H("Rodapé")}
         ${field("Texto do rodapé (nome ao lado do ano)", c.footer.text, v=>c.footer.text=v)}
@@ -323,6 +333,24 @@
       </div>`;
     }
 
+    // ---- FAQ ----
+    function tplFaq(){
+      const items=(content.faq.items||[]).map((f,i)=>`
+        <div class="card rounded-xl p-3 space-y-2" data-fi="${i}">
+          <input value="${esc(f.q)}" placeholder="Pergunta" data-ff="q" data-fi="${i}" class="w-full rounded-lg border border-white/15 px-2 py-1.5 text-sm">
+          <textarea rows="2" placeholder="Resposta" data-ff="a" data-fi="${i}" class="w-full rounded-lg border border-white/15 px-2 py-1.5 text-sm">${esc(f.a)}</textarea>
+          <div class="text-right"><button data-fdel="${i}" class="text-red-400 text-xs hover:underline">Remover</button></div>
+        </div>`).join("");
+      return `<div class="card rounded-2xl p-5">
+        ${field("Título da seção", content.faq.title, v=>content.faq.title=v)}
+        <div class="flex items-center justify-between mb-3 mt-2">
+          <h2 class="text-sm text-white/60">Perguntas e respostas <span class="text-white/30">(ótimo para Google e IAs)</span></h2>
+          <button id="add-faq" class="text-sm px-3 py-1.5 rounded-lg bg-white text-black font-semibold hover:bg-white/90">+ Pergunta</button>
+        </div>
+        <div class="space-y-2">${items || '<p class="text-white/40 text-sm">Nenhuma pergunta ainda.</p>'}</div>
+      </div>`;
+    }
+
     // ---- CONTATO ----
     function tplContato(){
       const c=content.contact;
@@ -380,6 +408,8 @@
       if(foot) foot.addEventListener("input", e=>{ content.footer.text=e.target.value; setDirty(true); });
       const logoUp = panel.querySelector("[data-logoupload]");
       if(logoUp) logoUp.addEventListener("change", async e=>{ const f=e.target.files[0]; if(!f) return; try{ toast("Enviando logo…"); const d=await uploadFile(f); content.logo=d.url; setDirty(true); renderTab(currentTab); toast("Logo trocado. Salve para publicar."); }catch(err){ toast("Erro: "+err.message,false); } });
+      const ogUp = panel.querySelector("[data-ogupload]");
+      if(ogUp) ogUp.addEventListener("change", async e=>{ const f=e.target.files[0]; if(!f) return; try{ toast("Enviando…"); const d=await uploadFile(f); content.seo.og_image=d.url; setDirty(true); renderTab(currentTab); toast("Imagem de compartilhamento definida. Salve para publicar."); }catch(err){ toast("Erro: "+err.message,false); } });
       const heroMode = panel.querySelector("[data-heromode]");
       if(heroMode) heroMode.addEventListener("change", e=>{ content.backgrounds.hero_mode=e.target.value; setDirty(true); renderTab(currentTab); });
       panel.querySelectorAll("[data-heroremove]").forEach(btn=> btn.addEventListener("click", ()=>{ content.backgrounds.hero_images.splice(+btn.dataset.heroremove,1); setDirty(true); renderTab(currentTab); }));
@@ -399,6 +429,12 @@
         if(j<0||j>=content.sections.length) return;
         const s=content.sections; [s[i],s[j]]=[s[j],s[i]]; setDirty(true); renderTab(currentTab);
       }));
+
+      // ---- FAQ ----
+      panel.querySelectorAll("[data-ff]").forEach(inp=> inp.addEventListener("input", e=>{ content.faq.items[+inp.dataset.fi][inp.dataset.ff]=e.target.value; setDirty(true); }));
+      panel.querySelectorAll("[data-fdel]").forEach(btn=> btn.addEventListener("click", ()=>{ content.faq.items.splice(+btn.dataset.fdel,1); renderTab(currentTab); setDirty(true); }));
+      const addF = panel.querySelector("#add-faq");
+      if(addF) addF.addEventListener("click", ()=>{ (content.faq.items=content.faq.items||[]).push({q:"",a:""}); renderTab(currentTab); setDirty(true); });
     }
 
     function movePhoto(id, dir){

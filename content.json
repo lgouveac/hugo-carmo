@@ -431,7 +431,9 @@
   "bucket_base": "https://gobslzsggskllmhzasti.supabase.co/storage/v1/object/public/photos",
   "seo": {
     "title": "Hugo Carmo — Artista Visual",
-    "description": "Portfólio e obras do artista visual Hugo Carmo — fotografias do Brasil e do mundo."
+    "description": "Portfólio e obras do artista visual Hugo Carmo — fotografias do Brasil e do mundo.",
+    "og_image": "https://gobslzsggskllmhzasti.supabase.co/storage/v1/object/public/photos/foto-01-rio-sao-francisco-2015.jpg",
+    "canonical": "https://hugocarmo.com.br/"
   },
   "theme": {
     "accent": "#d1d5db",
@@ -473,9 +475,49 @@
       "visible": true
     },
     {
+      "key": "faq",
+      "label": "Perguntas frequentes",
+      "visible": true
+    },
+    {
       "key": "exposicoes",
       "label": "Exposições",
       "visible": true
     }
-  ]
+  ],
+  "business": {
+    "name": "Hugo Carmo",
+    "city": "Rio de Janeiro",
+    "region": "RJ",
+    "country": "BR"
+  },
+  "faq": {
+    "title": "Perguntas frequentes",
+    "items": [
+      {
+        "q": "Como faço para comprar uma obra?",
+        "a": "É só falar comigo pelo WhatsApp pelo botão do site. As obras são feitas em tamanho personalizado, a partir de R$ 150,00, como print ou quadro com moldura."
+      },
+      {
+        "q": "Quais são os prazos de entrega?",
+        "a": "No Rio de Janeiro, 15 dias úteis a partir do pedido. Em outras cidades, 25 dias úteis a partir do pedido."
+      },
+      {
+        "q": "O frete está incluso no valor?",
+        "a": "Não. O valor das obras não inclui o frete, que é calculado à parte conforme a cidade de entrega. Entre em contato para mais informações."
+      },
+      {
+        "q": "Quais tipos de impressão e moldura estão disponíveis?",
+        "a": "Impressão Fine Art com moldura BOX preta, moldura BOX madeira, canvas ou metacrilato."
+      },
+      {
+        "q": "Posso encomendar uma foto específica ou um tamanho personalizado?",
+        "a": "Sim. Todas as obras são feitas sob medida — fale comigo pelo WhatsApp para ajustar a foto, o tamanho, a impressão e a moldura."
+      },
+      {
+        "q": "Quem é Hugo Carmo?",
+        "a": "Hugo Carmo é um artista visual e fotógrafo brasileiro. Seu trabalho registra a natureza e o cotidiano do Brasil em ciclo-viagens, com obras já expostas na Áustria, Alemanha e no Brasil."
+      }
+    ]
+  }
 }

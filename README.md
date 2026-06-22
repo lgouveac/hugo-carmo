@@ -62,6 +62,15 @@ Acesse `seu-site.com/admin`, entre com email + senha e edite:
 
 Clique em **Salvar alterações** — o site atualiza na hora.
 
+## SEO / AEO
+O domínio oficial é **https://hugocarmo.com.br/**. Incluído no `index.html` e em arquivos estáticos:
+- Meta tags completas, **Open Graph** e **Twitter Card** (preview ao compartilhar no WhatsApp/Instagram).
+- **JSON-LD**: `Person`/`VisualArtist`, `WebSite`, `Product` e `FAQPage` (atualizados ao vivo pelo CMS via JS).
+- Seção de **FAQ** visível e editável no painel (aba **FAQ**) — alimenta o `FAQPage` para Google e motores de resposta (IA).
+- `robots.txt` (libera crawlers de IA: GPTBot, ClaudeBot, PerplexityBot…), `sitemap.xml` e `llms.txt`.
+
+> Trocou de domínio? Atualize a URL em `robots.txt`, `sitemap.xml` e nas tags `canonical`/`og:url` do `index.html`.
+
 ## Segurança
 - A `service_role` fica **só** nas variáveis de ambiente da Vercel — nunca no navegador nem no Git.
 - O `.gitignore` ignora `.env`. Use `.env.example` como modelo (sem valores reais).
