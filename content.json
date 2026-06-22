@@ -432,7 +432,7 @@
   "seo": {
     "title": "Hugo Carmo — Artista Visual",
     "description": "Portfólio e obras do artista visual Hugo Carmo — fotografias do Brasil e do mundo.",
-    "og_image": "https://gobslzsggskllmhzasti.supabase.co/storage/v1/object/public/photos/foto-01-rio-sao-francisco-2015.jpg",
+    "og_image": "https://gobslzsggskllmhzasti.supabase.co/storage/v1/object/public/photos/og-card.jpg",
     "canonical": "https://hugocarmo.com.br/"
   },
   "theme": {
