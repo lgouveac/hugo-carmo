@@ -48,6 +48,7 @@
       <button data-tab="secoes"    class="tabbtn px-4 py-2 rounded-lg border border-white/15 text-sm">Seções</button>
       <button data-tab="fotografias" class="tabbtn px-4 py-2 rounded-lg border border-white/15 text-sm">Fotografias</button>
       <button data-tab="montagens" class="tabbtn px-4 py-2 rounded-lg border border-white/15 text-sm">Montagens</button>
+      <button data-tab="blog"      class="tabbtn px-4 py-2 rounded-lg border border-white/15 text-sm">Blog</button>
       <button data-tab="produtos"  class="tabbtn px-4 py-2 rounded-lg border border-white/15 text-sm">Produtos</button>
       <button data-tab="exposicoes" class="tabbtn px-4 py-2 rounded-lg border border-white/15 text-sm">Exposições</button>
       <button data-tab="faq"       class="tabbtn px-4 py-2 rounded-lg border border-white/15 text-sm">FAQ</button>
@@ -99,6 +100,7 @@
       content.backgrounds.hero_images = content.backgrounds.hero_images || [];
       content.exposicoes = content.exposicoes || {title:"Exposições", items:[]};
       content.faq = content.faq || {title:"Perguntas frequentes", items:[]};
+      content.blog = content.blog || {title:"Diário de viagem", subtitle:"", posts:[]};
       if(!content.sections || !content.sections.length) content.sections = [
         {key:"shop",label:"Comprar obras",visible:true},
         {key:"fotografias",label:"Fotografias",visible:true},
@@ -109,6 +111,7 @@
         {key:"exposicoes",label:"Exposições",visible:true},
       ];
       if(!content.sections.some(s=>s.key==="faq")){ const i=content.sections.findIndex(s=>s.key==="sobre"); content.sections.splice(i<0?content.sections.length:i+1,0,{key:"faq",label:"Perguntas frequentes",visible:true}); }
+      if(!content.sections.some(s=>s.key==="blog")){ const i=content.sections.findIndex(s=>s.key==="montagens"); content.sections.splice(i<0?content.sections.length:i+1,0,{key:"blog",label:"Diário de viagem",visible:true}); }
       $("#login").classList.add("hidden");
       $("#app").classList.remove("hidden");
       renderTab(currentTab);
@@ -139,6 +142,7 @@
       else if(tab==="produtos") p.innerHTML = tplProdutos();
       else if(tab==="exposicoes") p.innerHTML = tplExpos();
       else if(tab==="faq") p.innerHTML = tplFaq();
+      else if(tab==="blog") p.innerHTML = tplBlog();
       else if(tab==="contato") p.innerHTML = tplContato();
       bindFields();
     }
@@ -351,6 +355,47 @@
       </div>`;
     }
 
+    // ---- BLOG ----
+    const slugify = s => (s||'').toLowerCase().normalize('NFKD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,60);
+    function tplBlog(){
+      const posts=content.blog.posts||[];
+      const cards=posts.map((p,i)=>`
+        <div class="card rounded-xl p-3 space-y-2" data-bi="${i}">
+          <div class="flex gap-3">
+            <div class="w-28 shrink-0">
+              <img src="${p.cover?imgUrl(p.cover):''}" class="w-28 h-20 object-cover rounded bg-black">
+              <label class="block mt-1 text-center cursor-pointer text-xs px-2 py-1 rounded border border-white/15 hover:bg-white/10">Capa<input type="file" accept="image/jpeg,image/png,image/webp" class="hidden" data-bcover="${i}"></label>
+            </div>
+            <div class="flex-1 space-y-2">
+              <input value="${esc(p.title)}" placeholder="Título do post" data-bf="title" data-bi="${i}" class="w-full rounded-lg border border-white/15 px-2 py-1.5 text-sm">
+              <div class="flex gap-2">
+                <input value="${esc(p.slug)}" placeholder="slug-no-link" data-bf="slug" data-bi="${i}" class="flex-1 rounded-lg border border-white/15 px-2 py-1.5 text-sm">
+                <input type="date" value="${esc(p.date)}" data-bf="date" data-bi="${i}" class="rounded-lg border border-white/15 px-2 py-1.5 text-sm">
+              </div>
+            </div>
+          </div>
+          <textarea rows="2" placeholder="Resumo (aparece na listagem e no Google)" data-bf="excerpt" data-bi="${i}" class="w-full rounded-lg border border-white/15 px-2 py-1.5 text-sm">${esc(p.excerpt)}</textarea>
+          <input value="${esc(p.keywords)}" placeholder="palavras-chave que vendem (separadas por vírgula)" data-bf="keywords" data-bi="${i}" class="w-full rounded-lg border border-white/15 px-2 py-1.5 text-sm">
+          <textarea rows="8" placeholder="Texto do post. Linha em branco separa parágrafos. ## subtítulo · **negrito** · [link](/#comprar-obras)" data-bf="body" data-bi="${i}" class="w-full rounded-lg border border-white/15 px-2 py-1.5 text-sm">${esc(p.body)}</textarea>
+          <div class="flex items-center justify-between">
+            <label class="flex items-center gap-2 text-sm text-white/70 cursor-pointer"><input type="checkbox" data-bpub="${i}" ${p.published!==false?'checked':''}> Publicado</label>
+            <div class="flex gap-2">
+              <a href="/blog/${esc(p.slug)}" target="_blank" class="text-xs px-2 py-1 rounded border border-white/15 hover:bg-white/10">Ver ↗</a>
+              <button data-bdel="${i}" class="text-red-400 text-xs hover:underline">Remover</button>
+            </div>
+          </div>
+        </div>`).join("");
+      return `<div class="card rounded-2xl p-5">
+        ${field("Título da seção", content.blog.title, v=>content.blog.title=v)}
+        ${field("Subtítulo", content.blog.subtitle, v=>content.blog.subtitle=v, {textarea:true, rows:2})}
+        <div class="flex items-center justify-between mb-3 mt-2">
+          <h2 class="text-sm text-white/60">Posts <span class="text-white/30">(palavras-chave = mais gente do Google)</span></h2>
+          <button id="add-post" class="text-sm px-3 py-1.5 rounded-lg bg-white text-black font-semibold hover:bg-white/90">+ Novo post</button>
+        </div>
+        <div class="space-y-4">${cards||'<p class="text-white/40 text-sm">Nenhum post ainda.</p>'}</div>
+      </div>`;
+    }
+
     // ---- CONTATO ----
     function tplContato(){
       const c=content.contact;
@@ -435,6 +480,15 @@
       panel.querySelectorAll("[data-fdel]").forEach(btn=> btn.addEventListener("click", ()=>{ content.faq.items.splice(+btn.dataset.fdel,1); renderTab(currentTab); setDirty(true); }));
       const addF = panel.querySelector("#add-faq");
       if(addF) addF.addEventListener("click", ()=>{ (content.faq.items=content.faq.items||[]).push({q:"",a:""}); renderTab(currentTab); setDirty(true); });
+
+      // ---- Blog ----
+      panel.querySelectorAll("[data-bf]").forEach(inp=> inp.addEventListener("input", e=>{ content.blog.posts[+inp.dataset.bi][inp.dataset.bf]=e.target.value; setDirty(true); }));
+      panel.querySelectorAll('[data-bf="title"]').forEach(inp=> inp.addEventListener("change", e=>{ const i=+inp.dataset.bi, p=content.blog.posts[i]; if(!p.slug){ p.slug=slugify(e.target.value); renderTab(currentTab); } }));
+      panel.querySelectorAll("[data-bpub]").forEach(cb=> cb.addEventListener("change", e=>{ content.blog.posts[+cb.dataset.bpub].published=e.target.checked; setDirty(true); }));
+      panel.querySelectorAll("[data-bdel]").forEach(btn=> btn.addEventListener("click", ()=>{ if(!confirm("Remover este post?"))return; content.blog.posts.splice(+btn.dataset.bdel,1); renderTab(currentTab); setDirty(true); }));
+      panel.querySelectorAll("[data-bcover]").forEach(inp=> inp.addEventListener("change", async e=>{ const f=e.target.files[0]; if(!f)return; try{ toast("Enviando capa…"); const d=await uploadFile(f); content.blog.posts[+inp.dataset.bcover].cover=d.path; setDirty(true); renderTab(currentTab); toast("Capa definida. Salve para publicar."); }catch(err){ toast("Erro: "+err.message,false); } }));
+      const addPost = panel.querySelector("#add-post");
+      if(addPost) addPost.addEventListener("click", ()=>{ const today=new Date().toISOString().slice(0,10); content.blog.posts.unshift({id:"post"+Date.now(), slug:"", title:"Novo post", excerpt:"", keywords:"", cover:"", date:today, body:"", published:false}); renderTab(currentTab); setDirty(true); });
     }
 
     function movePhoto(id, dir){

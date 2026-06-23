@@ -166,6 +166,8 @@
     const fotos = () => C.photos.filter(p => p.section === 'fotografias').sort((a,b)=>a.order-b.order);
     const monts = () => C.photos.filter(p => p.section === 'montagens').sort((a,b)=>a.order-b.order);
     const waLink = () => "https://api.whatsapp.com/send/?phone="+(C.contact?.whatsapp||'')+"&text="+encodeURIComponent(C.contact?.whatsapp_msg||'Olá')+"&type=phone_number&app_absent=0";
+    const MESES=['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
+    const formatDate = d => { if(!d) return ''; const p=String(d).split('-'); return (p[2]&&p[1]&&p[0])?`${parseInt(p[2])} ${MESES[parseInt(p[1])-1]} ${p[0]}`:d; };
 
     const figHTML = p => `
       <figure class="group card-clickable relative mb-4 break-inside-avoid overflow-hidden rounded-xl bg-white/5">
@@ -209,6 +211,23 @@
         return `<section id="montagens" class="w-full max-w-6xl mx-auto px-4 sm:px-8 pb-16 fade-in">
           <div class="mb-10 text-center"><h2 class="text-3xl md:text-5xl font-semibold tracking-tight mb-3">${esc(C.montagens?.title||'Na sua parede')}</h2><p class="text-white/70 max-w-2xl mx-auto">${esc(C.montagens?.subtitle||'')}</p></div>
           <div class="columns-1 sm:columns-2 lg:columns-3 gap-4">${list.map(figHTML).join('')}</div>
+        </section>`;
+      },
+      blog(){
+        const b = C.blog || {}; const posts=(b.posts||[]).filter(p=>p.published!==false).slice(0,3);
+        if(!posts.length) return '';
+        const card = p => `<a href="/blog/${esc(p.slug)}" class="group block rounded-2xl overflow-hidden border border-white/10 bg-white/5 hover:bg-white/10 transition">
+          <div class="aspect-[16/10] overflow-hidden"><img src="${imgUrl(p.cover)}" alt="${esc(p.title)}" loading="lazy" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"></div>
+          <div class="p-5">
+            <div class="text-xs text-white/50 mb-2">${esc(formatDate(p.date))}</div>
+            <h3 class="text-lg font-semibold leading-snug mb-2">${esc(p.title)}</h3>
+            <p class="text-sm text-white/65" style="display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;">${esc(p.excerpt)}</p>
+            <span class="inline-block mt-3 text-sm text-white/80 group-hover:text-white">Ler →</span>
+          </div></a>`;
+        return `<section id="blog" class="w-full max-w-6xl mx-auto px-4 sm:px-8 py-16 fade-in">
+          <div class="mb-10 text-center"><h2 class="text-4xl md:text-6xl font-semibold tracking-tight mb-3">${esc(b.title||'Diário de viagem')}</h2><p class="text-white/70 max-w-2xl mx-auto">${esc(b.subtitle||'')}</p></div>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">${posts.map(card).join('')}</div>
+          <div class="text-center mt-8"><a href="/blog" class="inline-block px-6 py-3 rounded-lg border border-white/20 hover:bg-white/10 transition text-sm font-medium">Ver todos os posts</a></div>
         </section>`;
       },
       cta(){
@@ -255,7 +274,7 @@
         </section>`;
       }
     };
-    const NAV_LABELS = { fotografias:['#galeria','Fotografias'], montagens:['#montagens','Montagens'], shop:['#comprar-obras','Comprar'], sobre:['#sobre','Sobre'], faq:['#faq','FAQ'] };
+    const NAV_LABELS = { fotografias:['#galeria','Fotografias'], montagens:['#montagens','Montagens'], shop:['#comprar-obras','Comprar'], blog:['#blog','Diário'], sobre:['#sobre','Sobre'], faq:['#faq','FAQ'] };
 
     function render(c){
       C = c;

@@ -465,6 +465,11 @@
       "visible": true
     },
     {
+      "key": "blog",
+      "label": "Diário de viagem",
+      "visible": true
+    },
+    {
       "key": "cta",
       "label": "Chamada (CTA)",
       "visible": true
@@ -517,6 +522,34 @@
       {
         "q": "Quem é Hugo Carmo?",
         "a": "Hugo Carmo é um artista visual e fotógrafo brasileiro. Seu trabalho registra a natureza e o cotidiano do Brasil em ciclo-viagens, com obras já expostas na Áustria, Alemanha e no Brasil."
+      }
+    ]
+  },
+  "blog": {
+    "title": "Diário de viagem",
+    "subtitle": "Histórias e bastidores das ciclo-viagens pelo Brasil — e as obras que nasceram delas.",
+    "posts": [
+      {
+        "id": "rio-sao-francisco",
+        "slug": "de-bicicleta-pelo-rio-sao-francisco",
+        "title": "De bicicleta pelo Rio São Francisco: a viagem por trás da fotografia",
+        "excerpt": "A ciclo-viagem pelo sertão que deu origem a uma das fotografias mais procuradas do Hugo Carmo — hoje disponível como quadro fine art para decoração.",
+        "keywords": "fotografia rio são francisco, quadro fine art, arte de parede, fotografia paisagem brasil, print para decoração",
+        "cover": "foto-01-rio-sao-francisco-2015.jpg",
+        "date": "2026-06-16",
+        "body": "Foi numa ciclo-viagem pelo sertão que essa imagem nasceu. Pedalando às margens do **Rio São Francisco**, parei ao entardecer e encontrei a cena que virou uma das fotografias mais procuradas do meu trabalho: um barco simples cortando a água espelhada, o velho Chico em silêncio.\n\n## O Rio São Francisco pelas lentes\n\nMais do que paisagem, o São Francisco é gente, travessia e história. Cada parada virava um registro do cotidiano ribeirinho — pescadores, barcos, o ritmo lento das águas. É esse olhar documental, de quem chega de bicicleta e fica, que tento traduzir em cada obra.\n\n## Da estrada para a sua parede\n\nEssa fotografia está disponível como **quadro fine art** e como **print para decoração**, em tamanho personalizado. É uma peça de **arte de parede** que leva a força das paisagens do Brasil para a sala, o escritório ou o quarto — em preto e branco ou em cor.\n\nQuer essa imagem na sua casa? [Conheça as obras e adquira a sua](/#comprar-obras) — impressão Fine Art com moldura, canvas ou metacrilato, feita sob medida.",
+        "published": true
+      },
+      {
+        "id": "alagoas-pb",
+        "slug": "alagoas-em-preto-e-branco",
+        "title": "Alagoas em preto e branco: o cotidiano que virou quadro",
+        "excerpt": "Como o dia a dia do litoral de Alagoas virou fotografia documental em preto e branco — e por que esse estilo é tão procurado como quadro para sala.",
+        "keywords": "fotografia preto e branco, quadro para sala, fotografia documental, decoração preto e branco, arte de parede",
+        "cover": "foto-02-alagoas-2015.jpg",
+        "date": "2026-06-09",
+        "body": "Alagoas é onde meu olhar mais desacelera. Voltei várias vezes, de bicicleta e de câmera na mão, e foi ali que registrei boa parte das **fotografias em preto e branco** que hoje viram quadro na casa das pessoas.\n\n## O cotidiano que vira arte\n\nNão busco o cartão-postal. Busco o instante comum — o trabalhador atravessando a ponte, a criança correndo, a luz dura do litoral nordestino. É **fotografia documental** que transforma o dia a dia em **arte de parede** atemporal.\n\n## Por que preto e branco vende tanto na decoração\n\nO **preto e branco** combina com qualquer ambiente e dá um ar sofisticado à **decoração**. Por isso essas obras são tão procuradas como **quadro fotográfico para sala** e ambientes de trabalho.\n\nTodas saem como **impressão fine art** em tamanho personalizado. [Veja as obras de Alagoas e leve uma para casa](/#comprar-obras).",
+        "published": true
       }
     ]
   }

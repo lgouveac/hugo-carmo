@@ -3,12 +3,30 @@
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
     <loc>https://hugocarmo.com.br/</loc>
-    <lastmod>2026-06-22</lastmod>
+    <lastmod>2026-06-23</lastmod>
     <changefreq>monthly</changefreq>
     <priority>1.0</priority>
     <image:image>
       <image:loc>https://gobslzsggskllmhzasti.supabase.co/storage/v1/object/public/photos/foto-01-rio-sao-francisco-2015.jpg</image:loc>
       <image:title>Hugo Carmo — Fotografia</image:title>
     </image:image>
+  </url>
+  <url>
+    <loc>https://hugocarmo.com.br/blog</loc>
+    <lastmod>2026-06-23</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://hugocarmo.com.br/blog/de-bicicleta-pelo-rio-sao-francisco</loc>
+    <lastmod>2026-06-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://hugocarmo.com.br/blog/alagoas-em-preto-e-branco</loc>
+    <lastmod>2026-06-09</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
   </url>
 </urlset>
