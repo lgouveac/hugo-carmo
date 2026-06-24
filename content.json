@@ -1,10 +1,10 @@
 {
-  "version": 1,
+  "version": 2,
   "logo": "https://neompzltxilcimodyvpd.supabase.co/storage/v1/object/public/flou//Captura%20de%20tela%202025-06-16%20224245.png",
   "hero": {
-    "title1": "Uma câmera,",
-    "title2": "uma bicicleta",
-    "subtitle": "Navegue pelo olhar de <strong>Hugo Carmo</strong> ao redor do Brasil em suas ciclo viagens.",
+    "title1": "Kina",
+    "title2": "Fotografia",
+    "subtitle": "Navegue pelo olhar de <strong>Hugo Carmo</strong> ao redor do Brasil e do mundo.",
     "cta": "Comprar obras"
   },
   "about": {
@@ -638,6 +638,121 @@
         "date": "2026-06-04",
         "published": true,
         "body": "Nem toda ciclo-viagem fica no Brasil. Em 2022, cruzei o **Uruguai** de bicicleta — e algumas das imagens dessa estrada viraram obra.\n\n## A estrada como ateliê\nViajar de bike muda o ritmo do olhar. Você sente o vento, para onde quer e enxerga o que passa despercebido de carro. Foi assim, pedalando, que registrei a luz e a paisagem uruguaia que hoje estão disponíveis como **quadro**.\n\n## Fotografia que carrega um lugar\nMais do que uma bela imagem, uma **fotografia de viagem** leva uma história para dentro de casa. Quem olha viaja junto — e é isso que transforma a parede num ambiente com alma.\n\n## Da estrada para a sua casa\nEssas imagens saem como **impressão fine art** em tamanho personalizado, prontas para virar **arte de parede**.\n\nGostou de levar um pedaço dessa viagem para a sua casa? [Conheça as obras](/#comprar-obras)."
+      }
+    ]
+  },
+  "updated_at": "2026-06-24T13:08:54.280Z",
+  "en": {
+    "seo": {
+      "title": "Hugo Carmo — Visual Artist & Photographer",
+      "description": "Photography and fine-art prints by Brazilian visual artist Hugo Carmo — landscapes and documentary work from Brazil and beyond, in custom sizes."
+    },
+    "hero": {
+      "title1": "A camera,",
+      "title2": "a bicycle",
+      "subtitle": "See the world through the lens of <strong>Hugo Carmo</strong>, visual artist and photographer, across Brazil on his bike journeys.",
+      "cta": "Shop artworks"
+    },
+    "about": {
+      "title": "About",
+      "text": "Through photography, I seek to capture moments and convey emotions. My eye turns to the beauty of nature and to everyday urban life, letting me connect with the stories unfolding around me. I want to transport the viewer to the place, so they feel the essence of the moment. Each image is an invitation to explore, appreciate and preserve nature, and to value the human relationships we find along the way."
+    },
+    "gallery": {
+      "title": "Photography",
+      "subtitle": "A visual journey across Brazil and beyond — nature, everyday life and the stories found along the way. Click to enlarge."
+    },
+    "montagens": {
+      "title": "On your wall",
+      "subtitle": "Mounting ideas to inspire the right choice and make your home more charming."
+    },
+    "shop": {
+      "title": "Shop artworks",
+      "subtitle": "Prints and framed artworks, in custom sizes."
+    },
+    "cta": {
+      "title": "Like what you see?",
+      "text": "Follow my bike journeys and photography projects across Brazil and around the world.",
+      "button": "See my work"
+    },
+    "faq": {
+      "title": "Frequently asked questions",
+      "items": [
+        {
+          "q": "How do I buy an artwork?",
+          "a": "Just message me on WhatsApp via the button on the site. Works are made in custom sizes, starting at R$150, as a print or framed artwork."
+        },
+        {
+          "q": "What are the delivery times?",
+          "a": "In Rio de Janeiro, 15 business days from the order. To other cities, 25 business days from the order."
+        },
+        {
+          "q": "Is shipping included in the price?",
+          "a": "No. The price of the works does not include shipping, which is calculated separately based on the delivery city."
+        },
+        {
+          "q": "What print and framing options are available?",
+          "a": "Fine Art printing with a black BOX frame, wood BOX frame, canvas or acrylic (metacrylate)."
+        },
+        {
+          "q": "Can I order a specific photo or a custom size?",
+          "a": "Yes. All works are made to order — message me on WhatsApp to adjust the photo, size, print and framing."
+        },
+        {
+          "q": "Who is Hugo Carmo?",
+          "a": "Hugo Carmo is a Brazilian visual artist and photographer. His work documents the nature and everyday life of Brazil on bike journeys, with exhibitions in Austria, Germany and Brazil."
+        }
+      ]
+    },
+    "exposicoes": {
+      "title": "Exhibitions"
+    },
+    "blog": {
+      "title": "Travel diary",
+      "subtitle": "Stories and behind-the-scenes from the bike journeys across Brazil — and the artworks born from them."
+    },
+    "contact": {
+      "whatsapp_msg": "Hi, I'm interested in Hugo Carmo's work"
+    },
+    "products": [
+      {
+        "title": "Print or Framed Artwork",
+        "subtitle": "Custom size",
+        "stock": "7 left"
+      },
+      {
+        "title": "Print or Framed Artwork",
+        "subtitle": "Custom size",
+        "stock": "6 left"
+      },
+      {
+        "title": "Print or Framed Artwork",
+        "subtitle": "Custom size",
+        "stock": "4 left"
+      },
+      {
+        "title": "Print or Framed Artwork",
+        "subtitle": "Custom size",
+        "stock": "3 left"
+      },
+      {
+        "title": "Print or Framed Artwork",
+        "subtitle": "Custom size",
+        "stock": "2 left"
+      },
+      {
+        "title": "Print or Framed Artwork",
+        "subtitle": "Custom size",
+        "stock": "1 left"
+      },
+      {
+        "title": "Print or Framed Artwork",
+        "subtitle": "Custom size",
+        "stock": "7 left"
+      },
+      {
+        "title": "Print or Framed Artwork",
+        "subtitle": "Custom size",
+        "stock": "6 left"
       }
     ]
   }
