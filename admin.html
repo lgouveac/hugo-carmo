@@ -107,6 +107,9 @@
       content.fotolivros = content.fotolivros || {title:"Fotolivros", subtitle:"", items:[]};
       content.collections = content.collections || [];
       content.categorias = content.categorias || {items:[]};
+      content.en = content.en || {};
+      content.en.categorias = content.en.categorias || {items:[]};
+      { const ci=(content.categorias.items||[]); while(content.en.categorias.items.length < ci.length) content.en.categorias.items.push({}); }
       if(!content.sections || !content.sections.length) content.sections = [
         {key:"shop",label:"Comprar obras",visible:true},
         {key:"fotografias",label:"Fotografias",visible:true},
@@ -408,14 +411,17 @@
     // ---- LOJA (categorias) ----
     function tplCategorias(){
       const items=(content.categorias?.items)||[];
-      const cards=items.map((it,i)=>`
+      const enItems=(content.en?.categorias?.items)||[];
+      const cards=items.map((it,i)=>{ const en=enItems[i]||{}; return `
         <div class="card rounded-xl p-3 flex gap-3" data-kati="${i}">
           <div class="w-28 shrink-0"><img src="${it.image?imgUrl(it.image):''}" class="w-28 h-28 object-cover rounded-lg bg-black">
             <label class="block mt-2 text-center cursor-pointer text-xs px-2 py-1 rounded border border-white/15 hover:bg-white/10">Imagem<input type="file" accept="image/jpeg,image/png,image/webp" class="hidden" data-katimg="${i}"></label></div>
           <div class="flex-1 space-y-2">
-            <input value="${esc(it.title)}" placeholder="Título" data-katf="title" data-kati="${i}" class="w-full rounded-lg border border-white/15 px-2 py-1.5 text-sm">
-            <textarea rows="4" placeholder="Descrição" data-katf="desc" data-kati="${i}" class="w-full rounded-lg border border-white/15 px-2 py-1.5 text-sm">${esc(it.desc)}</textarea>
-          </div></div>`).join("");
+            <input value="${esc(it.title)}" placeholder="Título (PT)" data-katf="title" data-kati="${i}" class="w-full rounded-lg border border-white/15 px-2 py-1.5 text-sm">
+            <textarea rows="4" placeholder="Descrição (PT)" data-katf="desc" data-kati="${i}" class="w-full rounded-lg border border-white/15 px-2 py-1.5 text-sm">${esc(it.desc)}</textarea>
+            <input value="${esc(en.title)}" placeholder="Title (EN)" data-katenf="title" data-kati="${i}" class="w-full rounded-lg border border-white/10 px-2 py-1.5 text-sm text-white/80">
+            <textarea rows="3" placeholder="Description (EN)" data-katenf="desc" data-kati="${i}" class="w-full rounded-lg border border-white/10 px-2 py-1.5 text-sm text-white/80">${esc(en.desc)}</textarea>
+          </div></div>`; }).join("");
       return `<div class="card rounded-2xl p-5">
         <h2 class="text-lg font-semibold mb-1">Loja — categorias</h2>
         <p class="text-white/50 text-sm mb-4">Blusas, Prints, Bandeiras: edite título, descrição e imagem de cada uma. O botão COMPRAR leva ao WhatsApp com a categoria preenchida.</p>
@@ -574,6 +580,7 @@
       // ---- Loja (categorias) ----
       panel.querySelectorAll("[data-katf]").forEach(inp=> inp.addEventListener("input", e=>{ content.categorias.items[+inp.dataset.kati][inp.dataset.katf]=e.target.value; setDirty(true); }));
       panel.querySelectorAll("[data-katimg]").forEach(inp=> inp.addEventListener("change", async e=>{ const f=e.target.files[0]; if(!f)return; try{ toast("Enviando…"); const d=await uploadFile(f); content.categorias.items[+inp.dataset.katimg].image=d.path; setDirty(true); renderTab(currentTab); toast("Imagem trocada. Salve."); }catch(err){ toast("Erro: "+err.message,false); } }));
+      panel.querySelectorAll("[data-katenf]").forEach(inp=> inp.addEventListener("input", e=>{ const i=+inp.dataset.kati; content.en=content.en||{}; content.en.categorias=content.en.categorias||{items:[]}; while(content.en.categorias.items.length<=i) content.en.categorias.items.push({}); content.en.categorias.items[i][inp.dataset.katenf]=e.target.value; setDirty(true); }));
 
       // ---- Cicloviagens ----
       panel.querySelectorAll("[data-cf]").forEach(inp=> inp.addEventListener("input", e=>{ content.collections[+inp.dataset.ci][inp.dataset.cf]=e.target.value; setDirty(true); }));
