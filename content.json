@@ -461,6 +461,11 @@
       "visible": true
     },
     {
+      "key": "cicloviagens",
+      "label": "Cicloviagens",
+      "visible": true
+    },
+    {
       "key": "montagens",
       "label": "Na sua parede",
       "visible": true
@@ -663,5 +668,71 @@
       "button": "Subscribe",
       "success": "You're in! Thank you. 🙌"
     }
-  }
+  },
+  "collections": [
+    {
+      "slug": "alagoas",
+      "title": "Alagoas",
+      "subtitle": "",
+      "story": "",
+      "visible": true,
+      "order": 1
+    },
+    {
+      "slug": "rio-de-janeiro",
+      "title": "Rio de Janeiro",
+      "subtitle": "",
+      "story": "",
+      "visible": true,
+      "order": 2
+    },
+    {
+      "slug": "rio-sao-francisco",
+      "title": "Rio São Francisco",
+      "subtitle": "",
+      "story": "",
+      "visible": true,
+      "order": 3
+    },
+    {
+      "slug": "pernambuco",
+      "title": "Pernambuco",
+      "subtitle": "",
+      "story": "",
+      "visible": true,
+      "order": 4
+    },
+    {
+      "slug": "sertao-de-pernambuco",
+      "title": "Sertão de Pernambuco",
+      "subtitle": "",
+      "story": "",
+      "visible": true,
+      "order": 5
+    },
+    {
+      "slug": "curral",
+      "title": "Curral",
+      "subtitle": "",
+      "story": "",
+      "visible": true,
+      "order": 6
+    },
+    {
+      "slug": "parque-estadual-terra-ronca",
+      "title": "Parque Estadual Terra Ronca",
+      "subtitle": "",
+      "story": "",
+      "visible": true,
+      "order": 7
+    },
+    {
+      "slug": "uruguai",
+      "title": "Uruguai",
+      "subtitle": "",
+      "story": "",
+      "visible": true,
+      "order": 8
+    }
+  ]
 }

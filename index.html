@@ -174,11 +174,11 @@
     const esc = s => (s==null?"":String(s)).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
     let C = null;
     const LANG = (/^\/en(\/|$)/.test(location.pathname) || new URLSearchParams(location.search).get('lang')==='en') ? 'en' : 'pt';
-    const UI = { pt:{from:'A partir de',moreInfo:'Mais infos',readMore:'Ler →',seeAll:'Ver todos os posts'},
-                 en:{from:'From',moreInfo:'More info',readMore:'Read →',seeAll:'See all posts'} };
+    const UI = { pt:{from:'A partir de',moreInfo:'Mais infos',readMore:'Ler →',seeAll:'Ver todos os posts',photos:'fotos',ciclo:'Cicloviagens'},
+                 en:{from:'From',moreInfo:'More info',readMore:'Read →',seeAll:'See all posts',photos:'photos',ciclo:'Journeys'} };
     const L = UI[LANG];
-    const NAVS = { pt:{fotografias:['#galeria','Fotografias'],montagens:['#montagens','Montagens'],shop:['#comprar-obras','Comprar'],blog:['#blog','Diário'],sobre:['#sobre','Sobre'],faq:['#faq','FAQ']},
-                   en:{fotografias:['#galeria','Photography'],montagens:['#montagens','On your wall'],shop:['#comprar-obras','Shop'],blog:['#blog','Travel diary'],sobre:['#sobre','About'],faq:['#faq','FAQ']} };
+    const NAVS = { pt:{cicloviagens:['#cicloviagens','Viagens'],fotografias:['#galeria','Fotografias'],montagens:['#montagens','Montagens'],shop:['#comprar-obras','Comprar'],blog:['#blog','Diário'],sobre:['#sobre','Sobre'],faq:['#faq','FAQ']},
+                   en:{cicloviagens:['#cicloviagens','Journeys'],fotografias:['#galeria','Photography'],montagens:['#montagens','On your wall'],shop:['#comprar-obras','Shop'],blog:['#blog','Travel diary'],sobre:['#sobre','About'],faq:['#faq','FAQ']} };
     function mergeEn(raw){ const c=JSON.parse(JSON.stringify(raw)); const e=raw.en||{};
       ['seo','hero','about','gallery','montagens','shop','cta','faq','blog','contact','newsletter'].forEach(k=>{ if(e[k]) c[k]={...(c[k]||{}),...e[k]}; });
       if(e.exposicoes&&e.exposicoes.title&&c.exposicoes) c.exposicoes.title=e.exposicoes.title;
@@ -190,6 +190,8 @@
     const waLink = () => "https://api.whatsapp.com/send/?phone="+(C.contact?.whatsapp||'')+"&text="+encodeURIComponent(C.contact?.whatsapp_msg||'Olá')+"&type=phone_number&app_absent=0";
     const MESES=['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
     const formatDate = d => { if(!d) return ''; const p=String(d).split('-'); return (p[2]&&p[1]&&p[0])?`${parseInt(p[2])} ${MESES[parseInt(p[1])-1]} ${p[0]}`:d; };
+    const slugify = s => String(s||'').toLowerCase().normalize('NFKD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'');
+    const locOf = cap => { const p=String(cap||'').split(',').map(x=>x.trim()).filter(Boolean); if(!p.length) return ''; if(/^\d{4}$/.test(p[p.length-1])) p.pop(); return p[p.length-1]||''; };
 
     const figHTML = p => `
       <figure class="group card-clickable relative mb-4 break-inside-avoid overflow-hidden rounded-xl bg-white/5">
@@ -220,6 +222,23 @@
         return `<section id="comprar-obras" class="w-full max-w-6xl mx-auto px-4 sm:px-8 py-16">
           <div class="mb-10 text-center fade-in"><h2 class="text-4xl md:text-6xl font-semibold tracking-tight mb-3">${esc(C.shop?.title||'Comprar obras')}</h2><p class="text-white/70 max-w-2xl mx-auto">${esc(C.shop?.subtitle||'')}</p></div>
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">${items}</div>
+        </section>`;
+      },
+      cicloviagens(){
+        const cols=(C.collections||[]).filter(x=>x.visible!==false).sort((a,b)=>(a.order||0)-(b.order||0));
+        if(!cols.length) return '';
+        const fts=fotos(), base=LANG==='en'?'/en/viagem':'/viagem';
+        const cards=cols.map(col=>{ const ph=fts.filter(p=>slugify(locOf(p.caption))===col.slug); if(!ph.length) return '';
+          const cover=imgUrl(col.cover||ph[0].path);
+          return `<a href="${base}/${esc(col.slug)}" class="group relative block rounded-2xl overflow-hidden aspect-[4/3]">
+            <img src="${cover}" alt="${esc(col.title)}" loading="lazy" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent"></div>
+            <div class="absolute bottom-0 left-0 p-5"><div class="text-xl font-semibold">${esc(col.title)}</div><div class="text-white/70 text-sm">${ph.length} ${L.photos}</div></div>
+          </a>`; }).join('');
+        if(!cards.trim()) return '';
+        return `<section id="cicloviagens" class="w-full max-w-6xl mx-auto px-4 sm:px-8 py-16 fade-in">
+          <div class="mb-10 text-center"><h2 class="text-4xl md:text-6xl font-semibold tracking-tight mb-3">${L.ciclo}</h2><p class="text-white/70 max-w-2xl mx-auto">${LANG==='en'?'Photo series organized by the journeys across Brazil and beyond.':'Séries fotográficas organizadas pelas viagens pelo Brasil e além.'}</p></div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">${cards}</div>
         </section>`;
       },
       fotografias(){

@@ -6,6 +6,8 @@
     { "source": "/blog/:slug", "destination": "/post" },
     { "source": "/en/blog/:slug", "destination": "/post" },
     { "source": "/en/blog", "destination": "/blog" },
+    { "source": "/viagem/:slug", "destination": "/viagem" },
+    { "source": "/en/viagem/:slug", "destination": "/viagem" },
     { "source": "/en", "destination": "/" }
   ]
 }
