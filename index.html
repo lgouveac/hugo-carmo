@@ -197,7 +197,7 @@
     const locOf = cap => { const p=String(cap||'').split(',').map(x=>x.trim()).filter(Boolean); if(!p.length) return ''; if(/^\d{4}$/.test(p[p.length-1])) p.pop(); return p[p.length-1]||''; };
 
     const figHTML = p => `
-      <figure class="group card-clickable relative mb-4 break-inside-avoid overflow-hidden rounded-xl bg-white/5">
+      <figure data-temas="${(p.temas||[]).join(' ')}" class="tema-fig group card-clickable relative mb-4 break-inside-avoid overflow-hidden rounded-xl bg-white/5">
         <img src="${imgUrl(p.path)}" alt="${esc(p.caption)}" loading="lazy" data-lightbox data-caption="${esc(p.caption)}" class="bw-img w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]">
         ${p.caption?`<figcaption class="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent px-4 pt-10 pb-3 text-sm text-white/90 opacity-0 translate-y-2 transition-all duration-300 group-hover:opacity-100 group-hover:translate-y-0">${esc(p.caption)}</figcaption>`:''}
       </figure>`;
@@ -274,8 +274,11 @@
         </section>`;
       },
       fotografias(){
+        const ts=C.temas||[];
+        const filterBar = ts.length ? `<div id="tema-filter" class="flex flex-wrap justify-center gap-2 mb-8"><button data-tema="" class="tema-btn px-4 py-1.5 rounded-full border border-white/20 text-sm bg-white text-black">${LANG==='en'?'All':'Todas'}</button>${ts.map(t=>`<button data-tema="${esc(t.slug)}" class="tema-btn px-4 py-1.5 rounded-full border border-white/20 text-sm hover:bg-white/10">${esc(LANG==='en'?t.en:t.pt)}</button>`).join('')}</div>` : '';
         return `<section id="galeria" class="w-full max-w-6xl mx-auto px-4 sm:px-8 py-16 fade-in">
-          <div class="mb-10 text-center"><h2 class="text-4xl md:text-6xl font-semibold tracking-tight mb-3">${esc(C.gallery?.title||'Fotografias')}</h2><p class="text-white/70 max-w-2xl mx-auto">${esc(C.gallery?.subtitle||'')}</p></div>
+          <div class="mb-8 text-center"><h2 class="text-4xl md:text-6xl font-semibold tracking-tight mb-3">${esc(C.gallery?.title||'Fotografias')}</h2><p class="text-white/70 max-w-2xl mx-auto">${esc(C.gallery?.subtitle||'')}</p></div>
+          ${filterBar}
           <div class="columns-1 sm:columns-2 lg:columns-3 gap-4">${fotos().map(figHTML).join('')}</div>
         </section>`;
       },
@@ -410,6 +413,13 @@
         document.querySelectorAll('.cat-btn').forEach(b=>b.addEventListener('click',()=>setCat(+b.dataset.cat)));
         setCat(0);
       }
+      // Filtro por tema na galeria
+      const fbar=document.getElementById('tema-filter');
+      if(fbar){ fbar.querySelectorAll('.tema-btn').forEach(b=>b.addEventListener('click',()=>{
+        const t=b.dataset.tema;
+        fbar.querySelectorAll('.tema-btn').forEach(x=>{ const on=x===b; x.classList.toggle('bg-white',on); x.classList.toggle('text-black',on); });
+        document.querySelectorAll('#galeria .tema-fig').forEach(f=>{ const has=!t||(f.dataset.temas||'').split(' ').filter(Boolean).includes(t); f.style.display=has?'':'none'; });
+      })); }
       // Footer
       document.getElementById('footer-copy').textContent = (new Date().getFullYear()) + ' ' + (c.footer?.text || 'Hugo Carmo');
       const insta = document.getElementById('footer-insta');

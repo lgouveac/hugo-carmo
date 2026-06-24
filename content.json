@@ -132,238 +132,340 @@
       "path": "foto-01-rio-sao-francisco-2015.jpg",
       "caption": "Rio São Francisco, 2015",
       "section": "fotografias",
-      "order": 1
+      "order": 1,
+      "temas": [
+        "aguas"
+      ]
     },
     {
       "id": "foto-02-alagoas-2015.jpg",
       "path": "foto-02-alagoas-2015.jpg",
       "caption": "Alagoas, 2015",
       "section": "fotografias",
-      "order": 2
+      "order": 2,
+      "temas": [
+        "litoral"
+      ]
     },
     {
       "id": "foto-03-pernambuco-2017.jpg",
       "path": "foto-03-pernambuco-2017.jpg",
       "caption": "Pernambuco, 2017",
       "section": "fotografias",
-      "order": 3
+      "order": 3,
+      "temas": [
+        "sertao"
+      ]
     },
     {
       "id": "foto-04-alagoas-2016.jpg",
       "path": "foto-04-alagoas-2016.jpg",
       "caption": "Alagoas, 2016",
       "section": "fotografias",
-      "order": 4
+      "order": 4,
+      "temas": [
+        "litoral"
+      ]
     },
     {
       "id": "foto-05-alagoas-2015.jpg",
       "path": "foto-05-alagoas-2015.jpg",
       "caption": "Alagoas, 2015",
       "section": "fotografias",
-      "order": 5
+      "order": 5,
+      "temas": [
+        "litoral"
+      ]
     },
     {
       "id": "foto-06-rio-de-janeiro-2014.jpg",
       "path": "foto-06-rio-de-janeiro-2014.jpg",
       "caption": "Rio de Janeiro, 2014",
       "section": "fotografias",
-      "order": 6
+      "order": 6,
+      "temas": [
+        "urbano"
+      ]
     },
     {
       "id": "foto-07-rio-sao-francisco-2017.jpg",
       "path": "foto-07-rio-sao-francisco-2017.jpg",
       "caption": "Rio São Francisco, 2017",
       "section": "fotografias",
-      "order": 7
+      "order": 7,
+      "temas": [
+        "aguas"
+      ]
     },
     {
       "id": "foto-08-alagoas-2016.jpg",
       "path": "foto-08-alagoas-2016.jpg",
       "caption": "Alagoas, 2016",
       "section": "fotografias",
-      "order": 8
+      "order": 8,
+      "temas": [
+        "litoral"
+      ]
     },
     {
       "id": "foto-09-alagoas-2016.jpg",
       "path": "foto-09-alagoas-2016.jpg",
       "caption": "Alagoas, 2016",
       "section": "fotografias",
-      "order": 9
+      "order": 9,
+      "temas": [
+        "litoral"
+      ]
     },
     {
       "id": "foto-10-alagoas-2016.jpg",
       "path": "foto-10-alagoas-2016.jpg",
       "caption": "Alagoas, 2016",
       "section": "fotografias",
-      "order": 10
+      "order": 10,
+      "temas": [
+        "litoral"
+      ]
     },
     {
       "id": "foto-11-sertao-de-pernambuco-2015.jpg",
       "path": "foto-11-sertao-de-pernambuco-2015.jpg",
       "caption": "Sertão de Pernambuco, 2015",
       "section": "fotografias",
-      "order": 11
+      "order": 11,
+      "temas": [
+        "sertao"
+      ]
     },
     {
       "id": "foto-12-alagoas-2015.jpg",
       "path": "foto-12-alagoas-2015.jpg",
       "caption": "Alagoas, 2015",
       "section": "fotografias",
-      "order": 12
+      "order": 12,
+      "temas": [
+        "litoral"
+      ]
     },
     {
       "id": "foto-13-alagoas-2015.jpg",
       "path": "foto-13-alagoas-2015.jpg",
       "caption": "Alagoas, 2015",
       "section": "fotografias",
-      "order": 13
+      "order": 13,
+      "temas": [
+        "litoral"
+      ]
     },
     {
       "id": "foto-14-alagoas-2015.jpg",
       "path": "foto-14-alagoas-2015.jpg",
       "caption": "Alagoas, 2015",
       "section": "fotografias",
-      "order": 14
+      "order": 14,
+      "temas": [
+        "litoral"
+      ]
     },
     {
       "id": "foto-15-3-irmaos-rio-de-janeiro-2015.jpg",
       "path": "foto-15-3-irmaos-rio-de-janeiro-2015.jpg",
       "caption": "3 irmãos, Rio de Janeiro, 2015",
       "section": "fotografias",
-      "order": 15
+      "order": 15,
+      "temas": [
+        "urbano"
+      ]
     },
     {
       "id": "foto-16-3-irmaos-rio-de-janeiro-2015.jpg",
       "path": "foto-16-3-irmaos-rio-de-janeiro-2015.jpg",
       "caption": "3 irmãos, Rio de Janeiro, 2015",
       "section": "fotografias",
-      "order": 16
+      "order": 16,
+      "temas": [
+        "urbano"
+      ]
     },
     {
       "id": "foto-17-3-irmaos-rio-de-janeiro-2015.jpg",
       "path": "foto-17-3-irmaos-rio-de-janeiro-2015.jpg",
       "caption": "3 irmãos, Rio de Janeiro, 2015",
       "section": "fotografias",
-      "order": 17
+      "order": 17,
+      "temas": [
+        "urbano"
+      ]
     },
     {
       "id": "foto-18-alagoas-2017.jpg",
       "path": "foto-18-alagoas-2017.jpg",
       "caption": "Alagoas, 2017",
       "section": "fotografias",
-      "order": 18
+      "order": 18,
+      "temas": [
+        "litoral"
+      ]
     },
     {
       "id": "foto-19-curral-2018.jpg",
       "path": "foto-19-curral-2018.jpg",
       "caption": "Curral, 2018",
       "section": "fotografias",
-      "order": 19
+      "order": 19,
+      "temas": [
+        "sertao"
+      ]
     },
     {
       "id": "foto-20-alagoas-2014.jpg",
       "path": "foto-20-alagoas-2014.jpg",
       "caption": "Alagoas, 2014",
       "section": "fotografias",
-      "order": 20
+      "order": 20,
+      "temas": [
+        "litoral"
+      ]
     },
     {
       "id": "foto-21-alagoas-2015.jpg",
       "path": "foto-21-alagoas-2015.jpg",
       "caption": "Alagoas, 2015",
       "section": "fotografias",
-      "order": 21
+      "order": 21,
+      "temas": [
+        "litoral"
+      ]
     },
     {
       "id": "foto-22-rio-sao-francisco-2015.jpg",
       "path": "foto-22-rio-sao-francisco-2015.jpg",
       "caption": "Rio São Francisco, 2015",
       "section": "fotografias",
-      "order": 22
+      "order": 22,
+      "temas": [
+        "aguas"
+      ]
     },
     {
       "id": "foto-23-parque-estadual-terra-ronca-2015.jpg",
       "path": "foto-23-parque-estadual-terra-ronca-2015.jpg",
       "caption": "Parque Estadual Terra Ronca, 2015",
       "section": "fotografias",
-      "order": 23
+      "order": 23,
+      "temas": [
+        "abstrato"
+      ]
     },
     {
       "id": "foto-24-rio-de-janeiro-2014.jpg",
       "path": "foto-24-rio-de-janeiro-2014.jpg",
       "caption": "Rio de Janeiro, 2014",
       "section": "fotografias",
-      "order": 24
+      "order": 24,
+      "temas": [
+        "urbano"
+      ]
     },
     {
       "id": "foto-25-alagoas-2013.jpg",
       "path": "foto-25-alagoas-2013.jpg",
       "caption": "Alagoas, 2013",
       "section": "fotografias",
-      "order": 25
+      "order": 25,
+      "temas": [
+        "litoral"
+      ]
     },
     {
       "id": "foto-26-rio-sao-francisco-2015.jpg",
       "path": "foto-26-rio-sao-francisco-2015.jpg",
       "caption": "Rio São Francisco, 2015",
       "section": "fotografias",
-      "order": 26
+      "order": 26,
+      "temas": [
+        "aguas"
+      ]
     },
     {
       "id": "foto-27-uruguai-2022.jpg",
       "path": "foto-27-uruguai-2022.jpg",
       "caption": "Uruguai, 2022",
       "section": "fotografias",
-      "order": 27
+      "order": 27,
+      "temas": [
+        "aguas"
+      ]
     },
     {
       "id": "foto-28-alagoas-2015.jpg",
       "path": "foto-28-alagoas-2015.jpg",
       "caption": "Alagoas, 2015",
       "section": "fotografias",
-      "order": 28
+      "order": 28,
+      "temas": [
+        "litoral"
+      ]
     },
     {
       "id": "foto-29-alagoas-2015.jpg",
       "path": "foto-29-alagoas-2015.jpg",
       "caption": "Alagoas, 2015",
       "section": "fotografias",
-      "order": 29
+      "order": 29,
+      "temas": [
+        "litoral"
+      ]
     },
     {
       "id": "foto-30-alagoas-2015.jpg",
       "path": "foto-30-alagoas-2015.jpg",
       "caption": "Alagoas, 2015",
       "section": "fotografias",
-      "order": 30
+      "order": 30,
+      "temas": [
+        "litoral"
+      ]
     },
     {
       "id": "foto-31-alagoas-2016.jpg",
       "path": "foto-31-alagoas-2016.jpg",
       "caption": "Alagoas, 2016",
       "section": "fotografias",
-      "order": 31
+      "order": 31,
+      "temas": [
+        "litoral"
+      ]
     },
     {
       "id": "foto-32-alagoas-2014.jpg",
       "path": "foto-32-alagoas-2014.jpg",
       "caption": "Alagoas, 2014",
       "section": "fotografias",
-      "order": 32
+      "order": 32,
+      "temas": [
+        "litoral"
+      ]
     },
     {
       "id": "foto-33-alagoas-2014.jpg",
       "path": "foto-33-alagoas-2014.jpg",
       "caption": "Alagoas, 2014",
       "section": "fotografias",
-      "order": 33
+      "order": 33,
+      "temas": [
+        "litoral"
+      ]
     },
     {
       "id": "foto-34-alagoas-2014.jpg",
       "path": "foto-34-alagoas-2014.jpg",
       "caption": "Alagoas, 2014",
       "section": "fotografias",
-      "order": 34
+      "order": 34,
+      "temas": [
+        "litoral"
+      ]
     },
     {
       "id": "montagem-01.jpg",
@@ -843,5 +945,37 @@
         "image": "foto-11-sertao-de-pernambuco-2015.jpg"
       }
     ]
-  }
+  },
+  "temas": [
+    {
+      "slug": "aguas",
+      "pt": "Águas & Travessias",
+      "en": "Waters & Crossings"
+    },
+    {
+      "slug": "litoral",
+      "pt": "Litoral & Mar",
+      "en": "Coast & Sea"
+    },
+    {
+      "slug": "sertao",
+      "pt": "Sertão & Terra",
+      "en": "Backlands & Land"
+    },
+    {
+      "slug": "gente",
+      "pt": "Gente & Cotidiano",
+      "en": "People & Everyday"
+    },
+    {
+      "slug": "abstrato",
+      "pt": "Abstrato & Detalhe",
+      "en": "Abstract & Detail"
+    },
+    {
+      "slug": "urbano",
+      "pt": "Urbano & Escombros",
+      "en": "Urban & Ruins"
+    }
+  ]
 }

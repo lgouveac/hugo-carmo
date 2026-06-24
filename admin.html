@@ -283,6 +283,7 @@
           <div class="p-3 space-y-2">
             <input value="${esc(p.caption)}" placeholder="Legenda (local, ano)" data-cap="${esc(p.id)}"
                    class="w-full rounded-lg border border-white/15 px-2 py-1.5 text-sm outline-none focus:border-white/40">
+            ${section==='fotografias'?`<input value="${esc((p.temas||[]).join(', '))}" placeholder="temas (ex: aguas, gente)" data-temas="${esc(p.id)}" class="w-full rounded-lg border border-white/10 px-2 py-1 text-xs outline-none focus:border-white/40 text-white/80">`:''}
             <div class="flex items-center justify-between gap-1">
               <div class="flex gap-1">
                 <button data-move="up" data-id="${esc(p.id)}" class="px-2 py-1 rounded border border-white/15 text-xs hover:bg-white/10" ${i===0?'disabled style=opacity:.3':''}>↑</button>
@@ -300,6 +301,7 @@
             <input type="file" accept="image/jpeg,image/png,image/webp" multiple class="hidden" data-upload="${section}">
           </label>
         </div>
+        ${section==='fotografias'?`<p class="text-white/40 text-xs mb-3">Temas (separe por vírgula): ${(content.temas||[]).map(t=>t.slug).join(' · ')}</p>`:''}
         <div class="grid grid-cols-2 md:grid-cols-3 gap-3">${cards || '<p class="text-white/40 text-sm">Nenhuma foto ainda.</p>'}</div>
       </div>`;
     }
@@ -493,6 +495,9 @@
       // captions
       panel.querySelectorAll("[data-cap]").forEach(inp=> inp.addEventListener("input", e=>{
         const ph = content.photos.find(p=>p.id===inp.dataset.cap); if(ph){ ph.caption=e.target.value; setDirty(true); }
+      }));
+      panel.querySelectorAll("[data-temas]").forEach(inp=> inp.addEventListener("input", e=>{
+        const ph = content.photos.find(p=>p.id===inp.dataset.temas); if(ph){ ph.temas=e.target.value.split(',').map(s=>s.trim().toLowerCase()).filter(Boolean); setDirty(true); }
       }));
       // move
       panel.querySelectorAll("[data-move]").forEach(btn=> btn.addEventListener("click", ()=>{
