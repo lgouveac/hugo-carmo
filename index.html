@@ -52,6 +52,14 @@
     .animate-marquee { animation: marquee 40s linear infinite; }
     .accent-text { background: linear-gradient(to right, #fff, var(--accent) 60%, #6b7280); -webkit-background-clip: text; background-clip: text; color: transparent; }
     @media (max-width: 640px) { .modal-img-fullscreen { max-width: 99vw; border-radius: .7rem; } }
+    /* Galeria imersiva: filtro expansível + modo "na sua casa" */
+    #tema-panel { transition: max-height .35s cubic-bezier(.4,0,.2,1); }
+    .wall-sw::after { content:""; position:absolute; top:2px; left:2px; width:16px; height:16px; border-radius:50%; background:#fff; transition:transform .2s; }
+    #wall-toggle.on .wall-sw { background:#10b981; }
+    #wall-toggle.on .wall-sw::after { transform:translateX(16px); }
+    #galeria-grid.wall { background:#17120f; padding:16px; border-radius:18px; }
+    #galeria-grid.wall .tema-fig { border:11px solid #f1ede3; border-radius:2px; background:#f1ede3; box-shadow:0 18px 44px rgba(0,0,0,.6); transition:border-color .3s; }
+    #galeria-grid.wall .tema-fig img { border-radius:0; }
   </style>
 
   <!-- Dados estruturados (SEO/AEO) — atualizados pelo CMS via JS quando disponível -->
@@ -197,7 +205,7 @@
     const locOf = cap => { const p=String(cap||'').split(',').map(x=>x.trim()).filter(Boolean); if(!p.length) return ''; if(/^\d{4}$/.test(p[p.length-1])) p.pop(); return p[p.length-1]||''; };
 
     const figHTML = p => `
-      <figure data-temas="${(p.temas||[]).join(' ')}" class="tema-fig group card-clickable relative mb-4 break-inside-avoid overflow-hidden rounded-xl bg-white/5">
+      <figure data-temas="${(p.temas||[]).join(' ')}" class="tema-fig group card-clickable relative mb-3 break-inside-avoid overflow-hidden rounded-xl bg-white/5">
         <img src="${imgUrl(p.path)}" alt="${esc(p.caption)}" loading="lazy" data-lightbox data-caption="${esc(p.caption)}" class="bw-img w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]">
         ${p.caption?`<figcaption class="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent px-4 pt-10 pb-3 text-sm text-white/90 opacity-0 translate-y-2 transition-all duration-300 group-hover:opacity-100 group-hover:translate-y-0">${esc(p.caption)}</figcaption>`:''}
       </figure>`;
@@ -275,11 +283,33 @@
       },
       fotografias(){
         const ts=C.temas||[];
-        const filterBar = ts.length ? `<div id="tema-filter" class="flex flex-wrap justify-center gap-2 mb-8"><button data-tema="" class="tema-btn px-4 py-1.5 rounded-full border border-white/20 text-sm bg-white text-black">${LANG==='en'?'All':'Todas'}</button>${ts.map(t=>`<button data-tema="${esc(t.slug)}" class="tema-btn px-4 py-1.5 rounded-full border border-white/20 text-sm hover:bg-white/10">${esc(LANG==='en'?t.en:t.pt)}</button>`).join('')}</div>` : '';
-        return `<section id="galeria" class="w-full max-w-6xl mx-auto px-4 sm:px-8 py-16 fade-in">
-          <div class="mb-8 text-center"><h2 class="text-4xl md:text-6xl font-semibold tracking-tight mb-3">${esc(C.gallery?.title||'Fotografias')}</h2><p class="text-white/70 max-w-2xl mx-auto">${esc(C.gallery?.subtitle||'')}</p></div>
-          ${filterBar}
-          <div class="columns-1 sm:columns-2 lg:columns-3 gap-4">${fotos().map(figHTML).join('')}</div>
+        const lojaHref=LANG==='en'?'/en/loja':'/loja';
+        const T={ filtrar:LANG==='en'?'Filter':'Filtrar', tema:LANG==='en'?'Theme':'Tema', produto:LANG==='en'?'Product':'Produto', view:LANG==='en'?'View':'Visualização', casa:LANG==='en'?'See it on your wall':'Ver na sua casa', all:LANG==='en'?'All':'Todas', foto:LANG==='en'?'Photo · Print':'Foto · Print', blusa:LANG==='en'?'Tee':'Blusa', bandeira:LANG==='en'?'Flag':'Bandeira', fotolivro:LANG==='en'?'Photo book':'Fotolivro' };
+        const temaPills = `<button data-tema="" class="tema-btn px-4 py-1.5 rounded-full border border-white/20 text-sm bg-white text-black">${T.all}</button>`+ts.map(t=>`<button data-tema="${esc(t.slug)}" class="tema-btn px-4 py-1.5 rounded-full border border-white/20 text-sm text-white/80 hover:bg-white/10">${esc(LANG==='en'?t.en:t.pt)}</button>`).join('');
+        const prodPills = `<button data-prod="foto" class="px-4 py-1.5 rounded-full border border-white/20 text-sm bg-white text-black">${T.foto}</button>`
+          + `<a href="${lojaHref}" class="px-4 py-1.5 rounded-full border border-white/20 text-sm text-white/80 hover:bg-white/10">${T.blusa}</a>`
+          + `<a href="${lojaHref}" class="px-4 py-1.5 rounded-full border border-white/20 text-sm text-white/80 hover:bg-white/10">${T.bandeira}</a>`
+          + `<a href="#fotolivros" class="px-4 py-1.5 rounded-full border border-white/20 text-sm text-white/80 hover:bg-white/10">${T.fotolivro}</a>`;
+        const panel = ts.length ? `
+          <div class="flex justify-center mb-6">
+            <button id="tema-toggle" aria-expanded="false" class="inline-flex items-center gap-2 px-5 py-2 rounded-full border border-white/25 text-sm text-white/90 hover:bg-white/10 transition">
+              <i data-lucide="sliders-horizontal" class="w-4 h-4"></i> ${T.filtrar}
+              <i data-lucide="chevron-down" class="w-4 h-4 transition-transform" id="tema-chev"></i>
+            </button>
+          </div>
+          <div id="tema-panel" class="overflow-hidden" style="max-height:0">
+            <div class="max-w-4xl mx-auto px-4 pb-10 space-y-6">
+              <div><div class="text-xs uppercase tracking-widest text-white/40 mb-3">${T.tema}</div><div class="flex flex-wrap gap-2">${temaPills}</div></div>
+              <div><div class="text-xs uppercase tracking-widest text-white/40 mb-3">${T.produto}</div><div class="flex flex-wrap gap-2">${prodPills}</div></div>
+              <div><div class="text-xs uppercase tracking-widest text-white/40 mb-3">${T.view}</div>
+                <button id="wall-toggle" class="inline-flex items-center gap-3 text-sm text-white/80 hover:text-white"><span class="wall-sw relative inline-block w-9 h-5 rounded-full bg-white/20 transition"></span> ${T.casa}</button>
+              </div>
+            </div>
+          </div>` : '';
+        return `<section id="galeria" class="w-full px-2 sm:px-4 py-14 fade-in">
+          <div class="mb-6 text-center"><h2 class="text-4xl md:text-6xl font-semibold tracking-tight mb-3">${esc(C.gallery?.title||'Fotografias')}</h2><p class="text-white/70 max-w-2xl mx-auto">${esc(C.gallery?.subtitle||'')}</p></div>
+          ${panel}
+          <div id="galeria-grid" class="columns-2 sm:columns-3 xl:columns-4 gap-2 sm:gap-3">${fotos().map(figHTML).join('')}</div>
         </section>`;
       },
       montagens(){
@@ -413,13 +443,19 @@
         document.querySelectorAll('.cat-btn').forEach(b=>b.addEventListener('click',()=>setCat(+b.dataset.cat)));
         setCat(0);
       }
-      // Filtro por tema na galeria
-      const fbar=document.getElementById('tema-filter');
-      if(fbar){ fbar.querySelectorAll('.tema-btn').forEach(b=>b.addEventListener('click',()=>{
+      // Galeria imersiva: painel expansível + filtro por tema + modo "na sua casa"
+      const tpanel=document.getElementById('tema-panel'), ttoggle=document.getElementById('tema-toggle'), tchev=document.getElementById('tema-chev'), grid=document.getElementById('galeria-grid');
+      const panelOpen=()=> tpanel && tpanel.style.maxHeight && tpanel.style.maxHeight!=='0px';
+      const syncPanel=()=>{ if(panelOpen()) tpanel.style.maxHeight=tpanel.scrollHeight+'px'; };
+      if(ttoggle&&tpanel){ ttoggle.addEventListener('click',()=>{ const open=panelOpen(); tpanel.style.maxHeight=open?'0':tpanel.scrollHeight+'px'; ttoggle.setAttribute('aria-expanded',String(!open)); if(tchev) tchev.style.transform=open?'':'rotate(180deg)'; }); }
+      document.querySelectorAll('#galeria .tema-btn').forEach(b=>b.addEventListener('click',()=>{
         const t=b.dataset.tema;
-        fbar.querySelectorAll('.tema-btn').forEach(x=>{ const on=x===b; x.classList.toggle('bg-white',on); x.classList.toggle('text-black',on); });
+        document.querySelectorAll('#galeria .tema-btn').forEach(x=>{ const on=x===b; x.classList.toggle('bg-white',on); x.classList.toggle('text-black',on); x.classList.toggle('text-white/80',!on); });
         document.querySelectorAll('#galeria .tema-fig').forEach(f=>{ const has=!t||(f.dataset.temas||'').split(' ').filter(Boolean).includes(t); f.style.display=has?'':'none'; });
-      })); }
+        syncPanel();
+      }));
+      const wtoggle=document.getElementById('wall-toggle');
+      if(wtoggle&&grid){ wtoggle.addEventListener('click',()=>{ wtoggle.classList.toggle('on'); grid.classList.toggle('wall'); syncPanel(); }); }
       // Footer
       document.getElementById('footer-copy').textContent = (new Date().getFullYear()) + ' ' + (c.footer?.text || 'Hugo Carmo');
       const insta = document.getElementById('footer-insta');
