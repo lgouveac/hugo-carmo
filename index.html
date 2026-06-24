@@ -183,6 +183,8 @@
       ['seo','hero','about','gallery','montagens','shop','cta','faq','blog','contact','newsletter'].forEach(k=>{ if(e[k]) c[k]={...(c[k]||{}),...e[k]}; });
       if(e.exposicoes&&e.exposicoes.title&&c.exposicoes) c.exposicoes.title=e.exposicoes.title;
       if(Array.isArray(e.products)&&Array.isArray(c.products)) c.products=c.products.map((p,i)=> e.products[i]?{...p,...e.products[i]}:p);
+      if(e.fotolivros&&c.fotolivros){ c.fotolivros={...c.fotolivros,title:e.fotolivros.title||c.fotolivros.title,subtitle:e.fotolivros.subtitle||c.fotolivros.subtitle};
+        if(Array.isArray(e.fotolivros.items)) c.fotolivros.items=(c.fotolivros.items||[]).map((it,i)=> e.fotolivros.items[i]?{...it,...e.fotolivros.items[i]}:it); }
       return c; }
     const imgUrl = path => /^https?:\/\//.test(path) ? path : (C.bucket_base + "/" + path);
     const fotos = () => C.photos.filter(p => p.section === 'fotografias').sort((a,b)=>a.order-b.order);
@@ -222,6 +224,22 @@
         return `<section id="comprar-obras" class="w-full max-w-6xl mx-auto px-4 sm:px-8 py-16">
           <div class="mb-10 text-center fade-in"><h2 class="text-4xl md:text-6xl font-semibold tracking-tight mb-3">${esc(C.shop?.title||'Comprar obras')}</h2><p class="text-white/70 max-w-2xl mx-auto">${esc(C.shop?.subtitle||'')}</p></div>
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">${items}</div>
+          <div class="text-center mt-10"><a href="${LANG==='en'?'/en/loja':'/loja'}" class="inline-block px-6 py-3 rounded-lg border border-white/20 hover:bg-white/10 transition text-sm font-medium">${LANG==='en'?'Open full store →':'Ver loja completa →'}</a></div>
+        </section>`;
+      },
+      fotolivros(){
+        const f=C.fotolivros||{}; const items=f.items||[]; if(!items.length) return '';
+        const wa=(C.contact?.whatsapp)||''; const waLink2=t=>"https://api.whatsapp.com/send/?phone="+wa+"&text="+encodeURIComponent((LANG==='en'?'Hi, I want the photo book ':'Olá, quero o fotolivro ')+t)+"&type=phone_number&app_absent=0";
+        const cards=items.map(p=>`
+          <div class="group fade-in"><div class="card-clickable bg-gradient-to-br from-white/5 via-black/20 to-black/40 border border-white/10 rounded-2xl overflow-hidden shadow-xl flex flex-col">
+            <img src="${esc(imgUrl(p.cover))}" alt="${esc(p.title)}" class="bw-img w-full h-64 object-cover" data-lightbox data-caption="${esc(p.title)}">
+            <div class="flex-1 flex flex-col px-5 py-4"><h3 class="text-xl font-semibold tracking-tight mb-1">${esc(p.title)}</h3><p class="text-gray-400 text-sm mb-2">${esc(p.subtitle)}</p>
+              <div class="flex items-end justify-between mt-auto"><span class="text-lg font-medium">${esc(p.price)}</span>
+                <a href="${waLink2(p.title)}" target="_blank" rel="noopener" class="px-4 py-2 rounded-lg bg-white/10 border border-white/20 font-semibold text-white transition hover:bg-white/20 flex items-center gap-2"><i data-lucide="book-open" class="w-4 h-4"></i> ${L.moreInfo}</a></div></div>
+          </div></div>`).join('');
+        return `<section id="fotolivros" class="w-full max-w-6xl mx-auto px-4 sm:px-8 py-16 fade-in">
+          <div class="mb-10 text-center"><h2 class="text-4xl md:text-6xl font-semibold tracking-tight mb-3">${esc(f.title||'Fotolivros')}</h2><p class="text-white/70 max-w-2xl mx-auto">${esc(f.subtitle||'')}</p></div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">${cards}</div>
         </section>`;
       },
       cicloviagens(){

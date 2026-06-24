@@ -8,6 +8,7 @@
     { "source": "/en/blog", "destination": "/blog" },
     { "source": "/viagem/:slug", "destination": "/viagem" },
     { "source": "/en/viagem/:slug", "destination": "/viagem" },
+    { "source": "/en/loja", "destination": "/loja" },
     { "source": "/en", "destination": "/" }
   ]
 }

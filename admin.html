@@ -50,6 +50,8 @@
       <button data-tab="montagens" class="tabbtn px-4 py-2 rounded-lg border border-white/15 text-sm">Montagens</button>
       <button data-tab="blog"      class="tabbtn px-4 py-2 rounded-lg border border-white/15 text-sm">Blog</button>
       <button data-tab="produtos"  class="tabbtn px-4 py-2 rounded-lg border border-white/15 text-sm">Produtos</button>
+      <button data-tab="fotolivros" class="tabbtn px-4 py-2 rounded-lg border border-white/15 text-sm">Fotolivros</button>
+      <button data-tab="cicloviagens" class="tabbtn px-4 py-2 rounded-lg border border-white/15 text-sm">Cicloviagens</button>
       <button data-tab="exposicoes" class="tabbtn px-4 py-2 rounded-lg border border-white/15 text-sm">Exposições</button>
       <button data-tab="faq"       class="tabbtn px-4 py-2 rounded-lg border border-white/15 text-sm">FAQ</button>
       <button data-tab="contato"   class="tabbtn px-4 py-2 rounded-lg border border-white/15 text-sm">Contato</button>
@@ -101,6 +103,8 @@
       content.exposicoes = content.exposicoes || {title:"Exposições", items:[]};
       content.faq = content.faq || {title:"Perguntas frequentes", items:[]};
       content.blog = content.blog || {title:"Diário de viagem", subtitle:"", posts:[]};
+      content.fotolivros = content.fotolivros || {title:"Fotolivros", subtitle:"", items:[]};
+      content.collections = content.collections || [];
       if(!content.sections || !content.sections.length) content.sections = [
         {key:"shop",label:"Comprar obras",visible:true},
         {key:"fotografias",label:"Fotografias",visible:true},
@@ -143,6 +147,8 @@
       else if(tab==="exposicoes") p.innerHTML = tplExpos();
       else if(tab==="faq") p.innerHTML = tplFaq();
       else if(tab==="blog") p.innerHTML = tplBlog();
+      else if(tab==="fotolivros") p.innerHTML = tplFotolivros();
+      else if(tab==="cicloviagens") p.innerHTML = tplCicloviagens();
       else if(tab==="contato") p.innerHTML = tplContato();
       bindFields();
     }
@@ -396,6 +402,53 @@
       </div>`;
     }
 
+    // ---- FOTOLIVROS ----
+    function tplFotolivros(){
+      const f=content.fotolivros||{items:[]}; const items=f.items||[];
+      const cards=items.map((p,i)=>`
+        <div class="card rounded-xl p-3 flex gap-3" data-li="${i}">
+          <div class="w-28 shrink-0"><img src="${p.cover?imgUrl(p.cover):''}" class="w-28 h-28 object-cover rounded-lg bg-black">
+            <label class="block mt-2 text-center cursor-pointer text-xs px-2 py-1 rounded border border-white/15 hover:bg-white/10">Capa<input type="file" accept="image/jpeg,image/png,image/webp" class="hidden" data-lcover="${i}"></label></div>
+          <div class="flex-1 grid grid-cols-2 gap-2">
+            <input value="${esc(p.title)}" placeholder="Título" data-lf="title" data-li="${i}" class="col-span-2 rounded-lg border border-white/15 px-2 py-1.5 text-sm">
+            <input value="${esc(p.subtitle)}" placeholder="Subtítulo" data-lf="subtitle" data-li="${i}" class="col-span-2 rounded-lg border border-white/15 px-2 py-1.5 text-sm">
+            <input value="${esc(p.price)}" placeholder="Preço" data-lf="price" data-li="${i}" class="rounded-lg border border-white/15 px-2 py-1.5 text-sm">
+            <div class="text-right"><button data-ldel="${i}" class="text-red-400 text-xs hover:underline">Remover</button></div>
+          </div></div>`).join("");
+      return `<div class="card rounded-2xl p-5">
+        ${field("Título da seção", f.title, v=>content.fotolivros.title=v)}
+        ${field("Subtítulo", f.subtitle, v=>content.fotolivros.subtitle=v, {textarea:true, rows:2})}
+        <div class="flex items-center justify-between mb-3 mt-2"><h2 class="text-sm text-white/60">Livros</h2>
+          <button id="add-livro" class="text-sm px-3 py-1.5 rounded-lg bg-white text-black font-semibold hover:bg-white/90">+ Livro</button></div>
+        <div class="space-y-3">${cards||'<p class="text-white/40 text-sm">Nenhum livro.</p>'}</div>
+      </div>`;
+    }
+
+    // ---- CICLOVIAGENS ----
+    function tplCicloviagens(){
+      const cols=content.collections||[];
+      const rows=cols.map((col,i)=>`
+        <div class="card rounded-xl p-3 space-y-2" data-ci="${i}">
+          <div class="flex items-center gap-2">
+            <div class="flex gap-1">
+              <button data-cmove="up" data-i="${i}" class="px-2 py-1 rounded border border-white/15 text-xs hover:bg-white/10" ${i===0?'disabled style=opacity:.3':''}>↑</button>
+              <button data-cmove="down" data-i="${i}" class="px-2 py-1 rounded border border-white/15 text-xs hover:bg-white/10" ${i===cols.length-1?'disabled style=opacity:.3':''}>↓</button>
+            </div>
+            <span class="text-white/40 text-xs">/${esc(col.slug)}</span>
+            <label class="ml-auto flex items-center gap-2 text-sm text-white/70 cursor-pointer"><input type="checkbox" data-cvis="${i}" ${col.visible!==false?'checked':''}> Mostrar</label>
+            <a href="/viagem/${esc(col.slug)}" target="_blank" class="text-xs px-2 py-1 rounded border border-white/15 hover:bg-white/10">Ver ↗</a>
+          </div>
+          <input value="${esc(col.title)}" placeholder="Título da viagem" data-cf="title" data-ci="${i}" class="w-full rounded-lg border border-white/15 px-2 py-1.5 text-sm">
+          <textarea rows="2" placeholder="História da viagem (PT)" data-cf="story" data-ci="${i}" class="w-full rounded-lg border border-white/15 px-2 py-1.5 text-sm">${esc(col.story)}</textarea>
+          <textarea rows="2" placeholder="Story (EN)" data-cf="story_en" data-ci="${i}" class="w-full rounded-lg border border-white/15 px-2 py-1.5 text-sm">${esc(col.story_en)}</textarea>
+        </div>`).join("");
+      return `<div class="card rounded-2xl p-5">
+        <h2 class="text-lg font-semibold mb-1">Cicloviagens</h2>
+        <p class="text-white/50 text-sm mb-4">As coleções são agrupadas pelo local da legenda das fotos. Edite o título e a história de cada viagem, reordene e mostre/esconda. (As fotos entram automaticamente pelo local.)</p>
+        <div class="space-y-3">${rows||'<p class="text-white/40 text-sm">Nenhuma coleção.</p>'}</div>
+      </div>`;
+    }
+
     // ---- CONTATO ----
     function tplContato(){
       const c=content.contact;
@@ -489,6 +542,18 @@
       panel.querySelectorAll("[data-bcover]").forEach(inp=> inp.addEventListener("change", async e=>{ const f=e.target.files[0]; if(!f)return; try{ toast("Enviando capa…"); const d=await uploadFile(f); content.blog.posts[+inp.dataset.bcover].cover=d.path; setDirty(true); renderTab(currentTab); toast("Capa definida. Salve para publicar."); }catch(err){ toast("Erro: "+err.message,false); } }));
       const addPost = panel.querySelector("#add-post");
       if(addPost) addPost.addEventListener("click", ()=>{ const today=new Date().toISOString().slice(0,10); content.blog.posts.unshift({id:"post"+Date.now(), slug:"", title:"Novo post", excerpt:"", keywords:"", cover:"", date:today, body:"", published:false}); renderTab(currentTab); setDirty(true); });
+
+      // ---- Fotolivros ----
+      panel.querySelectorAll("[data-lf]").forEach(inp=> inp.addEventListener("input", e=>{ content.fotolivros.items[+inp.dataset.li][inp.dataset.lf]=e.target.value; setDirty(true); }));
+      panel.querySelectorAll("[data-ldel]").forEach(btn=> btn.addEventListener("click", ()=>{ if(!confirm("Remover este livro?"))return; content.fotolivros.items.splice(+btn.dataset.ldel,1); renderTab(currentTab); setDirty(true); }));
+      panel.querySelectorAll("[data-lcover]").forEach(inp=> inp.addEventListener("change", async e=>{ const f=e.target.files[0]; if(!f)return; try{ toast("Enviando capa…"); const d=await uploadFile(f); content.fotolivros.items[+inp.dataset.lcover].cover=d.path; setDirty(true); renderTab(currentTab); toast("Capa definida. Salve."); }catch(err){ toast("Erro: "+err.message,false); } }));
+      const addL = panel.querySelector("#add-livro");
+      if(addL) addL.addEventListener("click", ()=>{ (content.fotolivros.items=content.fotolivros.items||[]).push({id:"livro"+Date.now(),title:"Novo livro",subtitle:"",cover:"",price:"R$ 0,00"}); renderTab(currentTab); setDirty(true); });
+
+      // ---- Cicloviagens ----
+      panel.querySelectorAll("[data-cf]").forEach(inp=> inp.addEventListener("input", e=>{ content.collections[+inp.dataset.ci][inp.dataset.cf]=e.target.value; setDirty(true); }));
+      panel.querySelectorAll("[data-cvis]").forEach(cb=> cb.addEventListener("change", e=>{ content.collections[+cb.dataset.cvis].visible=e.target.checked; setDirty(true); }));
+      panel.querySelectorAll("[data-cmove]").forEach(btn=> btn.addEventListener("click", ()=>{ const i=+btn.dataset.i, j=btn.dataset.cmove==='up'?i-1:i+1; const a=content.collections; if(j<0||j>=a.length)return; [a[i],a[j]]=[a[j],a[i]]; a.forEach((x,k)=>x.order=k+1); setDirty(true); renderTab(currentTab); }));
     }
 
     function movePhoto(id, dir){

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title id="t">Loja — Hugo Carmo</title>
+  <meta name="description" id="meta-desc" content="Loja de fotografias fine art e fotolivros de Hugo Carmo — prints e quadros em tamanho personalizado.">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="index, follow, max-image-preview:large">
+  <link rel="canonical" id="canonical" href="https://hugocarmo.com.br/loja">
+  <link rel="alternate" hreflang="pt-BR" href="https://hugocarmo.com.br/loja">
+  <link rel="alternate" hreflang="en" href="https://hugocarmo.com.br/en/loja">
+  <link rel="alternate" hreflang="x-default" href="https://hugocarmo.com.br/loja">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Hugo Carmo">
+  <meta property="og:title" id="og-title" content="Loja — Hugo Carmo">
+  <meta property="og:url" id="og-url" content="https://hugocarmo.com.br/loja">
+  <meta property="og:image" content="https://gobslzsggskllmhzasti.supabase.co/storage/v1/object/public/photos/og-card.jpg">
+  <link rel="icon" type="image/png" href="https://neompzltxilcimodyvpd.supabase.co/storage/v1/object/public/flou//Captura%20de%20tela%202025-06-16%20224245.png">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+  <style>body{font-family:'Inter',system-ui,sans-serif;}</style>
+</head>
+<body class="bg-black text-white min-h-screen flex flex-col">
+  <header class="w-full px-6 md:px-16 py-6 flex items-center justify-between border-b border-white/10">
+    <a id="lnk-home" href="/"><img src="https://neompzltxilcimodyvpd.supabase.co/storage/v1/object/public/flou//Captura%20de%20tela%202025-06-16%20224245.png" alt="Hugo Carmo" class="w-14 h-14 object-contain rounded-xl"></a>
+    <a id="lnk-back" href="/" class="text-sm text-white/70 hover:text-white">← Voltar ao site</a>
+  </header>
+
+  <main class="flex-1 w-full max-w-6xl mx-auto px-4 sm:px-8 py-12">
+    <div class="text-center mb-12"><h1 id="h1" class="text-4xl md:text-6xl font-semibold tracking-tight mb-3">Loja</h1><p id="sub" class="text-white/70 max-w-2xl mx-auto"></p></div>
+    <section class="mb-16"><h2 id="t-obras" class="text-2xl font-semibold mb-6"></h2><div id="obras" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"></div></section>
+    <section id="sec-livros" class="mb-8 hidden"><h2 id="t-livros" class="text-2xl font-semibold mb-6"></h2><div id="livros" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"></div></section>
+  </main>
+
+  <footer class="w-full border-t border-white/10 py-8 px-4 md:px-16 text-center text-white/50 text-sm">
+    <a id="lnk-foot" href="/" class="hover:text-white">Hugo Carmo — Artista Visual</a>
+  </footer>
+
+  <script>
+    const SUPA="https://gobslzsggskllmhzasti.supabase.co", CONTENT_URL=SUPA+"/storage/v1/object/public/photos/content.json";
+    const LANG=(/^\/en(\/|$)/.test(location.pathname)||new URLSearchParams(location.search).get('lang')==='en')?'en':'pt';
+    const TX={pt:{title:'Loja',sub:'Fotografias fine art e fotolivros — em tamanho personalizado. Fechamento pelo WhatsApp.',obras:'Obras',livros:'Fotolivros',from:'A partir de',cta:'Quero esta',back:'← Voltar ao site',msgObra:'Olá, tenho interesse na obra ',msgLivro:'Olá, quero o fotolivro '},
+              en:{title:'Store',sub:'Fine-art photography and photo books — in custom sizes. Checkout via WhatsApp.',obras:'Artworks',livros:'Photo books',from:'From',cta:'I want this',back:'← Back to site',msgObra:"Hi, I'm interested in the artwork ",msgLivro:'Hi, I want the photo book '}};
+    const T=TX[LANG], HOMEBASE=LANG==='en'?'/en':'/';
+    document.documentElement.lang=LANG==='en'?'en':'pt-BR';
+    document.getElementById('lnk-home').href=HOMEBASE;
+    const lb=document.getElementById('lnk-back'); lb.href=HOMEBASE; lb.textContent=T.back;
+    document.getElementById('lnk-foot').href=HOMEBASE;
+    document.getElementById('h1').textContent=T.title; document.getElementById('sub').textContent=T.sub;
+    document.getElementById('t-obras').textContent=T.obras; document.getElementById('t-livros').textContent=T.livros;
+    document.getElementById('t').textContent=T.title+" — Hugo Carmo";
+    document.getElementById('canonical').href="https://hugocarmo.com.br"+(LANG==='en'?'/en/loja':'/loja');
+    const esc=s=>(s==null?"":String(s)).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+
+    fetch(CONTENT_URL+"?v="+Date.now(),{cache:"no-store"}).then(r=>r.json()).then(c=>{
+      const imgUrl=p=>/^https?:\/\//.test(p)?p:(c.bucket_base+"/"+p);
+      const wa=c.contact?.whatsapp||'';
+      const link=(msg,t)=>"https://api.whatsapp.com/send/?phone="+wa+"&text="+encodeURIComponent(msg+t)+"&type=phone_number&app_absent=0";
+      const en=c.en||{};
+      const card=(img,title,subtitle,price,href)=>`<div class="bg-gradient-to-br from-white/5 via-black/20 to-black/40 border border-white/10 rounded-2xl overflow-hidden flex flex-col">
+        <img src="${esc(img)}" alt="${esc(title)}" class="w-full h-64 object-cover">
+        <div class="flex-1 flex flex-col px-5 py-4"><h3 class="text-lg font-semibold mb-1">${esc(title)}</h3><p class="text-gray-400 text-sm mb-3">${esc(subtitle)}</p>
+          <div class="flex items-end justify-between mt-auto">${price?`<span class="flex flex-col"><span class="text-xs text-gray-400">${esc(T.from)}</span><span class="text-lg font-medium">${esc(price)}</span></span>`:'<span></span>'}
+            <a href="${href}" target="_blank" rel="noopener" class="px-4 py-2 rounded-lg bg-white text-black font-semibold hover:bg-white/90 flex items-center gap-2"><i data-lucide="message-circle" class="w-4 h-4"></i> ${esc(T.cta)}</a></div></div></div>`;
+
+      const prods=(c.products||[]).map((p,i)=>{ const t=(LANG==='en'&&en.products&&en.products[i])?{...p,...en.products[i]}:p; return card(esc(t.image),t.title,t.subtitle,t.price,link(T.msgObra,t.title)); });
+      document.getElementById('obras').innerHTML=prods.join('');
+
+      const fl=c.fotolivros||{}; const items=fl.items||[];
+      if(items.length){ document.getElementById('sec-livros').classList.remove('hidden');
+        document.getElementById('livros').innerHTML=items.map((p,i)=>{ const t=(LANG==='en'&&en.fotolivros&&en.fotolivros.items&&en.fotolivros.items[i])?{...p,...en.fotolivros.items[i]}:p; return card(imgUrl(t.cover),t.title,t.subtitle,t.price,link(T.msgLivro,t.title)); }).join('');
+      }
+      if(window.lucide) lucide.createIcons();
+    }).catch(()=>{ document.getElementById('obras').innerHTML='<p class="text-white/50">—</p>'; });
+  </script>
+</body>
+</html>

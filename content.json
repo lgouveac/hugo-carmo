@@ -456,6 +456,11 @@
       "visible": true
     },
     {
+      "key": "fotolivros",
+      "label": "Fotolivros",
+      "visible": true
+    },
+    {
       "key": "fotografias",
       "label": "Fotografias",
       "visible": true
@@ -667,6 +672,20 @@
       "placeholder": "Your best email",
       "button": "Subscribe",
       "success": "You're in! Thank you. 🙌"
+    },
+    "fotolivros": {
+      "title": "Photo books",
+      "subtitle": "Photo books from the journeys — limited run.",
+      "items": [
+        {
+          "title": "Bike Journeys — Vol. 1",
+          "subtitle": "Photo book · hardcover"
+        },
+        {
+          "title": "São Francisco River",
+          "subtitle": "Photo book"
+        }
+      ]
     }
   },
   "collections": [
@@ -734,5 +753,27 @@
       "visible": true,
       "order": 8
     }
-  ]
+  ],
+  "fotolivros": {
+    "title": "Fotolivros",
+    "subtitle": "Livros de fotografia das viagens — tiragem limitada.",
+    "items": [
+      {
+        "id": "livro1",
+        "title": "Cicloviagens — Vol. 1",
+        "subtitle": "Fotolivro · capa dura",
+        "cover": "foto-15-3-irmaos-rio-de-janeiro-2015.jpg",
+        "price": "R$ 120,00",
+        "stock": ""
+      },
+      {
+        "id": "livro2",
+        "title": "Rio São Francisco",
+        "subtitle": "Fotolivro",
+        "cover": "foto-22-rio-sao-francisco-2015.jpg",
+        "price": "R$ 90,00",
+        "stock": ""
+      }
+    ]
+  }
 }
