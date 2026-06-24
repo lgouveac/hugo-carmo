@@ -185,6 +185,7 @@
       if(Array.isArray(e.products)&&Array.isArray(c.products)) c.products=c.products.map((p,i)=> e.products[i]?{...p,...e.products[i]}:p);
       if(e.fotolivros&&c.fotolivros){ c.fotolivros={...c.fotolivros,title:e.fotolivros.title||c.fotolivros.title,subtitle:e.fotolivros.subtitle||c.fotolivros.subtitle};
         if(Array.isArray(e.fotolivros.items)) c.fotolivros.items=(c.fotolivros.items||[]).map((it,i)=> e.fotolivros.items[i]?{...it,...e.fotolivros.items[i]}:it); }
+      if(e.categorias&&c.categorias&&Array.isArray(e.categorias.items)) c.categorias.items=(c.categorias.items||[]).map((it,i)=> e.categorias.items[i]?{...it,...e.categorias.items[i]}:it);
       return c; }
     const imgUrl = path => /^https?:\/\//.test(path) ? path : (C.bucket_base + "/" + path);
     const fotos = () => C.photos.filter(p => p.section === 'fotografias').sort((a,b)=>a.order-b.order);
@@ -203,6 +204,19 @@
 
     // ---- Templates por seção ----
     const SECTIONS = {
+      categorias(){
+        const items=(C.categorias?.items)||[]; if(!items.length) return '';
+        const left=items.map((it,i)=>`<button data-cat="${i}" class="cat-btn block w-full text-left px-4 py-3 rounded-lg border border-white/15 mb-3 font-mono text-lg hover:bg-white/10 transition flex items-center justify-between">${esc(it.title)} <span>→</span></button>`).join('');
+        return `<section id="categorias" class="w-full max-w-6xl mx-auto px-4 sm:px-8 py-16 fade-in">
+          <div class="grid md:grid-cols-[260px_1fr] gap-8 items-stretch">
+            <div class="flex flex-col justify-center">${left}</div>
+            <div class="grid sm:grid-cols-2 rounded-2xl overflow-hidden border border-white/10 min-h-[380px]">
+              <div id="cat-info" class="bg-white/5 p-8 flex flex-col justify-center"></div>
+              <div class="bg-black min-h-[200px]"><img id="cat-img" src="" alt="" class="w-full h-full object-cover"></div>
+            </div>
+          </div>
+        </section>`;
+      },
       shop(){
         const items = (C.products||[]).map(p=>`
           <div class="group fade-in">
@@ -384,6 +398,18 @@
       document.getElementById('nav').innerHTML = secs.filter(s=>NAV_LABELS[s.key]).map(s=>`<a href="${NAV_LABELS[s.key][0]}" class="text-white/80 hover:text-white transition text-sm font-medium">${NAV_LABELS[s.key][1]}</a>`).join('') + toggle;
       // Seções na ordem definida
       document.getElementById('sections').innerHTML = secs.map(s => (SECTIONS[s.key]?SECTIONS[s.key]():'')).join('');
+      // Categorias (Blusas/Prints/Bandeiras) — troca interativa
+      const catItems=(c.categorias?.items)||[];
+      if(catItems.length){
+        const setCat=i=>{ const it=catItems[i], info=document.getElementById('cat-info'), img=document.getElementById('cat-img'); if(!info) return;
+          const wlink="https://api.whatsapp.com/send/?phone="+(c.contact?.whatsapp||'')+"&text="+encodeURIComponent((LANG==='en'?'Hi, I want to buy: ':'Olá, quero comprar: ')+it.title)+"&type=phone_number&app_absent=0";
+          info.innerHTML=`<p class="text-white/80 leading-relaxed mb-6">${esc(it.desc||'')}</p><a href="${wlink}" target="_blank" rel="noopener" class="self-start inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-white text-black font-semibold hover:bg-white/90">${LANG==='en'?'BUY':'COMPRAR'} →</a>`;
+          if(img){ img.src=it.image?imgUrl(it.image):''; img.alt=it.title||''; }
+          document.querySelectorAll('.cat-btn').forEach((b,bi)=>b.classList.toggle('bg-white/10',bi===i));
+        };
+        document.querySelectorAll('.cat-btn').forEach(b=>b.addEventListener('click',()=>setCat(+b.dataset.cat)));
+        setCat(0);
+      }
       // Footer
       document.getElementById('footer-copy').textContent = (new Date().getFullYear()) + ' ' + (c.footer?.text || 'Hugo Carmo');
       const insta = document.getElementById('footer-insta');

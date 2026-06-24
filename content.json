@@ -451,6 +451,11 @@
   },
   "sections": [
     {
+      "key": "categorias",
+      "label": "Loja (categorias)",
+      "visible": true
+    },
+    {
       "key": "shop",
       "label": "Comprar obras",
       "visible": true
@@ -711,6 +716,22 @@
           "note": ""
         }
       ]
+    },
+    "categorias": {
+      "items": [
+        {
+          "title": "T-shirts",
+          "desc": "Wear a story: t-shirts with prints of my photographs and bike journeys across Brazil. Comfort and art to take with you wherever you go."
+        },
+        {
+          "title": "Prints",
+          "desc": "Bring the road to your wall. Fine-art prints of my photographs, in custom sizes, made to last and impress."
+        },
+        {
+          "title": "Flags",
+          "desc": "Fabric-printed flags are pieces of history hung on the wall, telling the visual narratives of my bike journeys across Brazil. Made to last and impress, each flag is a fusion of art and memory — ideal to decorate indoor and outdoor spaces with a touch of authenticity and originality."
+        }
+      ]
     }
   },
   "collections": [
@@ -798,6 +819,28 @@
         "cover": "foto-22-rio-sao-francisco-2015.jpg",
         "price": "R$ 90,00",
         "stock": ""
+      }
+    ]
+  },
+  "categorias": {
+    "items": [
+      {
+        "id": "blusas",
+        "title": "Blusas",
+        "desc": "Vista uma história: blusas com estampas das minhas fotografias e das viagens de bicicleta pelo Brasil. Conforto e arte para levar com você por onde for.",
+        "image": "foto-25-alagoas-2013.jpg"
+      },
+      {
+        "id": "prints",
+        "title": "Prints",
+        "desc": "Leve a estrada para a sua parede. Prints e quadros fine art das minhas fotografias, em tamanho personalizado, impressos para durar e impressionar.",
+        "image": "montagem-02.jpg"
+      },
+      {
+        "id": "bandeiras",
+        "title": "Bandeiras",
+        "desc": "As bandeiras impressas em tecido são pedaços de história pendurados, contando as narrativas visuais das minhas jornadas de bicicleta pelo Brasil. Feitas para durar e impressionar, cada bandeira é uma fusão de arte e memória, ideal para decorar ambientes internos e externos com um toque de autenticidade e originalidade.",
+        "image": "foto-11-sertao-de-pernambuco-2015.jpg"
       }
     ]
   }
