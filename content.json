@@ -1,5 +1,5 @@
 {
-  "version": 2,
+  "version": 3,
   "logo": "https://neompzltxilcimodyvpd.supabase.co/storage/v1/object/public/flou//Captura%20de%20tela%202025-06-16%20224245.png",
   "hero": {
     "title1": "Kina",
@@ -57,7 +57,8 @@
     "whatsapp": "5521995208565",
     "whatsapp_msg": "Olá, tenho interesse no trabalho do Hugo Carmo",
     "instagram_label": "@kina.com.br",
-    "instagram_url": "https://www.instagram.com/kina.com.br/"
+    "instagram_url": "https://www.instagram.com/kina.com.br/",
+    "threads_url": "https://www.threads.net/@kina.com.br"
   },
   "products": [
     {
@@ -475,6 +476,11 @@
       "visible": true
     },
     {
+      "key": "newsletter",
+      "label": "Newsletter",
+      "visible": true
+    },
+    {
       "key": "sobre",
       "label": "Sobre",
       "visible": true
@@ -538,13 +544,7 @@
         "cover": "montagem-02.jpg",
         "date": "2026-06-23",
         "published": true,
-        "body": "A **parede de quadros** — ou *gallery wall* — é uma das tendências de decoração que mais valorizam um ambiente. Com as fotografias certas, ela vira o ponto alto da sala. Veja como montar a sua.\n\n## 1. Escolha um fio condutor\nFunciona melhor quando as obras conversam: tudo em **preto e branco**, só paisagens, ou uma série de viagem. Isso dá unidade mesmo com tamanhos diferentes.\n\n## 2. Defina a composição antes de furar\nMonte primeiro **no chão**, ou recorte papéis do tamanho dos quadros e cole na parede com fita. Duas abordagens:\n- **Simétrica:** quadros do mesmo tamanho em grade — clean e elegante.\n- **Orgânica:** tamanhos variados ao redor de uma peça central — mais artística.\n\n## 3. Espaçamento\nDeixe de **5 a 8 cm** entre os quadros. Espaço uniforme passa capricho.\n\n## 4. Escolha as obras\nFotografias **fine art** em tamanho personalizado deixam você ajustar cada peça à composição. Uma cor forte no meio de obras em P&B cria um ponto focal lindo.\n\nQuer montar a sua parede de quadros com fotografias autorais? [Veja as obras disponíveis](/#comprar-obras) — ajusto tamanhos e acabamentos sob medida pra sua parede.",
-        "en": {
-          "title": "How to build a gallery wall with photographs",
-          "excerpt": "A step-by-step guide to building a gallery wall with fine-art photographs: composition, spacing and how to combine the pieces.",
-          "keywords": "gallery wall, picture wall, composition of artworks, decorating with photography, wall art living room",
-          "body": "The **gallery wall** is one of the decor trends that most enhance a space. With the right photographs, it becomes the highlight of the living room. Here's how to build yours.\n\n## 1. Choose a common thread\nIt works best when the pieces talk to each other: all in **black and white**, only landscapes, or a single travel series. This gives unity even with different sizes.\n\n## 2. Plan the composition before drilling\nFirst lay it out **on the floor**, or cut paper to the size of the artworks and tape it to the wall. Two approaches:\n- **Symmetrical:** same-size pieces in a grid — clean and elegant.\n- **Organic:** varied sizes around a central piece — more artistic.\n\n## 3. Spacing\nLeave **5 to 8 cm** between pieces. Even spacing looks polished.\n\n## 4. Choose the artworks\n**Fine-art** photographs in a custom size let you fit each piece to the composition. A strong color in the middle of black-and-white pieces creates a beautiful focal point.\n\nWant to build your gallery wall with original photographs? [See the available artworks](/en#comprar-obras) — I'll adjust sizes and finishes to measure for your wall."
-        }
+        "body": "A **parede de quadros** — ou *gallery wall* — é uma das tendências de decoração que mais valorizam um ambiente. Com as fotografias certas, ela vira o ponto alto da sala. Veja como montar a sua.\n\n## 1. Escolha um fio condutor\nFunciona melhor quando as obras conversam: tudo em **preto e branco**, só paisagens, ou uma série de viagem. Isso dá unidade mesmo com tamanhos diferentes.\n\n## 2. Defina a composição antes de furar\nMonte primeiro **no chão**, ou recorte papéis do tamanho dos quadros e cole na parede com fita. Duas abordagens:\n- **Simétrica:** quadros do mesmo tamanho em grade — clean e elegante.\n- **Orgânica:** tamanhos variados ao redor de uma peça central — mais artística.\n\n## 3. Espaçamento\nDeixe de **5 a 8 cm** entre os quadros. Espaço uniforme passa capricho.\n\n## 4. Escolha as obras\nFotografias **fine art** em tamanho personalizado deixam você ajustar cada peça à composição. Uma cor forte no meio de obras em P&B cria um ponto focal lindo.\n\nQuer montar a sua parede de quadros com fotografias autorais? [Veja as obras disponíveis](/#comprar-obras) — ajusto tamanhos e acabamentos sob medida pra sua parede."
       },
       {
         "id": "altura-quadro",
@@ -555,13 +555,7 @@
         "cover": "montagem-06.jpg",
         "date": "2026-06-23",
         "published": true,
-        "body": "Pendurar quadro alto demais é o erro mais comum da decoração. A boa notícia: tem uma regra simples que resolve.\n\n## A regra do centro a 1,45 m\nO **centro do quadro** deve ficar a cerca de **1,45 m do chão** — a altura média do olhar. Vale pra maioria das paredes e dá aquele resultado de galeria.\n\n## Acima de móveis\nSobre **sofá, aparador ou cabeceira**, deixe de **15 a 25 cm** entre o topo do móvel e a base do quadro, pra que a obra converse com o móvel.\n\n## Corredores e escadas\nAqui o olhar está em movimento: pode subir um pouco a altura e alinhar os quadros pela base ou pelo centro.\n\n## O tamanho importa\nUm quadro grande ou pequeno demais estraga o efeito. Como minhas fotografias saem em **tamanho personalizado**, dá pra acertar a proporção exata da sua parede.\n\nQuer uma obra no tamanho certo pra sua parede? [Veja as fotografias fine art](/#comprar-obras) e me chama que ajusto tudo.",
-        "en": {
-          "title": "How high should you hang a picture? A quick decor guide",
-          "excerpt": "How high to hang a picture for a professional result: the 145 cm rule and tips for the sofa, headboard and hallway.",
-          "keywords": "how high to hang a picture, how to hang a picture, wall decor, wall art living room",
-          "body": "Hanging a picture too high is the most common decor mistake. The good news: there's a simple rule that solves it.\n\n## The center-at-145-cm rule\nThe **center of the picture** should sit about **145 cm from the floor** — average eye level. It works for most walls and gives that gallery result.\n\n## Above furniture\nOver a **sofa, sideboard or headboard**, leave **15 to 25 cm** between the top of the furniture and the bottom of the picture, so the piece talks to the furniture.\n\n## Hallways and stairs\nHere the eye is in motion: you can raise the height a bit and align the pieces by their base or center.\n\n## Size matters\nA picture that's too big or too small ruins the effect. Since my photographs come in a **custom size**, you can get the exact proportion for your wall.\n\nWant an artwork in the right size for your wall? [See the fine-art photographs](/en#comprar-obras) and message me — I'll sort everything out."
-        }
+        "body": "Pendurar quadro alto demais é o erro mais comum da decoração. A boa notícia: tem uma regra simples que resolve.\n\n## A regra do centro a 1,45 m\nO **centro do quadro** deve ficar a cerca de **1,45 m do chão** — a altura média do olhar. Vale pra maioria das paredes e dá aquele resultado de galeria.\n\n## Acima de móveis\nSobre **sofá, aparador ou cabeceira**, deixe de **15 a 25 cm** entre o topo do móvel e a base do quadro, pra que a obra converse com o móvel.\n\n## Corredores e escadas\nAqui o olhar está em movimento: pode subir um pouco a altura e alinhar os quadros pela base ou pelo centro.\n\n## O tamanho importa\nUm quadro grande ou pequeno demais estraga o efeito. Como minhas fotografias saem em **tamanho personalizado**, dá pra acertar a proporção exata da sua parede.\n\nQuer uma obra no tamanho certo pra sua parede? [Veja as fotografias fine art](/#comprar-obras) e me chama que ajusto tudo."
       },
       {
         "id": "presente-viagem",
@@ -572,13 +566,7 @@
         "cover": "foto-25-alagoas-2013.jpg",
         "date": "2026-06-23",
         "published": true,
-        "body": "Procurando um presente diferente, que não seja mais um objeto qualquer? Uma **fotografia de viagem** emoldurada é original, sofisticada e carrega uma história — daquelas que ficam na parede por anos.\n\n## Por que presentear com arte\n- **Único:** não é um presente genérico; é uma obra autoral.\n- **Pessoal:** dá pra escolher um lugar que significa algo pra quem recebe.\n- **Durável:** a impressão **fine art** dura décadas sem desbotar.\n\n## Como escolher\nPense no estilo da casa da pessoa: **preto e branco** combina com tudo; uma paisagem colorida vira ponto focal. O tamanho personalizado garante que encaixe na parede dela.\n\n## Para quem ama viajar\nMinhas obras nascem de **ciclo-viagens pelo Brasil e pelo mundo** — presente perfeito pra quem tem alma de viajante.\n\nQuer presentear com uma obra que emociona? [Conheça as fotografias](/#comprar-obras) — ajudo a escolher e ajusto o tamanho e o acabamento.",
-        "en": {
-          "title": "Travel photography as a gift: the artwork that tells a story",
-          "excerpt": "Why a fine-art travel photograph is an original, meaningful gift — and how to choose the right artwork to give.",
-          "keywords": "photography gift, artwork gift, creative gift, travel photography, decor gift",
-          "body": "Looking for a different gift, one that isn't just another object? A framed **travel photograph** is original, sophisticated and carries a story — the kind that stays on the wall for years.\n\n## Why give art as a gift\n- **Unique:** it's not a generic gift; it's an authorial artwork.\n- **Personal:** you can choose a place that means something to the person.\n- **Lasting:** the **fine-art print** lasts decades without fading.\n\n## How to choose\nThink about the style of the person's home: **black and white** goes with everything; a color landscape becomes a focal point. A custom size guarantees it fits their wall.\n\n## For those who love to travel\nMy works are born from **bike journeys across Brazil and the world** — the perfect gift for someone with a traveler's soul.\n\nWant to give an artwork that moves people? [Discover the photographs](/en#comprar-obras) — I'll help you choose and adjust the size and finishing."
-        }
+        "body": "Procurando um presente diferente, que não seja mais um objeto qualquer? Uma **fotografia de viagem** emoldurada é original, sofisticada e carrega uma história — daquelas que ficam na parede por anos.\n\n## Por que presentear com arte\n- **Único:** não é um presente genérico; é uma obra autoral.\n- **Pessoal:** dá pra escolher um lugar que significa algo pra quem recebe.\n- **Durável:** a impressão **fine art** dura décadas sem desbotar.\n\n## Como escolher\nPense no estilo da casa da pessoa: **preto e branco** combina com tudo; uma paisagem colorida vira ponto focal. O tamanho personalizado garante que encaixe na parede dela.\n\n## Para quem ama viajar\nMinhas obras nascem de **ciclo-viagens pelo Brasil e pelo mundo** — presente perfeito pra quem tem alma de viajante.\n\nQuer presentear com uma obra que emociona? [Conheça as fotografias](/#comprar-obras) — ajudo a escolher e ajusto o tamanho e o acabamento."
       },
       {
         "id": "quadro-para-sala",
@@ -589,13 +577,7 @@
         "cover": "montagem-02.jpg",
         "date": "2026-06-22",
         "published": true,
-        "body": "A sala é o cartão de visita da casa, e um bom **quadro de fotografia** muda completamente o ambiente. Mas como escolher o certo? Reuni aqui o que aprendi vendendo **arte de parede** para casas pelo Brasil.\n\n## Tamanho: o erro mais comum\nQuadro pequeno demais some na parede. Para a sala, pense grande: acima do sofá, o ideal é uma peça (ou um conjunto) que ocupe cerca de dois terços da largura do móvel. Todas as minhas obras são em **tamanho personalizado**, então dá para ajustar à sua parede.\n\n## Cor ou preto e branco?\nA **fotografia em preto e branco** combina com qualquer paleta e passa sofisticação atemporal. Já uma imagem colorida vira ponto focal e dá energia ao ambiente. Vale olhar os tons que já existem na sala antes de decidir.\n\n## Um tema que conversa com você\nPaisagens trazem calma; cenas de viagem contam história e viram assunto com as visitas. Minhas fotografias nascem de **ciclo-viagens pelo Brasil** — cada uma carrega um lugar e um momento.\n\n## Acabamento\nMoldura box, canvas ou metacrílato mudam o peso visual da obra. Para a sala, moldura box preta ou de madeira costuma ser certeira.\n\nQuer ajuda para escolher a obra e o tamanho ideais para a sua sala? [Veja as fotografias disponíveis](/#comprar-obras) — me chama que ajusto tudo sob medida.",
-        "en": {
-          "title": "How to choose the ideal photography artwork for your living room",
-          "excerpt": "A practical guide to choosing the ideal photography artwork for the living room: size, color or black and white, theme and finishing. Custom-size wall art.",
-          "keywords": "wall art living room, photography artwork, decorating with photography, wall art, artwork size",
-          "body": "The living room is the calling card of a home, and a good **photography artwork** completely changes the space. But how do you choose the right one? Here's what I learned selling **wall art** for homes across Brazil.\n\n## Size: the most common mistake\nA piece that's too small disappears on the wall. For the living room, think big: above the sofa, the ideal is a piece (or set) that takes up about two thirds of the furniture's width. All my works are in a **custom size**, so you can fit them to your wall.\n\n## Color or black and white?\n**Black-and-white photography** goes with any palette and conveys timeless sophistication. A color image becomes a focal point and energizes the room. It's worth looking at the tones already in your living room.\n\n## A theme that speaks to you\nLandscapes bring calm; travel scenes tell a story and spark conversation with guests. My photographs are born from **bike journeys across Brazil** — each one carries a place and a moment.\n\n## Finishing\nBox frame, canvas or acrylic change the visual weight. For the living room, a black or wood box frame is usually a safe bet.\n\nWant help choosing the ideal artwork and size for your living room? [See the available photographs](/en#comprar-obras) — I'll adjust everything to measure."
-        }
+        "body": "A sala é o cartão de visita da casa, e um bom **quadro de fotografia** muda completamente o ambiente. Mas como escolher o certo? Reuni aqui o que aprendi vendendo **arte de parede** para casas pelo Brasil.\n\n## Tamanho: o erro mais comum\nQuadro pequeno demais some na parede. Para a sala, pense grande: acima do sofá, o ideal é uma peça (ou um conjunto) que ocupe cerca de dois terços da largura do móvel. Todas as minhas obras são em **tamanho personalizado**, então dá para ajustar à sua parede.\n\n## Cor ou preto e branco?\nA **fotografia em preto e branco** combina com qualquer paleta e passa sofisticação atemporal. Já uma imagem colorida vira ponto focal e dá energia ao ambiente. Vale olhar os tons que já existem na sala antes de decidir.\n\n## Um tema que conversa com você\nPaisagens trazem calma; cenas de viagem contam história e viram assunto com as visitas. Minhas fotografias nascem de **ciclo-viagens pelo Brasil** — cada uma carrega um lugar e um momento.\n\n## Acabamento\nMoldura box, canvas ou metacrílato mudam o peso visual da obra. Para a sala, moldura box preta ou de madeira costuma ser certeira.\n\nQuer ajuda para escolher a obra e o tamanho ideais para a sua sala? [Veja as fotografias disponíveis](/#comprar-obras) — me chama que ajusto tudo sob medida."
       },
       {
         "id": "o-que-e-fine-art",
@@ -606,13 +588,7 @@
         "cover": "foto-22-rio-sao-francisco-2015.jpg",
         "date": "2026-06-20",
         "published": true,
-        "body": "Você já viu o termo **fotografia fine art** e ficou na dúvida do que significa? Explico de forma simples — e por que isso faz diferença na obra que vai para a sua parede.\n\n## O que é fotografia fine art\nÉ a fotografia tratada como **obra de arte**, não como uma simples foto impressa. Envolve um olhar autoral, a escolha cuidadosa da imagem e, principalmente, uma **impressão fine art** de alta qualidade, em papéis nobres que preservam cor, contraste e durabilidade por décadas.\n\n## Por que vale a pena\n- **Durabilidade:** papéis e tintas fine art resistem ao tempo sem desbotar.\n- **Profundidade:** os detalhes e as nuances de tom aparecem de verdade.\n- **Valor:** é uma peça de **arte de parede** única, com cara de galeria.\n\n## Fine art não é só técnica\nPor trás de cada **quadro fine art** existe uma história. As minhas vêm de viagens de bicicleta pelo Brasil — natureza, cotidiano e gente registrados no caminho.\n\nQuer levar uma fotografia fine art para casa? [Conheça as obras](/#comprar-obras), todas impressas em fine art e em tamanho personalizado.",
-        "en": {
-          "title": "Fine Art photography: what it is and why it's worth having at home",
-          "excerpt": "What fine art photography is, why it lasts longer and is worth having at home — and how each fine-art artwork carries a story from a journey across Brazil.",
-          "keywords": "fine art photography, fine art print, wall art, fine art artwork",
-          "body": "Have you seen the term **fine art photography** and wondered what it means? Let me explain it simply — and why it makes a difference in the piece that goes on your wall.\n\n## What fine art photography is\nIt's photography treated as a **work of art**, not as a simply printed photo. It involves an authorial eye, a careful choice of the image and, above all, a high-quality **fine-art print** on noble papers that preserve color, contrast and durability for decades.\n\n## Why it's worth it\n- **Durability:** fine-art papers and inks resist time without fading.\n- **Depth:** the details and tonal nuances truly show.\n- **Value:** it's a unique piece of **wall art**, with a gallery feel.\n\n## Fine art isn't only technique\nBehind each **fine-art artwork** there's a story. Mine come from bike journeys across Brazil — nature, everyday life and people captured along the way.\n\nWant to bring a fine-art photograph home? [Discover the artworks](/en#comprar-obras), all printed as fine art and in a custom size."
-        }
+        "body": "Você já viu o termo **fotografia fine art** e ficou na dúvida do que significa? Explico de forma simples — e por que isso faz diferença na obra que vai para a sua parede.\n\n## O que é fotografia fine art\nÉ a fotografia tratada como **obra de arte**, não como uma simples foto impressa. Envolve um olhar autoral, a escolha cuidadosa da imagem e, principalmente, uma **impressão fine art** de alta qualidade, em papéis nobres que preservam cor, contraste e durabilidade por décadas.\n\n## Por que vale a pena\n- **Durabilidade:** papéis e tintas fine art resistem ao tempo sem desbotar.\n- **Profundidade:** os detalhes e as nuances de tom aparecem de verdade.\n- **Valor:** é uma peça de **arte de parede** única, com cara de galeria.\n\n## Fine art não é só técnica\nPor trás de cada **quadro fine art** existe uma história. As minhas vêm de viagens de bicicleta pelo Brasil — natureza, cotidiano e gente registrados no caminho.\n\nQuer levar uma fotografia fine art para casa? [Conheça as obras](/#comprar-obras), todas impressas em fine art e em tamanho personalizado."
       },
       {
         "id": "tipos-de-impressao",
@@ -623,13 +599,7 @@
         "cover": "montagem-08.jpg",
         "date": "2026-06-18",
         "published": true,
-        "body": "Na hora de comprar um quadro, o acabamento muda tudo — no visual e no preço. Comparo aqui as opções que ofereço, para você escolher com segurança.\n\n## Impressão Fine Art + Moldura Box\nA combinação mais clássica. A **impressão fine art** com **moldura box** (preta ou de madeira) cria um respiro entre a foto e a moldura, com cara de galeria. Combina com quase tudo.\n\n## Canvas (tela)\nA imagem impressa em **canvas** traz textura e um ar mais artístico, sem vidro. É leve e aconchegante — ótima para ambientes informais.\n\n## Metacrílato (acrílico)\nO **metacrílato** dá brilho, profundidade e um acabamento moderno. As cores ganham vida. Ideal para quem quer um ponto focal contemporâneo.\n\n## Qual escolher?\n- Quer clássico e versátil? **Moldura box**.\n- Quer aconchego e leveza? **Canvas**.\n- Quer impacto e modernidade? **Metacrílato**.\n\nTodas as opções saem em **tamanho personalizado**. [Veja as obras e escolha o acabamento](/#comprar-obras) — me chama que te ajudo a decidir.",
-        "en": {
-          "title": "Fine Art, canvas, acrylic or box frame: which finishing to choose",
-          "excerpt": "Fine Art with a box frame, canvas or acrylic: compare the print finishes and choose the ideal photography artwork for your space.",
-          "keywords": "fine art print, canvas, acrylic print, box frame, how to frame photography",
-          "body": "When buying an artwork, the finishing changes everything — in look and in price. Here I compare the options I offer, so you can choose with confidence.\n\n## Fine Art print + Box frame\nThe most classic combination. The **fine-art print** with a **box frame** (black or wood) creates breathing room between the photo and the frame, with a gallery look. It goes with almost anything.\n\n## Canvas\nThe image printed on **canvas** brings texture and a more artistic air, without glass. It's light and cozy — great for informal spaces.\n\n## Acrylic\n**Acrylic** gives shine, depth and a modern finish. The colors come to life. Ideal for those who want a contemporary focal point.\n\n## Which to choose?\n- Want classic and versatile? **Box frame**.\n- Want warmth and lightness? **Canvas**.\n- Want impact and modernity? **Acrylic**.\n\nAll options come in a **custom size**. [See the artworks and choose the finishing](/en#comprar-obras) — message me and I'll help you decide."
-        }
+        "body": "Na hora de comprar um quadro, o acabamento muda tudo — no visual e no preço. Comparo aqui as opções que ofereço, para você escolher com segurança.\n\n## Impressão Fine Art + Moldura Box\nA combinação mais clássica. A **impressão fine art** com **moldura box** (preta ou de madeira) cria um respiro entre a foto e a moldura, com cara de galeria. Combina com quase tudo.\n\n## Canvas (tela)\nA imagem impressa em **canvas** traz textura e um ar mais artístico, sem vidro. É leve e aconchegante — ótima para ambientes informais.\n\n## Metacrílato (acrílico)\nO **metacrílato** dá brilho, profundidade e um acabamento moderno. As cores ganham vida. Ideal para quem quer um ponto focal contemporâneo.\n\n## Qual escolher?\n- Quer clássico e versátil? **Moldura box**.\n- Quer aconchego e leveza? **Canvas**.\n- Quer impacto e modernidade? **Metacrílato**.\n\nTodas as opções saem em **tamanho personalizado**. [Veja as obras e escolha o acabamento](/#comprar-obras) — me chama que te ajudo a decidir."
       },
       {
         "id": "rio-sao-francisco",
@@ -640,13 +610,7 @@
         "cover": "foto-01-rio-sao-francisco-2015.jpg",
         "date": "2026-06-16",
         "body": "Foi numa ciclo-viagem pelo sertão que essa imagem nasceu. Pedalando às margens do **Rio São Francisco**, parei ao entardecer e encontrei a cena que virou uma das fotografias mais procuradas do meu trabalho: um barco simples cortando a água espelhada, o velho Chico em silêncio.\n\n## O Rio São Francisco pelas lentes\n\nMais do que paisagem, o São Francisco é gente, travessia e história. Cada parada virava um registro do cotidiano ribeirinho — pescadores, barcos, o ritmo lento das águas. É esse olhar documental, de quem chega de bicicleta e fica, que tento traduzir em cada obra.\n\n## Da estrada para a sua parede\n\nEssa fotografia está disponível como **quadro fine art** e como **print para decoração**, em tamanho personalizado. É uma peça de **arte de parede** que leva a força das paisagens do Brasil para a sala, o escritório ou o quarto — em preto e branco ou em cor.\n\nQuer essa imagem na sua casa? [Conheça as obras e adquira a sua](/#comprar-obras) — impressão Fine Art com moldura, canvas ou metacrilato, feita sob medida.",
-        "published": true,
-        "en": {
-          "title": "By bicycle along the São Francisco River: the journey behind the photograph",
-          "excerpt": "The bike journey through the backlands that gave rise to one of Hugo Carmo's most sought-after photographs — now available as a fine-art print for your home.",
-          "keywords": "sao francisco river photography, fine art print, wall art, brazil landscape photography, decor print",
-          "body": "It was on a bike journey through the backlands that this image was born. Pedaling along the banks of the **São Francisco River**, I stopped at dusk and found the scene that became one of the most sought-after photographs in my work: a simple boat cutting across mirror-still water, the old river in silence.\n\n## The São Francisco River through the lens\nMore than a landscape, the São Francisco is people, crossings and history. Every stop became a record of riverside daily life — fishermen, boats, the slow rhythm of the waters. It's that documentary eye, of someone who arrives by bike and stays, that I try to translate into each piece.\n\n## From the road to your wall\nThis photograph is available as a **fine-art framed artwork** and as a **decor print**, in a custom size. It's a piece of **wall art** that brings the strength of Brazil's landscapes into your living room, office or bedroom — in black and white or in color.\n\nWant this image in your home? [See the artworks and get yours](/en#comprar-obras) — Fine Art printing with a frame, canvas or acrylic, made to measure."
-        }
+        "published": true
       },
       {
         "id": "decoracao-pb",
@@ -657,13 +621,7 @@
         "cover": "foto-05-alagoas-2015.jpg",
         "date": "2026-06-12",
         "published": true,
-        "body": "Poucas escolhas valorizam tanto um ambiente quanto a **fotografia em preto e branco**. Veja por que ela funciona em qualquer casa — e como usar.\n\n## Por que preto e branco combina com tudo\nSem a variável da cor, o **quadro preto e branco** se encaixa em qualquer paleta, do minimalista ao rústico. Ele traz elegância sem competir com o resto da decoração.\n\n## Onde fica melhor\n- **Sala:** acima do sofá ou do aparador, como ponto de sofisticação.\n- **Home office:** foco e seriedade — ótimo até de fundo em chamadas de vídeo.\n- **Quarto e corredor:** clima calmo e atemporal.\n\n## A força da imagem documental\nMinhas fotografias em **preto e branco** registram o cotidiano e as paisagens do Brasil em **ciclo-viagens** — cenas reais que viram **arte de parede** cheia de presença.\n\nQuer um quadro preto e branco que valorize seu ambiente? [Veja as obras disponíveis](/#comprar-obras), todas em impressão fine art e tamanho personalizado.",
-        "en": {
-          "title": "Black-and-white decor: how photography enhances any space",
-          "excerpt": "Why black-and-white photography goes with any decor and where to use a black-and-white artwork to enhance the living room, home office and bedroom.",
-          "keywords": "black and white decor, black and white artwork, black and white photography, wall art",
-          "body": "Few choices enhance a space as much as **black-and-white photography**. Here's why it works in any home — and how to use it.\n\n## Why black and white goes with everything\nWithout the color variable, a **black-and-white artwork** fits any palette, from minimalist to rustic. It brings elegance without competing with the rest of the decor.\n\n## Where it looks best\n- **Living room:** above the sofa or sideboard, as a touch of sophistication.\n- **Home office:** focus and seriousness — great even as a video-call background.\n- **Bedroom and hallway:** a calm, timeless mood.\n\n## The power of documentary imagery\nMy **black-and-white** photographs record the everyday life and landscapes of Brazil on **bike journeys** — real scenes that become **wall art** full of presence.\n\nWant a black-and-white artwork that enhances your space? [See the available works](/en#comprar-obras), all in fine-art print and custom size."
-        }
+        "body": "Poucas escolhas valorizam tanto um ambiente quanto a **fotografia em preto e branco**. Veja por que ela funciona em qualquer casa — e como usar.\n\n## Por que preto e branco combina com tudo\nSem a variável da cor, o **quadro preto e branco** se encaixa em qualquer paleta, do minimalista ao rústico. Ele traz elegância sem competir com o resto da decoração.\n\n## Onde fica melhor\n- **Sala:** acima do sofá ou do aparador, como ponto de sofisticação.\n- **Home office:** foco e seriedade — ótimo até de fundo em chamadas de vídeo.\n- **Quarto e corredor:** clima calmo e atemporal.\n\n## A força da imagem documental\nMinhas fotografias em **preto e branco** registram o cotidiano e as paisagens do Brasil em **ciclo-viagens** — cenas reais que viram **arte de parede** cheia de presença.\n\nQuer um quadro preto e branco que valorize seu ambiente? [Veja as obras disponíveis](/#comprar-obras), todas em impressão fine art e tamanho personalizado."
       },
       {
         "id": "alagoas-pb",
@@ -674,13 +632,7 @@
         "cover": "foto-02-alagoas-2015.jpg",
         "date": "2026-06-09",
         "body": "Alagoas é onde meu olhar mais desacelera. Voltei várias vezes, de bicicleta e de câmera na mão, e foi ali que registrei boa parte das **fotografias em preto e branco** que hoje viram quadro na casa das pessoas.\n\n## O cotidiano que vira arte\n\nNão busco o cartão-postal. Busco o instante comum — o trabalhador atravessando a ponte, a criança correndo, a luz dura do litoral nordestino. É **fotografia documental** que transforma o dia a dia em **arte de parede** atemporal.\n\n## Por que preto e branco vende tanto na decoração\n\nO **preto e branco** combina com qualquer ambiente e dá um ar sofisticado à **decoração**. Por isso essas obras são tão procuradas como **quadro fotográfico para sala** e ambientes de trabalho.\n\nTodas saem como **impressão fine art** em tamanho personalizado. [Veja as obras de Alagoas e leve uma para casa](/#comprar-obras).",
-        "published": true,
-        "en": {
-          "title": "Alagoas in black and white: the everyday life that became wall art",
-          "excerpt": "How the daily life of the Alagoas coast became black-and-white documentary photography — and why this style is so sought-after as wall art for the living room.",
-          "keywords": "black and white photography, wall art living room, documentary photography, black and white decor, wall art",
-          "body": "Alagoas is where my eye slows down the most. I went back several times, by bike and with a camera in hand, and it was there that I captured much of the **black-and-white photography** that now hangs on people's walls.\n\n## The everyday that becomes art\nI don't chase the postcard. I chase the ordinary instant — the worker crossing the bridge, the child running, the hard light of the northeastern coast. It's **documentary photography** that turns daily life into timeless **wall art**.\n\n## Why black and white sells so well in decor\n**Black and white** goes with any room and lends a sophisticated air to your **decor**. That's why these works are so sought-after as **wall art for the living room** and workspaces.\n\nAll are printed as **fine art** in a custom size. [See the Alagoas works and take one home](/en#comprar-obras)."
-        }
+        "published": true
       },
       {
         "id": "uruguai-bike",
@@ -691,129 +643,25 @@
         "cover": "foto-27-uruguai-2022.jpg",
         "date": "2026-06-04",
         "published": true,
-        "body": "Nem toda ciclo-viagem fica no Brasil. Em 2022, cruzei o **Uruguai** de bicicleta — e algumas das imagens dessa estrada viraram obra.\n\n## A estrada como ateliê\nViajar de bike muda o ritmo do olhar. Você sente o vento, para onde quer e enxerga o que passa despercebido de carro. Foi assim, pedalando, que registrei a luz e a paisagem uruguaia que hoje estão disponíveis como **quadro**.\n\n## Fotografia que carrega um lugar\nMais do que uma bela imagem, uma **fotografia de viagem** leva uma história para dentro de casa. Quem olha viaja junto — e é isso que transforma a parede num ambiente com alma.\n\n## Da estrada para a sua casa\nEssas imagens saem como **impressão fine art** em tamanho personalizado, prontas para virar **arte de parede**.\n\nGostou de levar um pedaço dessa viagem para a sua casa? [Conheça as obras](/#comprar-obras).",
-        "en": {
-          "title": "Uruguay by bicycle: the journey that became a photograph",
-          "excerpt": "The diary of the 2022 bike journey through Uruguay — and how travel photography becomes wall art that brings a story into your home.",
-          "keywords": "uruguay photography, travel photography, documentary photography, landscape, wall art",
-          "body": "Not every bike journey stays in Brazil. In 2022, I crossed **Uruguay** by bicycle — and some of the images from that road became artworks.\n\n## The road as a studio\nTraveling by bike changes the rhythm of your eye. You feel the wind, stop wherever you want, and see what goes unnoticed from a car. It was like this, pedaling, that I captured the Uruguayan light and landscape now available as **wall art**.\n\n## Photography that carries a place\nMore than a beautiful image, a **travel photograph** brings a story into your home. Whoever looks travels along — and that's what turns a wall into a space with soul.\n\n## From the road to your home\nThese images come as **fine-art prints** in a custom size, ready to become **wall art**.\n\nWould you like to bring a piece of this journey into your home? [Discover the artworks](/en#comprar-obras)."
-        }
+        "body": "Nem toda ciclo-viagem fica no Brasil. Em 2022, cruzei o **Uruguai** de bicicleta — e algumas das imagens dessa estrada viraram obra.\n\n## A estrada como ateliê\nViajar de bike muda o ritmo do olhar. Você sente o vento, para onde quer e enxerga o que passa despercebido de carro. Foi assim, pedalando, que registrei a luz e a paisagem uruguaia que hoje estão disponíveis como **quadro**.\n\n## Fotografia que carrega um lugar\nMais do que uma bela imagem, uma **fotografia de viagem** leva uma história para dentro de casa. Quem olha viaja junto — e é isso que transforma a parede num ambiente com alma.\n\n## Da estrada para a sua casa\nEssas imagens saem como **impressão fine art** em tamanho personalizado, prontas para virar **arte de parede**.\n\nGostou de levar um pedaço dessa viagem para a sua casa? [Conheça as obras](/#comprar-obras)."
       }
     ]
   },
-  "updated_at": "2026-06-24T13:08:54.280Z",
+  "updated_at": "2026-06-24T14:08:59.363Z",
+  "newsletter": {
+    "title": "Receba novidades",
+    "subtitle": "Novas obras, bastidores das viagens e ofertas — direto no seu e-mail.",
+    "placeholder": "Seu melhor e-mail",
+    "button": "Inscrever",
+    "success": "Inscrição feita! Obrigado. 🙌"
+  },
   "en": {
-    "seo": {
-      "title": "Hugo Carmo — Visual Artist & Photographer",
-      "description": "Photography and fine-art prints by Brazilian visual artist Hugo Carmo — landscapes and documentary work from Brazil and beyond, in custom sizes."
-    },
-    "hero": {
-      "title1": "A camera,",
-      "title2": "a bicycle",
-      "subtitle": "See the world through the lens of <strong>Hugo Carmo</strong>, visual artist and photographer, across Brazil on his bike journeys.",
-      "cta": "Shop artworks"
-    },
-    "about": {
-      "title": "About",
-      "text": "Through photography, I seek to capture moments and convey emotions. My eye turns to the beauty of nature and to everyday urban life, letting me connect with the stories unfolding around me. I want to transport the viewer to the place, so they feel the essence of the moment. Each image is an invitation to explore, appreciate and preserve nature, and to value the human relationships we find along the way."
-    },
-    "gallery": {
-      "title": "Photography",
-      "subtitle": "A visual journey across Brazil and beyond — nature, everyday life and the stories found along the way. Click to enlarge."
-    },
-    "montagens": {
-      "title": "On your wall",
-      "subtitle": "Mounting ideas to inspire the right choice and make your home more charming."
-    },
-    "shop": {
-      "title": "Shop artworks",
-      "subtitle": "Prints and framed artworks, in custom sizes."
-    },
-    "cta": {
-      "title": "Like what you see?",
-      "text": "Follow my bike journeys and photography projects across Brazil and around the world.",
-      "button": "See my work"
-    },
-    "faq": {
-      "title": "Frequently asked questions",
-      "items": [
-        {
-          "q": "How do I buy an artwork?",
-          "a": "Just message me on WhatsApp via the button on the site. Works are made in custom sizes, starting at R$150, as a print or framed artwork."
-        },
-        {
-          "q": "What are the delivery times?",
-          "a": "In Rio de Janeiro, 15 business days from the order. To other cities, 25 business days from the order."
-        },
-        {
-          "q": "Is shipping included in the price?",
-          "a": "No. The price of the works does not include shipping, which is calculated separately based on the delivery city."
-        },
-        {
-          "q": "What print and framing options are available?",
-          "a": "Fine Art printing with a black BOX frame, wood BOX frame, canvas or acrylic (metacrylate)."
-        },
-        {
-          "q": "Can I order a specific photo or a custom size?",
-          "a": "Yes. All works are made to order — message me on WhatsApp to adjust the photo, size, print and framing."
-        },
-        {
-          "q": "Who is Hugo Carmo?",
-          "a": "Hugo Carmo is a Brazilian visual artist and photographer. His work documents the nature and everyday life of Brazil on bike journeys, with exhibitions in Austria, Germany and Brazil."
-        }
-      ]
-    },
-    "exposicoes": {
-      "title": "Exhibitions"
-    },
-    "blog": {
-      "title": "Travel diary",
-      "subtitle": "Stories and behind-the-scenes from the bike journeys across Brazil — and the artworks born from them."
-    },
-    "contact": {
-      "whatsapp_msg": "Hi, I'm interested in Hugo Carmo's work"
-    },
-    "products": [
-      {
-        "title": "Print or Framed Artwork",
-        "subtitle": "Custom size",
-        "stock": "7 left"
-      },
-      {
-        "title": "Print or Framed Artwork",
-        "subtitle": "Custom size",
-        "stock": "6 left"
-      },
-      {
-        "title": "Print or Framed Artwork",
-        "subtitle": "Custom size",
-        "stock": "4 left"
-      },
-      {
-        "title": "Print or Framed Artwork",
-        "subtitle": "Custom size",
-        "stock": "3 left"
-      },
-      {
-        "title": "Print or Framed Artwork",
-        "subtitle": "Custom size",
-        "stock": "2 left"
-      },
-      {
-        "title": "Print or Framed Artwork",
-        "subtitle": "Custom size",
-        "stock": "1 left"
-      },
-      {
-        "title": "Print or Framed Artwork",
-        "subtitle": "Custom size",
-        "stock": "7 left"
-      },
-      {
-        "title": "Print or Framed Artwork",
-        "subtitle": "Custom size",
-        "stock": "6 left"
-      }
-    ]
+    "newsletter": {
+      "title": "Get updates",
+      "subtitle": "New artworks, behind-the-scenes from the journeys and offers — straight to your inbox.",
+      "placeholder": "Your best email",
+      "button": "Subscribe",
+      "success": "You're in! Thank you. 🙌"
+    }
   }
 }
