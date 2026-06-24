@@ -4,6 +4,8 @@
   "trailingSlash": false,
   "rewrites": [
     { "source": "/blog/:slug", "destination": "/post" },
+    { "source": "/en/blog/:slug", "destination": "/post" },
+    { "source": "/en/blog", "destination": "/blog" },
     { "source": "/en", "destination": "/" }
   ]
 }
