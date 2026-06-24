@@ -181,7 +181,7 @@
                    en:{cicloviagens:['#cicloviagens','Journeys'],fotografias:['#galeria','Photography'],montagens:['#montagens','On your wall'],shop:['#comprar-obras','Shop'],blog:['#blog','Travel diary'],sobre:['#sobre','About'],faq:['#faq','FAQ']} };
     function mergeEn(raw){ const c=JSON.parse(JSON.stringify(raw)); const e=raw.en||{};
       ['seo','hero','about','gallery','montagens','shop','cta','faq','blog','contact','newsletter'].forEach(k=>{ if(e[k]) c[k]={...(c[k]||{}),...e[k]}; });
-      if(e.exposicoes&&e.exposicoes.title&&c.exposicoes) c.exposicoes.title=e.exposicoes.title;
+      if(e.exposicoes&&c.exposicoes){ if(e.exposicoes.title) c.exposicoes.title=e.exposicoes.title; if(Array.isArray(e.exposicoes.items)) c.exposicoes.items=(c.exposicoes.items||[]).map((it,i)=> e.exposicoes.items[i]?{...it,...e.exposicoes.items[i]}:it); }
       if(Array.isArray(e.products)&&Array.isArray(c.products)) c.products=c.products.map((p,i)=> e.products[i]?{...p,...e.products[i]}:p);
       if(e.fotolivros&&c.fotolivros){ c.fotolivros={...c.fotolivros,title:e.fotolivros.title||c.fotolivros.title,subtitle:e.fotolivros.subtitle||c.fotolivros.subtitle};
         if(Array.isArray(e.fotolivros.items)) c.fotolivros.items=(c.fotolivros.items||[]).map((it,i)=> e.fotolivros.items[i]?{...it,...e.fotolivros.items[i]}:it); }

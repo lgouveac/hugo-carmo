@@ -686,6 +686,31 @@
           "subtitle": "Photo book"
         }
       ]
+    },
+    "exposicoes": {
+      "title": "Exhibitions",
+      "items": [
+        {
+          "text": "Raiding Project Exhibition — Raiding, Austria.",
+          "year": "2017",
+          "note": ""
+        },
+        {
+          "text": "Artlab Munich Exhibition — Munich, Germany.",
+          "year": "2017",
+          "note": ""
+        },
+        {
+          "text": "EAV Occupation — School of Visual Arts, Rio de Janeiro.",
+          "year": "2022",
+          "note": "Curated by Denise Cathilina"
+        },
+        {
+          "text": "First Photography Salon — Museum of Modern Art of Resende.",
+          "year": "2023",
+          "note": ""
+        }
+      ]
     }
   },
   "collections": [
