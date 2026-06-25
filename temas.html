@@ -2,17 +2,17 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title id="t">Cicloviagens — Hugo Carmo</title>
-  <meta name="description" id="meta-desc" content="Cicloviagens de Hugo Carmo — séries fotográficas organizadas pelas viagens de bicicleta pelo Brasil e além.">
+  <title id="t">Explorar por tema — Hugo Carmo</title>
+  <meta name="description" id="meta-desc" content="Explore as fotografias de Hugo Carmo por tema — Águas, Litoral, Sertão, Gente, Abstrato e Urbano.">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="robots" content="index, follow, max-image-preview:large">
-  <link rel="canonical" id="canonical" href="https://hugocarmo.com.br/cicloviagens">
-  <link rel="alternate" hreflang="pt-BR" href="https://hugocarmo.com.br/cicloviagens">
-  <link rel="alternate" hreflang="en" href="https://hugocarmo.com.br/en/cicloviagens">
-  <link rel="alternate" hreflang="x-default" href="https://hugocarmo.com.br/cicloviagens">
+  <link rel="canonical" id="canonical" href="https://hugocarmo.com.br/temas">
+  <link rel="alternate" hreflang="pt-BR" href="https://hugocarmo.com.br/temas">
+  <link rel="alternate" hreflang="en" href="https://hugocarmo.com.br/en/temas">
+  <link rel="alternate" hreflang="x-default" href="https://hugocarmo.com.br/temas">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Hugo Carmo">
-  <meta property="og:title" id="og-title" content="Cicloviagens — Hugo Carmo">
+  <meta property="og:title" id="og-title" content="Explorar por tema — Hugo Carmo">
   <meta property="og:image" content="https://gobslzsggskllmhzasti.supabase.co/storage/v1/object/public/photos/og-card.jpg">
   <link rel="icon" type="image/png" href="https://neompzltxilcimodyvpd.supabase.co/storage/v1/object/public/flou//Captura%20de%20tela%202025-06-16%20224245.png">
   <script src="https://cdn.tailwindcss.com"></script>
@@ -32,9 +32,9 @@
     <div id="drawer-foot" class="px-6 py-5 border-t border-white/10 flex items-center justify-between gap-3"></div>
   </aside>
 
-  <main class="flex-1 w-full max-w-6xl mx-auto px-5 sm:px-8 py-16">
-    <div class="text-center mb-12"><h1 id="h1" class="text-4xl md:text-6xl font-semibold tracking-tight mb-3">Cicloviagens</h1><p id="sub" class="text-white/70 max-w-2xl mx-auto"></p></div>
-    <div id="grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5"></div>
+  <main class="flex-1 w-full max-w-6xl mx-auto px-4 sm:px-8 py-14">
+    <div class="text-center mb-10"><h1 id="h1" class="text-4xl md:text-6xl font-semibold tracking-tight mb-3">Explorar por tema</h1><p id="sub" class="text-white/70 max-w-2xl mx-auto"></p></div>
+    <div id="grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5"></div>
     <p id="empty" class="text-center text-white/50 mt-8 hidden">—</p>
   </main>
 
@@ -44,11 +44,9 @@
     const SUPA="https://gobslzsggskllmhzasti.supabase.co",CONTENT_URL=SUPA+"/storage/v1/object/public/photos/content.json";
     const LANG=(/^\/en(\/|$)/.test(location.pathname)||new URLSearchParams(location.search).get('lang')==='en')?'en':'pt';
     const esc=s=>(s==null?"":String(s)).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
-    const slugify=s=>String(s||'').toLowerCase().normalize('NFKD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'');
-    const locOf=cap=>{const p=String(cap||'').split(',').map(x=>x.trim()).filter(Boolean);if(!p.length)return '';if(/^\d{4}$/.test(p[p.length-1]))p.pop();return p[p.length-1]||'';};
     document.documentElement.lang=LANG==='en'?'en':'pt-BR';
     document.getElementById('yr').textContent=new Date().getFullYear();
-    document.getElementById('canonical').href='https://hugocarmo.com.br'+(LANG==='en'?'/en/cicloviagens':'/cicloviagens');
+    document.getElementById('canonical').href='https://hugocarmo.com.br'+(LANG==='en'?'/en/temas':'/temas');
     function chrome(c){
       const home=LANG==='en'?'/en':'/';
       const lh=document.getElementById('lnk-home'),lf=document.getElementById('lnk-foot'); if(lh)lh.href=home; if(lf)lf.href=home;
@@ -66,19 +64,20 @@
     }
     fetch(CONTENT_URL+"?v="+Date.now(),{cache:"no-store"}).then(r=>r.json()).then(c=>{
       const imgUrl=p=>/^https?:\/\//.test(p)?p:(c.bucket_base+"/"+p);
-      const photos=LANG==='en'?'photos':'fotos';
-      const base=LANG==='en'?'/en/viagem':'/viagem';
-      document.getElementById('t').textContent=(LANG==='en'?'Journeys':'Cicloviagens')+' — Hugo Carmo';
-      document.getElementById('h1').textContent=LANG==='en'?'Journeys':'Cicloviagens';
-      document.getElementById('sub').textContent=LANG==='en'?'Photo series organized by the journeys across Brazil and beyond.':'Séries fotográficas organizadas pelas viagens pelo Brasil e além.';
+      document.getElementById('t').textContent=(LANG==='en'?'Explore by theme':'Explorar por tema')+' — Hugo Carmo';
+      document.getElementById('h1').textContent=LANG==='en'?'Explore by theme':'Explorar por tema';
+      document.getElementById('sub').textContent=LANG==='en'?'Six ways into the work — pick a theme and dive into the gallery.':'Seis portas de entrada para a obra — escolha um tema e mergulhe na galeria.';
       const fts=(c.photos||[]).filter(p=>p.section==='fotografias').sort((a,b)=>a.order-b.order);
-      const cols=(c.collections||[]).filter(x=>x.visible!==false).sort((a,b)=>(a.order||0)-(b.order||0));
-      const cards=cols.map(col=>{ const ph=fts.filter(p=>slugify(locOf(p.caption))===col.slug); if(!ph.length) return '';
-        const cover=imgUrl(col.cover||ph[0].path);
-        return `<a href="${base}/${esc(col.slug)}" class="group relative block rounded-2xl overflow-hidden aspect-[4/3]">
-          <img src="${cover}" alt="${esc(col.title)}" loading="lazy" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
-          <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent"></div>
-          <div class="absolute bottom-0 left-0 p-5"><div class="text-xl font-semibold">${esc(col.title)}</div><div class="text-white/70 text-sm">${ph.length} ${photos}</div></div>
+      const temas=c.temas||[];
+      const home=LANG==='en'?'/en':'/';
+      const works=LANG==='en'?'works':'obras';
+      const cards=temas.map(t=>{ const ph=fts.filter(p=>(p.temas||[]).includes(t.slug)); if(!ph.length) return '';
+        const cover=imgUrl(ph[Math.floor(ph.length/2)].path||ph[0].path);
+        const label=LANG==='en'?t.en:t.pt;
+        return `<a href="${home}?tema=${esc(t.slug)}" class="group relative block rounded-2xl overflow-hidden aspect-[4/3]">
+          <img src="${cover}" alt="${esc(label)}" loading="lazy" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+          <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent"></div>
+          <div class="absolute bottom-0 left-0 p-5"><div class="text-2xl font-semibold leading-tight">${esc(label)}</div><div class="text-white/70 text-sm mt-1">${ph.length} ${works}</div></div>
         </a>`; }).join('');
       if(cards.trim()) document.getElementById('grid').innerHTML=cards; else document.getElementById('empty').classList.remove('hidden');
       chrome(c); if(window.lucide)lucide.createIcons();

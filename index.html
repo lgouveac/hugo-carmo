@@ -436,8 +436,8 @@
       document.getElementById('hero-marquee').innerHTML = hi.length ? strip(false)+strip(true) : '';
       // Menu lateral (drawer) — cada categoria é uma página própria
       const PAGES = LANG==='en'
-        ? [['/en','Photography'],['/en/cicloviagens','Journeys'],['/en/loja','Shop'],['/en/fotolivros','Photo books'],['/en/blog','Travel diary'],['/en/sobre','About'],['/en/faq','FAQ']]
-        : [['/','Fotografias'],['/cicloviagens','Cicloviagens'],['/loja','Loja'],['/fotolivros','Fotolivros'],['/blog','Diário'],['/sobre','Sobre'],['/faq','FAQ']];
+        ? [['/en','Photography'],['/en/temas','Themes'],['/en/cicloviagens','Journeys'],['/en/loja','Shop'],['/en/fotolivros','Photo books'],['/en/blog','Travel diary'],['/en/sobre','About'],['/en/faq','FAQ']]
+        : [['/','Fotografias'],['/temas','Temas'],['/cicloviagens','Cicloviagens'],['/loja','Loja'],['/fotolivros','Fotolivros'],['/blog','Diário'],['/sobre','Sobre'],['/faq','FAQ']];
       const has = {
         cicloviagens:(c.collections||[]).some(x=>x.visible!==false),
         fotolivros:(c.fotolivros?.items||[]).length>0,
@@ -482,6 +482,11 @@
       }));
       const wtoggle=document.getElementById('wall-toggle');
       if(wtoggle&&grid){ wtoggle.addEventListener('click',()=>{ wtoggle.classList.toggle('on'); grid.classList.toggle('wall'); syncPanel(); }); }
+      // Deep-link ?tema= (vindo do hub "Explorar por tema"): aplica filtro, abre painel e rola
+      const qTema=new URLSearchParams(location.search).get('tema');
+      if(qTema){ const tb=[...document.querySelectorAll('#galeria .tema-btn')].find(x=>x.dataset.tema===qTema);
+        if(tb){ tb.click(); if(tpanel&&ttoggle){ tpanel.style.maxHeight=tpanel.scrollHeight+'px'; ttoggle.setAttribute('aria-expanded','true'); if(tchev)tchev.style.transform='rotate(180deg)'; }
+          setTimeout(()=>{ document.getElementById('galeria').scrollIntoView({behavior:'smooth',block:'start'}); },350); } }
       // Drawer lateral + hambúrguer que surge após o primeiro scroll
       const menuBtn=document.getElementById('menu-btn'), drawer=document.getElementById('drawer'), drawerBg=document.getElementById('drawer-bg'), drawerClose=document.getElementById('drawer-close');
       if(menuBtn&&drawer){

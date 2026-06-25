@@ -65,8 +65,8 @@
       const home=LANG==='en'?'/en':'/';
       const lh=document.getElementById('lnk-home'),lf=document.getElementById('lnk-foot'); if(lh)lh.href=home; if(lf)lf.href=home;
       const P=LANG==='en'
-        ?[['/en','Photography'],['/en/cicloviagens','Journeys'],['/en/loja','Shop'],['/en/fotolivros','Photo books'],['/en/blog','Travel diary'],['/en/sobre','About'],['/en/faq','FAQ']]
-        :[['/','Fotografias'],['/cicloviagens','Cicloviagens'],['/loja','Loja'],['/fotolivros','Fotolivros'],['/blog','Diário'],['/sobre','Sobre'],['/faq','FAQ']];
+        ?[['/en','Photography'],['/en/temas','Themes'],['/en/cicloviagens','Journeys'],['/en/loja','Shop'],['/en/fotolivros','Photo books'],['/en/blog','Travel diary'],['/en/sobre','About'],['/en/faq','FAQ']]
+        :[['/','Fotografias'],['/temas','Temas'],['/cicloviagens','Cicloviagens'],['/loja','Loja'],['/fotolivros','Fotolivros'],['/blog','Diário'],['/sobre','Sobre'],['/faq','FAQ']];
       const cur=(location.pathname.replace(/\/+$/,'')||'/');
       document.getElementById('drawer-nav').innerHTML=P.map(([h,l])=>`<a href="${h}" class="px-3 py-3 rounded-lg text-lg ${cur===h.replace(/\/+$/,'')?'bg-white/10 text-white':'text-white/80 hover:bg-white/5 hover:text-white'} transition">${l}</a>`).join('');
       const lang=LANG==='en'?'<a href="/" class="text-sm font-semibold border border-white/20 rounded px-3 py-1.5 hover:bg-white/10">PT</a>':'<a href="/en" class="text-sm font-semibold border border-white/20 rounded px-3 py-1.5 hover:bg-white/10">EN</a>';
