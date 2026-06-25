@@ -298,8 +298,8 @@
         const T={ filtrar:LANG==='en'?'Filter':'Filtrar', tema:LANG==='en'?'Theme':'Tema', produto:LANG==='en'?'Product':'Produto', view:LANG==='en'?'View':'Visualização', casa:LANG==='en'?'See it on your wall':'Ver na sua casa', all:LANG==='en'?'All':'Todas', foto:LANG==='en'?'Photo · Print':'Foto · Print', blusa:LANG==='en'?'Tee':'Blusa', bandeira:LANG==='en'?'Flag':'Bandeira', fotolivro:LANG==='en'?'Photo book':'Fotolivro' };
         const temaPills = `<button data-tema="" class="tema-btn px-4 py-1.5 rounded-full border border-white/20 text-sm bg-white text-black">${T.all}</button>`+ts.map(t=>`<button data-tema="${esc(t.slug)}" class="tema-btn px-4 py-1.5 rounded-full border border-white/20 text-sm text-white/80 hover:bg-white/10">${esc(LANG==='en'?t.en:t.pt)}</button>`).join('');
         const prodPills = `<button data-prod="foto" class="px-4 py-1.5 rounded-full border border-white/20 text-sm bg-white text-black">${T.foto}</button>`
-          + `<a href="${lojaHref}" class="px-4 py-1.5 rounded-full border border-white/20 text-sm text-white/80 hover:bg-white/10">${T.blusa}</a>`
-          + `<a href="${lojaHref}" class="px-4 py-1.5 rounded-full border border-white/20 text-sm text-white/80 hover:bg-white/10">${T.bandeira}</a>`
+          + `<a href="${lojaHref}?tipo=blusa" class="px-4 py-1.5 rounded-full border border-white/20 text-sm text-white/80 hover:bg-white/10">${T.blusa}</a>`
+          + `<a href="${lojaHref}?tipo=bandeira" class="px-4 py-1.5 rounded-full border border-white/20 text-sm text-white/80 hover:bg-white/10">${T.bandeira}</a>`
           + `<a href="${LANG==='en'?'/en/fotolivros':'/fotolivros'}" class="px-4 py-1.5 rounded-full border border-white/20 text-sm text-white/80 hover:bg-white/10">${T.fotolivro}</a>`;
         const panel = ts.length ? `
           <div class="flex justify-center mb-6">
