@@ -3,9 +3,10 @@
 Objetivo: reformular o site para navegação por **produtos (foco em fotos)** e **categorias/temas**, alimentado pelo acervo real do Hugo no Google Drive.
 
 ## ✅ Feito
-- **Motor de navegação por temas**: taxonomia de 6 temas (`content.temas`) + barra de filtro na galeria + tag `temas[]` por foto + campo de edição no CMS (aba Fotografias).
-- **1ª curadoria do acervo (24 fotos)** baixadas do Drive, otimizadas (≤1600px) e somadas ao site via API do CMS — `fotografias` 34 → 58. Distribuição: gente 6 · litoral 6 · águas 5 · abstrato 3 · sertão 2 · urbano 2.
-  - Fontes usadas: `retratos`, `brasil`, `TATUA`.
+- **Motor de navegação por temas**: taxonomia de 6 temas (`content.temas`) + filtro na galeria + tag `temas[]` por foto + campo de edição no CMS (aba Fotografias).
+- **Home reformulada (imersiva)**: home = só mosaico full-bleed + filtro expansível (Tema/Produto/Ver na sua casa); menu hambúrguer (drawer direito) que surge no 1º scroll; cada categoria virou página própria (`/cicloviagens`, `/fotolivros`, `/sobre`, `/faq`, além de `/loja` e `/blog`).
+- **Curadoria do acervo (45 fotos)** baixadas do Drive, otimizadas (≤1600px), somadas via API — `fotografias` 34 → **79**. Distribuição equilibrada: litoral 27 · urbano 13 · sertão 12 · águas 11 · abstrato 8 · gente 8.
+  - Fontes usadas: `retratos`, `brasil`, `TATUA`, `museu nacional`, `baixão+rumo`, `textura`, `areia`, `zig zag`.
 
 ## 🎯 Temas (6 eixos) e cobertura atual
 | Tema | slug | Status | Onde buscar mais |
