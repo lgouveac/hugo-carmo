@@ -19,12 +19,10 @@ Objetivo: reformular o site para navegação por **produtos (foco em fotos)** e 
 | Urbano & Escombros | urbano | fraco | **museu nacional**, muros urbanos, som |
 
 ## 📋 Próximos passos (ordem sugerida)
-1. **Importar séries que faltam** (mesmo pipeline): `sinestesia` + `textura` + `areia` → reforçar **abstrato**; `museu nacional` → **urbano**; `baixão + rumo` → **sertão**.
-   - ⚠️ `sinestesia` é majoritariamente `.psd` pesado (≈80MB cada) — converter `.psd → .jpg` (flatten) antes; baixar 1 por vez (Google throttla rajada).
-2. **Loja filtrável por tipo + tema** — aplicar o mesmo motor de filtro na `/loja` (Tipo: Print/Blusa/Bandeira/Fotolivro × Tema). Fecha o "navegar pelos produtos".
-3. **Hub "Explorar por tema"** — entrada de navegação dedicada (grid de 6 temas → galeria filtrada), além do filtro inline.
-4. **CMS edita EN** dos temas/captions (hoje EN é mantido manualmente).
-5. **Refino do Hugo**: revisar captions/temas das 24 no CMS; trocar placeholders de Blusas/Bandeiras por fotos reais.
+1. ✅ **Loja filtrável por Tipo + Tema** — FEITO. `/loja` modular: Print (as 79 fotos por tema) + Blusa + Bandeira + Fotolivro, filtro Tipo×Tema, deep-link `?tipo=&tema=`. Home liga Blusa/Bandeira à loja filtrada.
+2. **Hub "Explorar por tema"** — entrada de navegação dedicada (grid de 6 temas → galeria filtrada), além do filtro inline.
+3. **CMS edita EN** dos temas/captions (hoje EN é mantido manualmente).
+4. **Refino do Hugo**: revisar captions/temas das 45 fotos no CMS; trocar placeholders de Blusas/Bandeiras por fotos reais; (opcional) importar `fotos pro rio`/`DNA`/`sinestesia2.0` (esta é `.psd` pesado — flatten antes).
 
 ## ⚠️ Notas do acervo (Drive "HUGOCARMO.COM.BR")
 - Pasta **pública**, 40 subpastas (séries autorais + clientes + exposições + workflow). Acessar pelo **navegador** — o conector de Drive não indexa essa árvore. (Detalhes em memória `hugo-carmo-acervo-drive`.)
