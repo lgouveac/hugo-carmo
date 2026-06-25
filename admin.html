@@ -160,32 +160,44 @@
     }
 
     // ---- TEXTOS ----
+    let textosLang='pt';
     function tplTextos(){
       const c=content;
+      const isEn = textosLang==='en';
+      if(isEn){ c.en=c.en||{}; ['hero','gallery','montagens','shop','cta','about'].forEach(k=>c.en[k]=c.en[k]||{}); }
+      const O = k => isEn ? c.en[k] : c[k];
+      const mk = (o,k)=> isEn ? (v=>{ if(v&&v.trim()){o[k]=v;} else {delete o[k];} }) : (v=>{o[k]=v;});
       const H=(t)=>`<h2 class="text-lg font-semibold mt-6 mb-3 text-white/90">${t}</h2>`;
+      const h=O('hero'), g=O('gallery'), m=O('montagens'), sh=O('shop'), ct=O('cta'), ab=O('about');
+      const toggle=`<div class="flex items-center gap-2 mb-2">
+        <button data-txlang="pt" class="px-3 py-1.5 rounded-lg text-sm border ${!isEn?'bg-white text-black border-white':'border-white/20 text-white/70 hover:bg-white/10'}">Português</button>
+        <button data-txlang="en" class="px-3 py-1.5 rounded-lg text-sm border ${isEn?'bg-white text-black border-white':'border-white/20 text-white/70 hover:bg-white/10'}">English</button>
+        ${isEn?'<span class="text-white/40 text-xs ml-2">Em branco = usa o texto em português.</span>':''}
+      </div>`;
       return `<div class="card rounded-2xl p-5">
+        ${toggle}
         ${H("Topo (hero)")}
-        ${field("Título — linha 1", c.hero.title1, v=>c.hero.title1=v)}
-        ${field("Título — linha 2 (destaque)", c.hero.title2, v=>c.hero.title2=v)}
-        ${field("Subtítulo (aceita HTML, ex: <strong>)", c.hero.subtitle, v=>c.hero.subtitle=v, {textarea:true, rows:2})}
-        ${field("Texto do botão", c.hero.cta, v=>c.hero.cta=v)}
-        ${field("URL do logo", c.logo, v=>c.logo=v)}
+        ${field("Título — linha 1", h.title1, mk(h,'title1'))}
+        ${field("Título — linha 2 (destaque)", h.title2, mk(h,'title2'))}
+        ${field("Subtítulo (aceita HTML, ex: <strong>)", h.subtitle, mk(h,'subtitle'), {textarea:true, rows:2})}
+        ${field("Texto do botão", h.cta, mk(h,'cta'))}
+        ${isEn?'':field("URL do logo", c.logo, v=>c.logo=v)}
         ${H("Seção Fotografias")}
-        ${field("Título", c.gallery.title, v=>c.gallery.title=v)}
-        ${field("Subtítulo", c.gallery.subtitle, v=>c.gallery.subtitle=v, {textarea:true, rows:2})}
+        ${field("Título", g.title, mk(g,'title'))}
+        ${field("Subtítulo", g.subtitle, mk(g,'subtitle'), {textarea:true, rows:2})}
         ${H("Seção Montagens")}
-        ${field("Título", c.montagens.title, v=>c.montagens.title=v)}
-        ${field("Subtítulo", c.montagens.subtitle, v=>c.montagens.subtitle=v, {textarea:true, rows:2})}
+        ${field("Título", m.title, mk(m,'title'))}
+        ${field("Subtítulo", m.subtitle, mk(m,'subtitle'), {textarea:true, rows:2})}
         ${H("Seção Comprar obras")}
-        ${field("Título", c.shop.title, v=>c.shop.title=v)}
-        ${field("Subtítulo", c.shop.subtitle, v=>c.shop.subtitle=v, {textarea:true, rows:2})}
+        ${field("Título", sh.title, mk(sh,'title'))}
+        ${field("Subtítulo", sh.subtitle, mk(sh,'subtitle'), {textarea:true, rows:2})}
         ${H("Chamada (CTA)")}
-        ${field("Título", c.cta.title, v=>c.cta.title=v)}
-        ${field("Texto", c.cta.text, v=>c.cta.text=v, {textarea:true, rows:2})}
-        ${field("Texto do botão", c.cta.button, v=>c.cta.button=v)}
+        ${field("Título", ct.title, mk(ct,'title'))}
+        ${field("Texto", ct.text, mk(ct,'text'), {textarea:true, rows:2})}
+        ${field("Texto do botão", ct.button, mk(ct,'button'))}
         ${H("Sobre")}
-        ${field("Título", c.about.title, v=>c.about.title=v)}
-        ${field("Texto", c.about.text, v=>c.about.text=v, {textarea:true, rows:6})}
+        ${field("Título", ab.title, mk(ab,'title'))}
+        ${field("Texto", ab.text, mk(ab,'text'), {textarea:true, rows:6})}
       </div>`;
     }
 
@@ -283,6 +295,7 @@
           <div class="p-3 space-y-2">
             <input value="${esc(p.caption)}" placeholder="Legenda (local, ano)" data-cap="${esc(p.id)}"
                    class="w-full rounded-lg border border-white/15 px-2 py-1.5 text-sm outline-none focus:border-white/40">
+            <input value="${esc(p.caption_en||'')}" placeholder="Legenda EN (opcional)" data-capen="${esc(p.id)}" class="w-full rounded-lg border border-white/10 px-2 py-1 text-xs outline-none focus:border-white/40 text-white/60">
             ${section==='fotografias'?`<input value="${esc((p.temas||[]).join(', '))}" placeholder="temas (ex: aguas, gente)" data-temas="${esc(p.id)}" class="w-full rounded-lg border border-white/10 px-2 py-1 text-xs outline-none focus:border-white/40 text-white/80">`:''}
             <div class="flex items-center justify-between gap-1">
               <div class="flex gap-1">
@@ -496,6 +509,10 @@
       panel.querySelectorAll("[data-cap]").forEach(inp=> inp.addEventListener("input", e=>{
         const ph = content.photos.find(p=>p.id===inp.dataset.cap); if(ph){ ph.caption=e.target.value; setDirty(true); }
       }));
+      panel.querySelectorAll("[data-capen]").forEach(inp=> inp.addEventListener("input", e=>{
+        const ph = content.photos.find(p=>p.id===inp.dataset.capen); if(ph){ const v=e.target.value.trim(); if(v) ph.caption_en=v; else delete ph.caption_en; setDirty(true); }
+      }));
+      panel.querySelectorAll("[data-txlang]").forEach(b=> b.addEventListener("click", ()=>{ textosLang=b.dataset.txlang; renderTab("textos"); }));
       panel.querySelectorAll("[data-temas]").forEach(inp=> inp.addEventListener("input", e=>{
         const ph = content.photos.find(p=>p.id===inp.dataset.temas); if(ph){ ph.temas=e.target.value.split(',').map(s=>s.trim().toLowerCase()).filter(Boolean); setDirty(true); }
       }));

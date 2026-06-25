@@ -215,11 +215,12 @@
     const slugify = s => String(s||'').toLowerCase().normalize('NFKD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'');
     const locOf = cap => { const p=String(cap||'').split(',').map(x=>x.trim()).filter(Boolean); if(!p.length) return ''; if(/^\d{4}$/.test(p[p.length-1])) p.pop(); return p[p.length-1]||''; };
 
-    const figHTML = p => `
+    const capOf = p => (LANG==='en' && p.caption_en) ? p.caption_en : (p.caption||'');
+    const figHTML = p => { const cap=capOf(p); return `
       <figure data-temas="${(p.temas||[]).join(' ')}" class="tema-fig group card-clickable relative mb-3 break-inside-avoid overflow-hidden rounded-xl bg-white/5">
-        <img src="${imgUrl(p.path)}" alt="${esc(p.caption)}" loading="lazy" data-lightbox data-caption="${esc(p.caption)}" class="bw-img w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]">
-        ${p.caption?`<figcaption class="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent px-4 pt-10 pb-3 text-sm text-white/90 opacity-0 translate-y-2 transition-all duration-300 group-hover:opacity-100 group-hover:translate-y-0">${esc(p.caption)}</figcaption>`:''}
-      </figure>`;
+        <img src="${imgUrl(p.path)}" alt="${esc(cap)}" loading="lazy" data-lightbox data-caption="${esc(cap)}" class="bw-img w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]">
+        ${cap?`<figcaption class="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent px-4 pt-10 pb-3 text-sm text-white/90 opacity-0 translate-y-2 transition-all duration-300 group-hover:opacity-100 group-hover:translate-y-0">${esc(cap)}</figcaption>`:''}
+      </figure>`; };
 
     // ---- Templates por seção ----
     const SECTIONS = {

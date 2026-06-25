@@ -94,7 +94,7 @@
       // ----- montar produtos -----
       const items=[];
       (c.photos||[]).filter(p=>p.section==='fotografias').sort((a,b)=>a.order-b.order).forEach(p=>{
-        items.push({tipo:'print', temas:(p.temas||[]), img:imgUrl(p.path), title:p.caption||'', price:printPrice, from:true});
+        items.push({tipo:'print', temas:(p.temas||[]), img:imgUrl(p.path), title:(LANG==='en'&&p.caption_en)?p.caption_en:(p.caption||''), price:printPrice, from:true});
       });
       (c.fotolivros?.items||[]).forEach((p,i)=>{ const t=(LANG==='en'&&en.fotolivros&&en.fotolivros.items&&en.fotolivros.items[i])?{...p,...en.fotolivros.items[i]}:p;
         items.push({tipo:'fotolivro', temas:[], img:imgUrl(t.cover), title:t.title||'', price:t.price||'', from:false}); });
