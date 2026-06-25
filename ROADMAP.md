@@ -20,7 +20,7 @@ Objetivo: reformular o site para navegação por **produtos (foco em fotos)** e 
 
 ## 📋 Próximos passos (ordem sugerida)
 1. ✅ **Loja filtrável por Tipo + Tema** — FEITO. `/loja` modular: Print (as 79 fotos por tema) + Blusa + Bandeira + Fotolivro, filtro Tipo×Tema, deep-link `?tipo=&tema=`. Home liga Blusa/Bandeira à loja filtrada.
-2. **Hub "Explorar por tema"** — entrada de navegação dedicada (grid de 6 temas → galeria filtrada), além do filtro inline.
+2. ✅ **Hub "Explorar por tema"** — FEITO. Página `/temas` (6 cards com capa+contagem → `/?tema=<slug>` que filtra a galeria da home); item "Temas" no menu de todas as páginas.
 3. **CMS edita EN** dos temas/captions (hoje EN é mantido manualmente).
 4. **Refino do Hugo**: revisar captions/temas das 45 fotos no CMS; trocar placeholders de Blusas/Bandeiras por fotos reais; (opcional) importar `fotos pro rio`/`DNA`/`sinestesia2.0` (esta é `.psd` pesado — flatten antes).
 
