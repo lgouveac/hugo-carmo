@@ -9,6 +9,10 @@
     { "source": "/viagem/:slug", "destination": "/viagem" },
     { "source": "/en/viagem/:slug", "destination": "/viagem" },
     { "source": "/en/loja", "destination": "/loja" },
+    { "source": "/en/cicloviagens", "destination": "/cicloviagens" },
+    { "source": "/en/fotolivros", "destination": "/fotolivros" },
+    { "source": "/en/sobre", "destination": "/sobre" },
+    { "source": "/en/faq", "destination": "/faq" },
     { "source": "/en", "destination": "/" }
   ]
 }

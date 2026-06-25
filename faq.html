@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title id="t">Perguntas frequentes — Hugo Carmo</title>
+  <meta name="description" id="meta-desc" content="Perguntas frequentes sobre as obras de Hugo Carmo — como comprar, prazos, impressão fine art, molduras e tamanhos personalizados.">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="index, follow, max-image-preview:large">
+  <link rel="canonical" id="canonical" href="https://hugocarmo.com.br/faq">
+  <link rel="alternate" hreflang="pt-BR" href="https://hugocarmo.com.br/faq">
+  <link rel="alternate" hreflang="en" href="https://hugocarmo.com.br/en/faq">
+  <link rel="alternate" hreflang="x-default" href="https://hugocarmo.com.br/faq">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Hugo Carmo">
+  <meta property="og:title" id="og-title" content="Perguntas frequentes — Hugo Carmo">
+  <meta property="og:image" content="https://gobslzsggskllmhzasti.supabase.co/storage/v1/object/public/photos/og-card.jpg">
+  <link rel="icon" type="image/png" href="https://neompzltxilcimodyvpd.supabase.co/storage/v1/object/public/flou//Captura%20de%20tela%202025-06-16%20224245.png">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+  <style>body{font-family:'Inter',system-ui,sans-serif;background:#000}</style>
+  <script type="application/ld+json" id="ld-faq">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[]}</script>
+</head>
+<body class="bg-black text-white min-h-screen flex flex-col">
+  <header class="sticky top-0 z-[1100] w-full px-6 md:px-12 py-4 flex items-center justify-between bg-black/70 backdrop-blur border-b border-white/10">
+    <a href="/" id="lnk-home" class="font-mono tracking-[3px] text-lg">KINA</a>
+    <button id="menu-btn" aria-label="Menu" class="w-11 h-11 rounded-full border border-white/20 flex items-center justify-center hover:bg-white/10"><i data-lucide="menu" class="w-5 h-5"></i></button>
+  </header>
+  <div id="drawer-bg" class="fixed inset-0 z-[1099] bg-black/60 opacity-0 pointer-events-none transition-opacity duration-300"></div>
+  <aside id="drawer" class="fixed top-0 right-0 z-[1101] h-full w-[82%] max-w-sm bg-[#0b0b0a] border-l border-white/10 translate-x-full transition-transform duration-300 flex flex-col" aria-hidden="true">
+    <div class="flex items-center justify-between px-6 py-5 border-b border-white/10"><span class="font-mono tracking-[3px] text-lg">KINA</span><button id="drawer-close" aria-label="Fechar menu" class="w-10 h-10 rounded-full hover:bg-white/10 flex items-center justify-center"><i data-lucide="x" class="w-5 h-5"></i></button></div>
+    <nav id="drawer-nav" class="flex-1 overflow-y-auto px-4 py-4 flex flex-col"></nav>
+    <div id="drawer-foot" class="px-6 py-5 border-t border-white/10 flex items-center justify-between gap-3"></div>
+  </aside>
+
+  <main class="flex-1 w-full max-w-3xl mx-auto px-5 sm:px-8 py-16">
+    <h1 id="h1" class="text-4xl md:text-6xl font-semibold tracking-tight mb-10 text-center">Perguntas frequentes</h1>
+    <div id="faq-list" class="border-y border-white/10 divide-y divide-white/10"></div>
+  </main>
+
+  <footer class="w-full border-t border-white/10 py-8 px-4 md:px-16 text-center text-white/50 text-sm"><a href="/" id="lnk-foot" class="hover:text-white">© <span id="yr"></span> Hugo Carmo — Artista Visual</a></footer>
+
+  <script>
+    const SUPA="https://gobslzsggskllmhzasti.supabase.co",CONTENT_URL=SUPA+"/storage/v1/object/public/photos/content.json";
+    const LANG=(/^\/en(\/|$)/.test(location.pathname)||new URLSearchParams(location.search).get('lang')==='en')?'en':'pt';
+    const esc=s=>(s==null?"":String(s)).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+    document.documentElement.lang=LANG==='en'?'en':'pt-BR';
+    document.getElementById('yr').textContent=new Date().getFullYear();
+    document.getElementById('canonical').href='https://hugocarmo.com.br'+(LANG==='en'?'/en/faq':'/faq');
+    function chrome(c){
+      const home=LANG==='en'?'/en':'/';
+      const lh=document.getElementById('lnk-home'),lf=document.getElementById('lnk-foot'); if(lh)lh.href=home; if(lf)lf.href=home;
+      const P=LANG==='en'
+        ?[['/en','Photography'],['/en/cicloviagens','Journeys'],['/en/loja','Shop'],['/en/fotolivros','Photo books'],['/en/blog','Travel diary'],['/en/sobre','About'],['/en/faq','FAQ']]
+        :[['/','Fotografias'],['/cicloviagens','Cicloviagens'],['/loja','Loja'],['/fotolivros','Fotolivros'],['/blog','Diário'],['/sobre','Sobre'],['/faq','FAQ']];
+      const cur=(location.pathname.replace(/\/+$/,'')||'/');
+      document.getElementById('drawer-nav').innerHTML=P.map(([h,l])=>`<a href="${h}" class="px-3 py-3 rounded-lg text-lg ${cur===h.replace(/\/+$/,'')?'bg-white/10 text-white':'text-white/80 hover:bg-white/5 hover:text-white'} transition">${l}</a>`).join('');
+      const lang=LANG==='en'?'<a href="/" class="text-sm font-semibold border border-white/20 rounded px-3 py-1.5 hover:bg-white/10">PT</a>':'<a href="/en" class="text-sm font-semibold border border-white/20 rounded px-3 py-1.5 hover:bg-white/10">EN</a>';
+      document.getElementById('drawer-foot').innerHTML=`<div class="flex items-center gap-3"><a href="${c.contact?.instagram_url||'#'}" target="_blank" rel="noopener" aria-label="Instagram" class="w-9 h-9 flex items-center justify-center rounded-full border border-white/15 text-white/70 hover:text-white hover:bg-white/10"><i data-lucide="instagram" class="w-4 h-4"></i></a><a href="https://wa.me/${c.contact?.whatsapp||''}" target="_blank" rel="noopener" aria-label="WhatsApp" class="w-9 h-9 flex items-center justify-center rounded-full border border-white/15 text-white/70 hover:text-white hover:bg-white/10"><i data-lucide="message-circle" class="w-4 h-4"></i></a></div>${lang}`;
+      const mb=document.getElementById('menu-btn'),dr=document.getElementById('drawer'),bg=document.getElementById('drawer-bg');
+      const op=()=>{dr.classList.remove('translate-x-full');bg.classList.remove('opacity-0','pointer-events-none');document.body.style.overflow='hidden';};
+      const cl=()=>{dr.classList.add('translate-x-full');bg.classList.add('opacity-0','pointer-events-none');document.body.style.overflow='';};
+      mb.onclick=op;document.getElementById('drawer-close').onclick=cl;bg.onclick=cl;document.addEventListener('keydown',e=>{if(e.key==='Escape')cl();});
+    }
+    fetch(CONTENT_URL+"?v="+Date.now(),{cache:"no-store"}).then(r=>r.json()).then(c=>{
+      const en=c.en||{};
+      const faq=(LANG==='en'&&en.faq)?{...c.faq,...en.faq}:(c.faq||{});
+      const items=(LANG==='en'&&en.faq&&Array.isArray(en.faq.items))?(c.faq.items||[]).map((it,i)=>en.faq.items[i]?{...it,...en.faq.items[i]}:it):(c.faq?.items||[]);
+      const title=faq.title||(LANG==='en'?'Frequently asked questions':'Perguntas frequentes');
+      document.getElementById('h1').textContent=title;
+      document.getElementById('t').textContent=title+' — Hugo Carmo';
+      document.getElementById('faq-list').innerHTML=items.map(q=>`<details class="group py-4"><summary class="cursor-pointer list-none flex justify-between items-center gap-4 text-lg font-medium text-white/90"><span>${esc(q.q)}</span><span class="text-white/40 text-2xl leading-none group-open:rotate-45 transition-transform">+</span></summary><p class="text-white/70 mt-3 leading-relaxed">${esc(q.a)}</p></details>`).join('');
+      if(items.length){ const ld=document.getElementById('ld-faq'); if(ld) ld.textContent=JSON.stringify({"@context":"https://schema.org","@type":"FAQPage","mainEntity":items.map(q=>({"@type":"Question","name":q.q,"acceptedAnswer":{"@type":"Answer","text":q.a}}))}); }
+      chrome(c); if(window.lucide)lucide.createIcons();
+    }).catch(()=>{ chrome({}); if(window.lucide)lucide.createIcons(); });
+  </script>
+</body>
+</html>

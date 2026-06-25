@@ -120,11 +120,8 @@
   <section class="relative w-full min-h-screen flex flex-col overflow-hidden">
     <div id="hero-marquee" class="absolute inset-0 w-full h-full flex overflow-hidden pointer-events-none select-none [mask-image:_linear-gradient(to_right,transparent_0,_black_128px,_black_calc(100%-128px),transparent_100%)] z-0"></div>
     <div class="hero-overlay"></div>
-    <header class="hero-content w-full px-6 py-6 md:px-16 flex flex-col md:flex-row items-center justify-between gap-4 relative z-10">
-      <div class="flex items-center gap-4">
-        <img id="logo" src="" alt="Hugo Carmo" class="w-20 h-20 object-contain rounded-2xl">
-      </div>
-      <nav id="nav" class="flex items-center gap-6 flex-wrap justify-center"></nav>
+    <header class="hero-content w-full px-6 py-6 md:px-16 flex items-center justify-between gap-4 relative z-10">
+      <img id="logo" src="" alt="Hugo Carmo" class="w-20 h-20 object-contain rounded-2xl">
     </header>
     <div class="hero-content flex-1 flex items-center justify-center w-full px-4 sm:px-8 py-8 md:py-16">
       <div class="w-full max-w-6xl mx-auto text-center">
@@ -134,7 +131,7 @@
         </h1>
         <p id="hero-subtitle" class="text-xl md:text-2xl text-white/80 mb-8 max-w-3xl mx-auto fade-in">Navegue pelo olhar de <strong>Hugo Carmo</strong>, artista visual e fotógrafo, ao redor do Brasil em suas ciclo viagens.</p>
         <div class="flex flex-col sm:flex-row items-center justify-center gap-4 fade-in">
-          <a href="#comprar-obras" class="px-8 py-4 bg-white/10 border border-white/20 rounded-lg font-medium text-white hover:bg-white/20 transition text-lg flex items-center justify-center">
+          <a id="hero-cta-link" href="#galeria" class="px-8 py-4 bg-white/10 border border-white/20 rounded-lg font-medium text-white hover:bg-white/20 transition text-lg flex items-center justify-center">
             <i data-lucide="arrow-down" class="w-5 h-5 inline-block mr-2"></i>
             <span id="hero-cta"></span>
           </a>
@@ -142,6 +139,20 @@
       </div>
     </div>
   </section>
+
+  <!-- Menu hambúrguer (aparece após o primeiro scroll) + drawer lateral direito -->
+  <button id="menu-btn" aria-label="Menu" aria-expanded="false" class="fixed top-5 right-5 z-[1100] w-12 h-12 rounded-full bg-black/50 border border-white/20 backdrop-blur flex items-center justify-center text-white hover:bg-black/70 transition-all duration-300 opacity-0 -translate-y-2 pointer-events-none">
+    <i data-lucide="menu" class="w-6 h-6"></i>
+  </button>
+  <div id="drawer-bg" class="fixed inset-0 z-[1099] bg-black/60 opacity-0 pointer-events-none transition-opacity duration-300"></div>
+  <aside id="drawer" class="fixed top-0 right-0 z-[1101] h-full w-[82%] max-w-sm bg-[#0b0b0a] border-l border-white/10 translate-x-full transition-transform duration-300 flex flex-col" aria-hidden="true">
+    <div class="flex items-center justify-between px-6 py-5 border-b border-white/10">
+      <span class="font-mono tracking-[3px] text-lg">KINA</span>
+      <button id="drawer-close" aria-label="Fechar menu" class="w-10 h-10 rounded-full hover:bg-white/10 flex items-center justify-center"><i data-lucide="x" class="w-5 h-5"></i></button>
+    </div>
+    <nav id="drawer-nav" class="flex-1 overflow-y-auto px-4 py-4 flex flex-col"></nav>
+    <div id="drawer-foot" class="px-6 py-5 border-t border-white/10 flex items-center justify-between gap-3"></div>
+  </aside>
 
   <!-- Seções dinâmicas (ordem e visibilidade controladas pelo CMS) -->
   <div id="sections" class="flex-1 w-full"></div>
@@ -289,7 +300,7 @@
         const prodPills = `<button data-prod="foto" class="px-4 py-1.5 rounded-full border border-white/20 text-sm bg-white text-black">${T.foto}</button>`
           + `<a href="${lojaHref}" class="px-4 py-1.5 rounded-full border border-white/20 text-sm text-white/80 hover:bg-white/10">${T.blusa}</a>`
           + `<a href="${lojaHref}" class="px-4 py-1.5 rounded-full border border-white/20 text-sm text-white/80 hover:bg-white/10">${T.bandeira}</a>`
-          + `<a href="#fotolivros" class="px-4 py-1.5 rounded-full border border-white/20 text-sm text-white/80 hover:bg-white/10">${T.fotolivro}</a>`;
+          + `<a href="${LANG==='en'?'/en/fotolivros':'/fotolivros'}" class="px-4 py-1.5 rounded-full border border-white/20 text-sm text-white/80 hover:bg-white/10">${T.fotolivro}</a>`;
         const panel = ts.length ? `
           <div class="flex justify-center mb-6">
             <button id="tema-toggle" aria-expanded="false" class="inline-flex items-center gap-2 px-5 py-2 rounded-full border border-white/25 text-sm text-white/90 hover:bg-white/10 transition">
@@ -423,14 +434,29 @@
       const hi = (c.backgrounds?.hero_mode==='custom' && (c.backgrounds.hero_images||[]).length) ? c.backgrounds.hero_images.map(p=>({path:p})) : fotos().slice(0,5);
       const strip = h => `<div class="flex-none flex animate-marquee space-x-4 pr-4"${h?' aria-hidden="true"':''}>`+hi.map(p=>`<img src="${imgUrl(p.path)}" alt="" class="h-full max-h-[100vh] rounded-2xl object-cover opacity-70">`).join('')+`</div>`;
       document.getElementById('hero-marquee').innerHTML = hi.length ? strip(false)+strip(true) : '';
-      // Nav (apenas seções visíveis com link)
-      let secs = (c.sections||[]).filter(s=>s.visible);
-      const toggle = LANG==='en'
-        ? '<a href="/" class="text-white/80 hover:text-white transition text-sm font-semibold border border-white/20 rounded px-2 py-0.5">PT</a>'
-        : '<a href="/en" class="text-white/80 hover:text-white transition text-sm font-semibold border border-white/20 rounded px-2 py-0.5">EN</a>';
-      document.getElementById('nav').innerHTML = secs.filter(s=>NAV_LABELS[s.key]).map(s=>`<a href="${NAV_LABELS[s.key][0]}" class="text-white/80 hover:text-white transition text-sm font-medium">${NAV_LABELS[s.key][1]}</a>`).join('') + toggle;
-      // Seções na ordem definida
-      document.getElementById('sections').innerHTML = secs.map(s => (SECTIONS[s.key]?SECTIONS[s.key]():'')).join('');
+      // Menu lateral (drawer) — cada categoria é uma página própria
+      const PAGES = LANG==='en'
+        ? [['/en','Photography'],['/en/cicloviagens','Journeys'],['/en/loja','Shop'],['/en/fotolivros','Photo books'],['/en/blog','Travel diary'],['/en/sobre','About'],['/en/faq','FAQ']]
+        : [['/','Fotografias'],['/cicloviagens','Cicloviagens'],['/loja','Loja'],['/fotolivros','Fotolivros'],['/blog','Diário'],['/sobre','Sobre'],['/faq','FAQ']];
+      const has = {
+        cicloviagens:(c.collections||[]).some(x=>x.visible!==false),
+        fotolivros:(c.fotolivros?.items||[]).length>0,
+        blog:(c.blog?.posts||[]).some(p=>p.published!==false),
+        sobre:!!(c.about?.text), faq:(c.faq?.items||[]).length>0 };
+      const gate = href => { const k=href.replace(/^\/(en\/?)?/,'')||''; return !(k in has) || has[k]; };
+      document.getElementById('drawer-nav').innerHTML = PAGES.filter(([h])=>gate(h)).map(([href,label])=>{
+        const active=(location.pathname.replace(/\/+$/,'')||'/')===href.replace(/\/+$/,'');
+        return `<a href="${href}" class="px-3 py-3 rounded-lg text-lg ${active?'bg-white/10 text-white':'text-white/80 hover:bg-white/5 hover:text-white'} transition">${label}</a>`;
+      }).join('');
+      const langLink = LANG==='en'
+        ? '<a href="/" class="text-sm font-semibold border border-white/20 rounded px-3 py-1.5 hover:bg-white/10">PT</a>'
+        : '<a href="/en" class="text-sm font-semibold border border-white/20 rounded px-3 py-1.5 hover:bg-white/10">EN</a>';
+      document.getElementById('drawer-foot').innerHTML = `<div class="flex items-center gap-3">
+        <a href="${c.contact?.instagram_url||'#'}" target="_blank" rel="noopener" aria-label="Instagram" class="w-9 h-9 flex items-center justify-center rounded-full border border-white/15 text-white/70 hover:text-white hover:bg-white/10"><i data-lucide="instagram" class="w-4 h-4"></i></a>
+        <a href="https://wa.me/${c.contact?.whatsapp||''}" target="_blank" rel="noopener" aria-label="WhatsApp" class="w-9 h-9 flex items-center justify-center rounded-full border border-white/15 text-white/70 hover:text-white hover:bg-white/10"><i data-lucide="message-circle" class="w-4 h-4"></i></a>
+      </div>${langLink}`;
+      // Home = só o mosaico de fotografias
+      document.getElementById('sections').innerHTML = SECTIONS.fotografias();
       // Categorias (Blusas/Prints/Bandeiras) — troca interativa
       const catItems=(c.categorias?.items)||[];
       if(catItems.length){
@@ -456,6 +482,16 @@
       }));
       const wtoggle=document.getElementById('wall-toggle');
       if(wtoggle&&grid){ wtoggle.addEventListener('click',()=>{ wtoggle.classList.toggle('on'); grid.classList.toggle('wall'); syncPanel(); }); }
+      // Drawer lateral + hambúrguer que surge após o primeiro scroll
+      const menuBtn=document.getElementById('menu-btn'), drawer=document.getElementById('drawer'), drawerBg=document.getElementById('drawer-bg'), drawerClose=document.getElementById('drawer-close');
+      if(menuBtn&&drawer){
+        const openDrawer=()=>{ drawer.classList.remove('translate-x-full'); drawerBg.classList.remove('opacity-0','pointer-events-none'); drawer.setAttribute('aria-hidden','false'); menuBtn.setAttribute('aria-expanded','true'); document.body.style.overflow='hidden'; };
+        const closeDrawer=()=>{ drawer.classList.add('translate-x-full'); drawerBg.classList.add('opacity-0','pointer-events-none'); drawer.setAttribute('aria-hidden','true'); menuBtn.setAttribute('aria-expanded','false'); document.body.style.overflow=''; };
+        menuBtn.addEventListener('click',openDrawer); drawerClose.addEventListener('click',closeDrawer); drawerBg.addEventListener('click',closeDrawer);
+        document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeDrawer(); });
+        const reveal=()=>{ const past=window.scrollY>window.innerHeight*0.55; menuBtn.classList.toggle('opacity-0',!past); menuBtn.classList.toggle('-translate-y-2',!past); menuBtn.classList.toggle('pointer-events-none',!past); };
+        window.addEventListener('scroll',reveal,{passive:true}); reveal();
+      }
       // Footer
       document.getElementById('footer-copy').textContent = (new Date().getFullYear()) + ' ' + (c.footer?.text || 'Hugo Carmo');
       const insta = document.getElementById('footer-insta');

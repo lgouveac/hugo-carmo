@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title id="t">Fotolivros — Hugo Carmo</title>
+  <meta name="description" id="meta-desc" content="Fotolivros de Hugo Carmo — séries fotográficas das ciclo-viagens pelo Brasil, reunidas em livros de arte.">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="index, follow, max-image-preview:large">
+  <link rel="canonical" id="canonical" href="https://hugocarmo.com.br/fotolivros">
+  <link rel="alternate" hreflang="pt-BR" href="https://hugocarmo.com.br/fotolivros">
+  <link rel="alternate" hreflang="en" href="https://hugocarmo.com.br/en/fotolivros">
+  <link rel="alternate" hreflang="x-default" href="https://hugocarmo.com.br/fotolivros">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Hugo Carmo">
+  <meta property="og:title" id="og-title" content="Fotolivros — Hugo Carmo">
+  <meta property="og:image" content="https://gobslzsggskllmhzasti.supabase.co/storage/v1/object/public/photos/og-card.jpg">
+  <link rel="icon" type="image/png" href="https://neompzltxilcimodyvpd.supabase.co/storage/v1/object/public/flou//Captura%20de%20tela%202025-06-16%20224245.png">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+  <style>body{font-family:'Inter',system-ui,sans-serif;background:#000}</style>
+</head>
+<body class="bg-black text-white min-h-screen flex flex-col">
+  <header class="sticky top-0 z-[1100] w-full px-6 md:px-12 py-4 flex items-center justify-between bg-black/70 backdrop-blur border-b border-white/10">
+    <a href="/" id="lnk-home" class="font-mono tracking-[3px] text-lg">KINA</a>
+    <button id="menu-btn" aria-label="Menu" class="w-11 h-11 rounded-full border border-white/20 flex items-center justify-center hover:bg-white/10"><i data-lucide="menu" class="w-5 h-5"></i></button>
+  </header>
+  <div id="drawer-bg" class="fixed inset-0 z-[1099] bg-black/60 opacity-0 pointer-events-none transition-opacity duration-300"></div>
+  <aside id="drawer" class="fixed top-0 right-0 z-[1101] h-full w-[82%] max-w-sm bg-[#0b0b0a] border-l border-white/10 translate-x-full transition-transform duration-300 flex flex-col" aria-hidden="true">
+    <div class="flex items-center justify-between px-6 py-5 border-b border-white/10"><span class="font-mono tracking-[3px] text-lg">KINA</span><button id="drawer-close" aria-label="Fechar menu" class="w-10 h-10 rounded-full hover:bg-white/10 flex items-center justify-center"><i data-lucide="x" class="w-5 h-5"></i></button></div>
+    <nav id="drawer-nav" class="flex-1 overflow-y-auto px-4 py-4 flex flex-col"></nav>
+    <div id="drawer-foot" class="px-6 py-5 border-t border-white/10 flex items-center justify-between gap-3"></div>
+  </aside>
+
+  <main class="flex-1 w-full max-w-6xl mx-auto px-5 sm:px-8 py-16">
+    <div class="text-center mb-12"><h1 id="h1" class="text-4xl md:text-6xl font-semibold tracking-tight mb-3">Fotolivros</h1><p id="sub" class="text-white/70 max-w-2xl mx-auto"></p></div>
+    <div id="grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"></div>
+    <p id="empty" class="text-center text-white/50 mt-8 hidden">—</p>
+  </main>
+
+  <footer class="w-full border-t border-white/10 py-8 px-4 md:px-16 text-center text-white/50 text-sm"><a href="/" id="lnk-foot" class="hover:text-white">© <span id="yr"></span> Hugo Carmo — Artista Visual</a></footer>
+
+  <script>
+    const SUPA="https://gobslzsggskllmhzasti.supabase.co",CONTENT_URL=SUPA+"/storage/v1/object/public/photos/content.json";
+    const LANG=(/^\/en(\/|$)/.test(location.pathname)||new URLSearchParams(location.search).get('lang')==='en')?'en':'pt';
+    const esc=s=>(s==null?"":String(s)).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+    document.documentElement.lang=LANG==='en'?'en':'pt-BR';
+    document.getElementById('yr').textContent=new Date().getFullYear();
+    document.getElementById('canonical').href='https://hugocarmo.com.br'+(LANG==='en'?'/en/fotolivros':'/fotolivros');
+    function chrome(c){
+      const home=LANG==='en'?'/en':'/';
+      const lh=document.getElementById('lnk-home'),lf=document.getElementById('lnk-foot'); if(lh)lh.href=home; if(lf)lf.href=home;
+      const P=LANG==='en'
+        ?[['/en','Photography'],['/en/cicloviagens','Journeys'],['/en/loja','Shop'],['/en/fotolivros','Photo books'],['/en/blog','Travel diary'],['/en/sobre','About'],['/en/faq','FAQ']]
+        :[['/','Fotografias'],['/cicloviagens','Cicloviagens'],['/loja','Loja'],['/fotolivros','Fotolivros'],['/blog','Diário'],['/sobre','Sobre'],['/faq','FAQ']];
+      const cur=(location.pathname.replace(/\/+$/,'')||'/');
+      document.getElementById('drawer-nav').innerHTML=P.map(([h,l])=>`<a href="${h}" class="px-3 py-3 rounded-lg text-lg ${cur===h.replace(/\/+$/,'')?'bg-white/10 text-white':'text-white/80 hover:bg-white/5 hover:text-white'} transition">${l}</a>`).join('');
+      const lang=LANG==='en'?'<a href="/" class="text-sm font-semibold border border-white/20 rounded px-3 py-1.5 hover:bg-white/10">PT</a>':'<a href="/en" class="text-sm font-semibold border border-white/20 rounded px-3 py-1.5 hover:bg-white/10">EN</a>';
+      document.getElementById('drawer-foot').innerHTML=`<div class="flex items-center gap-3"><a href="${c.contact?.instagram_url||'#'}" target="_blank" rel="noopener" aria-label="Instagram" class="w-9 h-9 flex items-center justify-center rounded-full border border-white/15 text-white/70 hover:text-white hover:bg-white/10"><i data-lucide="instagram" class="w-4 h-4"></i></a><a href="https://wa.me/${c.contact?.whatsapp||''}" target="_blank" rel="noopener" aria-label="WhatsApp" class="w-9 h-9 flex items-center justify-center rounded-full border border-white/15 text-white/70 hover:text-white hover:bg-white/10"><i data-lucide="message-circle" class="w-4 h-4"></i></a></div>${lang}`;
+      const mb=document.getElementById('menu-btn'),dr=document.getElementById('drawer'),bg=document.getElementById('drawer-bg');
+      const op=()=>{dr.classList.remove('translate-x-full');bg.classList.remove('opacity-0','pointer-events-none');document.body.style.overflow='hidden';};
+      const cl=()=>{dr.classList.add('translate-x-full');bg.classList.add('opacity-0','pointer-events-none');document.body.style.overflow='';};
+      mb.onclick=op;document.getElementById('drawer-close').onclick=cl;bg.onclick=cl;document.addEventListener('keydown',e=>{if(e.key==='Escape')cl();});
+    }
+    fetch(CONTENT_URL+"?v="+Date.now(),{cache:"no-store"}).then(r=>r.json()).then(c=>{
+      const imgUrl=p=>/^https?:\/\//.test(p)?p:(c.bucket_base+"/"+p);
+      const en=c.en||{};
+      const fl=(LANG==='en'&&en.fotolivros)?{...c.fotolivros,...en.fotolivros}:(c.fotolivros||{});
+      const items=(LANG==='en'&&en.fotolivros&&Array.isArray(en.fotolivros.items))?(c.fotolivros?.items||[]).map((it,i)=>en.fotolivros.items[i]?{...it,...en.fotolivros.items[i]}:it):(c.fotolivros?.items||[]);
+      const title=fl.title||'Fotolivros';
+      document.getElementById('h1').textContent=title;
+      document.getElementById('t').textContent=title+' — Hugo Carmo';
+      document.getElementById('sub').textContent=fl.subtitle||'';
+      const wa=c.contact?.whatsapp||'';
+      const link=t=>"https://api.whatsapp.com/send/?phone="+wa+"&text="+encodeURIComponent((LANG==='en'?'Hi, I want the photo book ':'Olá, quero o fotolivro ')+t)+"&type=phone_number&app_absent=0";
+      const from=LANG==='en'?'From':'A partir de', cta=LANG==='en'?'I want this':'Quero este';
+      if(items.length){
+        document.getElementById('grid').innerHTML=items.map(p=>`<div class="bg-gradient-to-br from-white/5 via-black/20 to-black/40 border border-white/10 rounded-2xl overflow-hidden flex flex-col">
+          <img src="${esc(imgUrl(p.cover))}" alt="${esc(p.title)}" class="w-full h-64 object-cover">
+          <div class="flex-1 flex flex-col px-5 py-4"><h3 class="text-lg font-semibold mb-1">${esc(p.title)}</h3><p class="text-gray-400 text-sm mb-3">${esc(p.subtitle||'')}</p>
+            <div class="flex items-end justify-between mt-auto">${p.price?`<span class="flex flex-col"><span class="text-xs text-gray-400">${esc(from)}</span><span class="text-lg font-medium">${esc(p.price)}</span></span>`:'<span></span>'}
+              <a href="${link(p.title)}" target="_blank" rel="noopener" class="px-4 py-2 rounded-lg bg-white text-black font-semibold hover:bg-white/90 flex items-center gap-2"><i data-lucide="book-open" class="w-4 h-4"></i> ${esc(cta)}</a></div></div></div>`).join('');
+      } else { document.getElementById('empty').classList.remove('hidden'); }
+      chrome(c); if(window.lucide)lucide.createIcons();
+    }).catch(()=>{ document.getElementById('empty').classList.remove('hidden'); chrome({}); if(window.lucide)lucide.createIcons(); });
+  </script>
+</body>
+</html>
