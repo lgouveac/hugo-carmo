@@ -16,19 +16,30 @@ const PROMPT = `Você é um radar semanal de oportunidades para o fotógrafo bra
 
 Pesquise na web editais, concursos, grants e chamadas de EXPOSIÇÃO de fotografia que estejam ABERTOS AGORA, com INSCRIÇÃO 100% GRATUITA (sem taxa) e prazo NO FUTURO. Fontes boas: phmuseum.com/awards, lensculture.com/competitions, lenscratch.com, booooooom.com/open-calls, all-about-photo.com, theartlist.com, photocontestcalendar.com. Faça buscas como "free photography open call ${new Date().getFullYear()} no entry fee".
 
-Selecione de 3 a 6 melhores que sejam: (a) TOTALMENTE GRATUITAS (regra obrigatória — na dúvida, não inclua); (b) abertas a fotógrafos internacionais/brasileiros (exclua as restritas a um único país); (c) relevantes aos temas do Hugo (viagem, natureza, paisagem, documental, ruínas, tema livre). Para cada, confirme na página oficial que o prazo é futuro E que é gratuita. NÃO invente prazos nem URLs.
+Selecione de 3 a 6 melhores que sejam: (a) TOTALMENTE GRATUITAS (regra obrigatória — na dúvida, não inclua); (b) abertas a fotógrafos internacionais/brasileiros (exclua as restritas a um único país); (c) relevantes aos temas do Hugo (viagem, natureza, paisagem, documental, ruínas, tema livre). Para cada, confirme na página oficial que o prazo é futuro E que é gratuita.
+
+REGRAS RÍGIDAS (obrigatórias):
+- NUNCA inclua edital com prazo já passado, encerrado ou marcado como "expirado". Se não conseguir CONFIRMAR que o prazo é depois de hoje, NÃO inclua.
+- Use SEMPRE a URL oficial da organização/plataforma de inscrição (ex.: site do prêmio, phmuseum.com, picter.com), NUNCA um artigo de notícia/blog de terceiros.
+- NÃO invente prazos nem URLs. Melhor trazer 3 confiáveis do que 6 duvidosos.
 
 Responda APENAS com um array JSON válido (sem markdown, sem texto fora do array), no formato:
 [{"name":"...","deadline":"prazo em pt-BR, ex: 11 de setembro de 2026","url":"https://pagina-oficial","local":"linha curta, ex: Online · Vogue","desc":"1-2 frases em pt-BR do que oferece","why":"1 frase em pt-BR de por que combina com o Hugo","urgent":true_se_o_prazo_está_muito_próximo}]`;
 
 async function curate(OAI) {
-  const r = await fetch('https://api.openai.com/v1/responses', {
-    method: 'POST',
-    headers: { Authorization: `Bearer ${OAI}`, 'Content-Type': 'application/json' },
-    body: JSON.stringify({ model: 'gpt-4.1', tools: [{ type: 'web_search' }], input: PROMPT }),
-  });
-  const j = await r.json();
-  if (!r.ok) throw new Error('OpenAI ' + (j.error?.message || r.status));
+  // guarda de 45s: se a IA demorar, aborta pra caber no timeout de 60s e cair no fallback
+  const ctrl = new AbortController();
+  const t = setTimeout(() => ctrl.abort(), 45000);
+  let j;
+  try {
+    const r = await fetch('https://api.openai.com/v1/responses', {
+      method: 'POST', signal: ctrl.signal,
+      headers: { Authorization: `Bearer ${OAI}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ model: 'gpt-4.1', tools: [{ type: 'web_search' }], input: PROMPT }),
+    });
+    j = await r.json();
+    if (!r.ok) throw new Error('OpenAI ' + (j.error?.message || r.status));
+  } finally { clearTimeout(t); }
   let txt = j.output_text;
   if (!txt && Array.isArray(j.output)) {
     txt = j.output.filter(o => o.type === 'message').flatMap(o => (o.content || [])).filter(c => c.type === 'output_text').map(c => c.text).join('\n');
@@ -36,7 +47,10 @@ async function curate(OAI) {
   const m = String(txt || '').match(/\[[\s\S]*\]/);
   if (!m) throw new Error('sem JSON');
   const arr = JSON.parse(m[0]);
-  return Array.isArray(arr) ? arr.filter(o => o && o.name && o.url && o.deadline).slice(0, 6) : [];
+  if (!Array.isArray(arr)) return [];
+  // filtro de segurança: descarta expirados / URLs não-oficiais / campos faltando
+  return arr.filter(o => o && o.name && o.deadline && /^https?:\/\//.test(o.url || '')
+    && !/expir|encerr|passad|closed|ended|vencid/i.test(o.deadline)).slice(0, 6);
 }
 
 const esc = s => String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
