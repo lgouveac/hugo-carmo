@@ -48,9 +48,18 @@ async function curate(OAI) {
   if (!m) throw new Error('sem JSON');
   const arr = JSON.parse(m[0]);
   if (!Array.isArray(arr)) return [];
-  // filtro de segurança: descarta expirados / URLs não-oficiais / campos faltando
-  return arr.filter(o => o && o.name && o.deadline && /^https?:\/\//.test(o.url || '')
-    && !/expir|encerr|passad|closed|ended|vencid/i.test(o.deadline)).slice(0, 6);
+  const MES = { janeiro:0, fevereiro:1, 'março':2, marco:2, abril:3, maio:4, junho:5, julho:6, agosto:7, setembro:8, outubro:9, novembro:10, dezembro:11 };
+  const hoje = new Date(); hoje.setHours(0,0,0,0);
+  const futura = d => { const m2 = String(d||'').toLowerCase().match(/(\d{1,2})\s+de\s+([a-zç]+)\s+de\s+(\d{4})/); if (!m2) return true; const mo = MES[m2[2]]; if (mo == null) return true; return new Date(+m2[3], mo, +m2[1]) >= hoje; };
+  const seen = new Set();
+  return arr.filter(o => {
+    if (!o || !o.name || !o.deadline || !/^https?:\/\//.test(o.url || '')) return false;
+    if (/expir|encerr|passad|closed|ended|vencid/i.test(o.deadline)) return false;
+    if (!futura(o.deadline)) return false;                 // descarta data no passado
+    const host = (o.url.match(/^https?:\/\/([^/]+)/) || [])[1] || o.url;
+    if (seen.has(host)) return false; seen.add(host);       // descarta URL/host repetido (alucinação)
+    return true;
+  }).slice(0, 6);
 }
 
 const esc = s => String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
