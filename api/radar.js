@@ -78,6 +78,9 @@ export default async function handler(req, res) {
   let opps = [], mode = 'fallback', curateErr = null;
   if (OAI) { try { opps = await curate(OAI); mode = opps.length ? 'curated' : 'fallback'; } catch (e) { curateErr = String(e.message || e); } }
 
+  // dry-run: cura mas NÃO envia (pra testar sem incomodar o Hugo)
+  if (req.query && req.query.dry) return res.status(200).json({ dry: true, mode, count: opps.length, curateErr, opps });
+
   const r = await fetch('https://api.resend.com/emails', {
     method: 'POST',
     headers: { Authorization: `Bearer ${RESEND}`, 'Content-Type': 'application/json' },
