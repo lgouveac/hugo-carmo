@@ -43,6 +43,11 @@
   <main class="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-8 py-12">
     <div class="text-center mb-8"><h1 id="h1" class="text-4xl md:text-6xl font-semibold tracking-tight mb-3">Loja</h1><p id="sub" class="text-white/70 max-w-2xl mx-auto"></p></div>
 
+    <a id="prov-banner" href="/provador" class="max-w-3xl mx-auto mb-6 rounded-2xl border border-white/15 bg-white/5 hover:bg-white/10 transition px-5 py-4 flex items-center justify-between gap-3">
+      <span class="flex items-center gap-3"><i data-lucide="sparkles" class="w-5 h-5 shrink-0"></i><span id="prov-txt"><span class="font-semibold">Provador IA</span> <span class="text-white/60 text-sm">— veja qualquer foto na blusa, quadro ou bandeira</span></span></span>
+      <span id="prov-cta" class="text-sm font-semibold whitespace-nowrap">Experimentar →</span>
+    </a>
+
     <div class="flex justify-center mb-5">
       <button id="loja-toggle" aria-expanded="false" class="inline-flex items-center gap-2 px-5 py-2 rounded-full border border-white/25 text-sm text-white/90 hover:bg-white/10 transition"><i data-lucide="sliders-horizontal" class="w-4 h-4"></i> <span id="lbl-filtrar">Filtrar</span> <i data-lucide="chevron-down" class="w-4 h-4 transition-transform" id="loja-chev"></i></button>
     </div>
@@ -73,8 +78,8 @@
       const home=LANG==='en'?'/en':'/';
       const lh=document.getElementById('lnk-home'),lf=document.getElementById('lnk-foot'); if(lh)lh.href=home; if(lf)lf.href=home;
       const P=LANG==='en'
-        ?[['/en','Photography'],['/en/temas','Themes'],['/en/cicloviagens','Journeys'],['/en/loja','Shop'],['/en/fotolivros','Photo books'],['/en/blog','Travel diary'],['/en/sobre','About'],['/en/faq','FAQ']]
-        :[['/','Fotografias'],['/temas','Temas'],['/cicloviagens','Cicloviagens'],['/loja','Loja'],['/fotolivros','Fotolivros'],['/blog','Diário'],['/sobre','Sobre'],['/faq','FAQ']];
+        ?[['/en','Photography'],['/en/temas','Themes'],['/en/provador','AI try-on'],['/en/cicloviagens','Journeys'],['/en/loja','Shop'],['/en/fotolivros','Photo books'],['/en/blog','Travel diary'],['/en/sobre','About'],['/en/faq','FAQ']]
+        :[['/','Fotografias'],['/temas','Temas'],['/provador','Provador IA'],['/cicloviagens','Cicloviagens'],['/loja','Loja'],['/fotolivros','Fotolivros'],['/blog','Diário'],['/sobre','Sobre'],['/faq','FAQ']];
       const cur=(location.pathname.replace(/\/+$/,'')||'/');
       document.getElementById('drawer-nav').innerHTML=P.map(([h,l])=>`<a href="${h}" class="px-3 py-3 rounded-lg text-lg ${cur===h.replace(/\/+$/,'')?'bg-white/10 text-white':'text-white/80 hover:bg-white/5 hover:text-white'} transition">${l}</a>`).join('');
       const lang=LANG==='en'?'<a href="/" class="text-sm font-semibold border border-white/20 rounded px-3 py-1.5 hover:bg-white/10">PT</a>':'<a href="/en" class="text-sm font-semibold border border-white/20 rounded px-3 py-1.5 hover:bg-white/10">EN</a>';
@@ -93,6 +98,9 @@
         from:LANG==='en'?'From':'A partir de', cta:LANG==='en'?'I want it':'Quero', prods:LANG==='en'?'products':'produtos', prod:LANG==='en'?'product':'produto' };
       document.getElementById('h1').textContent=T.title; document.getElementById('t').textContent=T.title+' — Hugo Carmo';
       document.getElementById('sub').textContent=T.sub;
+      { const pb=document.getElementById('prov-banner'); if(pb){ pb.href=LANG==='en'?'/en/provador':'/provador';
+        document.getElementById('prov-txt').innerHTML=LANG==='en'?'<span class="font-semibold">AI try-on</span> <span class="text-white/60 text-sm">— see any photo on a tee, print or flag</span>':'<span class="font-semibold">Provador IA</span> <span class="text-white/60 text-sm">— veja qualquer foto na blusa, quadro ou bandeira</span>';
+        document.getElementById('prov-cta').textContent=LANG==='en'?'Try it →':'Experimentar →'; } }
       document.getElementById('lbl-filtrar').textContent=T.filtrar; document.getElementById('lbl-tipo').textContent=T.tipo; document.getElementById('lbl-tema').textContent=T.tema;
       const KICK=LANG==='en'?{print:'Fine-art print',blusa:'Tee',bandeira:'Flag',fotolivro:'Photo book'}:{print:'Print fine art',blusa:'Blusa',bandeira:'Bandeira',fotolivro:'Fotolivro'};
       const TIPO=LANG==='en'?{print:'Print',blusa:'Tee',bandeira:'Flag',fotolivro:'Photo book'}:{print:'Print',blusa:'Blusa',bandeira:'Bandeira',fotolivro:'Fotolivro'};

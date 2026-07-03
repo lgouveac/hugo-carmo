@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-H1QFBNHHW3"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-H1QFBNHHW3');
+  </script>
+  <title id="t">Provador IA — Hugo Carmo</title>
+  <meta name="description" id="meta-desc" content="Provador com IA: escolha uma fotografia de Hugo Carmo e veja na blusa, no quadro ou na bandeira antes de comprar.">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="index, follow, max-image-preview:large">
+  <link rel="canonical" id="canonical" href="https://hugocarmo.com.br/provador">
+  <link rel="alternate" hreflang="pt-BR" href="https://hugocarmo.com.br/provador">
+  <link rel="alternate" hreflang="en" href="https://hugocarmo.com.br/en/provador">
+  <link rel="alternate" hreflang="x-default" href="https://hugocarmo.com.br/provador">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Hugo Carmo">
+  <meta property="og:title" id="og-title" content="Provador IA — Hugo Carmo">
+  <meta property="og:image" content="https://gobslzsggskllmhzasti.supabase.co/storage/v1/object/public/photos/og-card.jpg">
+  <link rel="icon" type="image/png" href="https://neompzltxilcimodyvpd.supabase.co/storage/v1/object/public/flou//Captura%20de%20tela%202025-06-16%20224245.png">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+  <style>body{font-family:'Inter',system-ui,sans-serif;background:#000}
+    @keyframes spin{to{transform:rotate(360deg)}} .spin{animation:spin 1s linear infinite}
+    @keyframes shimmer{0%{opacity:.4}50%{opacity:.8}100%{opacity:.4}} .shimmer{animation:shimmer 1.6s ease-in-out infinite}</style>
+</head>
+<body class="bg-black text-white min-h-screen flex flex-col">
+  <header class="sticky top-0 z-[1100] w-full px-6 md:px-12 py-4 flex items-center justify-between bg-black/70 backdrop-blur border-b border-white/10">
+    <a href="/" id="lnk-home" class="font-mono tracking-[3px] text-lg">KINA</a>
+    <button id="menu-btn" aria-label="Menu" class="w-11 h-11 rounded-full border border-white/20 flex items-center justify-center hover:bg-white/10"><i data-lucide="menu" class="w-5 h-5"></i></button>
+  </header>
+  <div id="drawer-bg" class="fixed inset-0 z-[1099] bg-black/60 opacity-0 pointer-events-none transition-opacity duration-300"></div>
+  <aside id="drawer" class="fixed top-0 right-0 z-[1101] h-full w-[82%] max-w-sm bg-[#0b0b0a] border-l border-white/10 translate-x-full transition-transform duration-300 flex flex-col" aria-hidden="true">
+    <div class="flex items-center justify-between px-6 py-5 border-b border-white/10"><span class="font-mono tracking-[3px] text-lg">KINA</span><button id="drawer-close" aria-label="Fechar menu" class="w-10 h-10 rounded-full hover:bg-white/10 flex items-center justify-center"><i data-lucide="x" class="w-5 h-5"></i></button></div>
+    <nav id="drawer-nav" class="flex-1 overflow-y-auto px-4 py-4 flex flex-col"></nav>
+    <div id="drawer-foot" class="px-6 py-5 border-t border-white/10 flex items-center justify-between gap-3"></div>
+  </aside>
+
+  <main class="flex-1 w-full max-w-6xl mx-auto px-4 sm:px-8 py-12">
+    <div class="text-center mb-8">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-white/20 text-xs text-white/70 mb-3"><i data-lucide="sparkles" class="w-3.5 h-3.5"></i> <span id="badge">Provador com IA</span></div>
+      <h1 id="h1" class="text-4xl md:text-6xl font-semibold tracking-tight mb-3">Provador IA</h1>
+      <p id="sub" class="text-white/70 max-w-2xl mx-auto"></p>
+    </div>
+
+    <div class="flex justify-center mb-2"><div id="tipo-pills" class="flex flex-wrap justify-center gap-2"></div></div>
+    <p id="step" class="text-center text-white/50 text-sm mb-6"></p>
+
+    <div id="result" class="hidden max-w-3xl mx-auto mb-10">
+      <div class="rounded-2xl overflow-hidden border border-white/10 bg-white/5">
+        <div class="relative aspect-square bg-black flex items-center justify-center">
+          <img id="r-img" alt="" class="w-full h-full object-cover hidden">
+          <div id="r-load" class="absolute inset-0 flex flex-col items-center justify-center gap-4 hidden">
+            <img id="r-thumb" class="absolute inset-0 w-full h-full object-cover opacity-20 shimmer" alt="">
+            <div class="relative z-10 w-10 h-10 rounded-full border-2 border-white/20 border-t-white spin"></div>
+            <p id="r-msg" class="relative z-10 text-sm text-white/80"></p>
+          </div>
+          <div id="r-err" class="absolute inset-0 hidden flex-col items-center justify-center gap-2 p-6 text-center"></div>
+        </div>
+        <div class="p-5 flex flex-wrap items-center justify-between gap-3">
+          <div><div id="r-cap" class="font-semibold"></div><div id="r-tag" class="text-white/50 text-xs"></div></div>
+          <div class="flex gap-2">
+            <a id="r-buy" href="#" target="_blank" rel="noopener" class="px-5 py-2.5 rounded-lg bg-white text-black text-sm font-semibold hover:bg-white/90 flex items-center gap-2 hidden"><i data-lucide="message-circle" class="w-4 h-4"></i> <span id="r-buylbl">Quero esta</span></a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="grid" class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-2 sm:gap-3"></div>
+  </main>
+
+  <footer class="w-full border-t border-white/10 py-8 px-4 md:px-16 text-center text-white/50 text-sm"><a href="/" id="lnk-foot" class="hover:text-white">© <span id="yr"></span> Hugo Carmo — Artista Visual</a></footer>
+
+  <script>
+    const SUPA="https://gobslzsggskllmhzasti.supabase.co",CONTENT_URL=SUPA+"/storage/v1/object/public/photos/content.json";
+    const LANG=(/^\/en(\/|$)/.test(location.pathname)||new URLSearchParams(location.search).get('lang')==='en')?'en':'pt';
+    const esc=s=>(s==null?"":String(s)).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+    document.documentElement.lang=LANG==='en'?'en':'pt-BR';
+    document.getElementById('yr').textContent=new Date().getFullYear();
+    document.getElementById('canonical').href='https://hugocarmo.com.br'+(LANG==='en'?'/en/provador':'/provador');
+    const params=new URLSearchParams(location.search);
+    function chrome(c){
+      const home=LANG==='en'?'/en':'/';
+      const lh=document.getElementById('lnk-home'),lf=document.getElementById('lnk-foot'); if(lh)lh.href=home; if(lf)lf.href=home;
+      const P=LANG==='en'
+        ?[['/en','Photography'],['/en/temas','Themes'],['/en/provador','AI try-on'],['/en/cicloviagens','Journeys'],['/en/loja','Shop'],['/en/fotolivros','Photo books'],['/en/blog','Travel diary'],['/en/sobre','About'],['/en/faq','FAQ']]
+        :[['/','Fotografias'],['/temas','Temas'],['/provador','Provador IA'],['/cicloviagens','Cicloviagens'],['/loja','Loja'],['/fotolivros','Fotolivros'],['/blog','Diário'],['/sobre','Sobre'],['/faq','FAQ']];
+      const cur=(location.pathname.replace(/\/+$/,'')||'/');
+      document.getElementById('drawer-nav').innerHTML=P.map(([h,l])=>`<a href="${h}" class="px-3 py-3 rounded-lg text-lg ${cur===h.replace(/\/+$/,'')?'bg-white/10 text-white':'text-white/80 hover:bg-white/5 hover:text-white'} transition">${l}</a>`).join('');
+      const lang=LANG==='en'?'<a href="/" class="text-sm font-semibold border border-white/20 rounded px-3 py-1.5 hover:bg-white/10">PT</a>':'<a href="/en" class="text-sm font-semibold border border-white/20 rounded px-3 py-1.5 hover:bg-white/10">EN</a>';
+      document.getElementById('drawer-foot').innerHTML=`<div class="flex items-center gap-3"><a href="${c.contact?.instagram_url||'#'}" target="_blank" rel="noopener" aria-label="Instagram" class="w-9 h-9 flex items-center justify-center rounded-full border border-white/15 text-white/70 hover:text-white hover:bg-white/10"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></a><a href="https://wa.me/${c.contact?.whatsapp||''}" target="_blank" rel="noopener" aria-label="WhatsApp" class="w-9 h-9 flex items-center justify-center rounded-full border border-white/15 text-white/70 hover:text-white hover:bg-white/10"><i data-lucide="message-circle" class="w-4 h-4"></i></a></div>${lang}`;
+      const mb=document.getElementById('menu-btn'),dr=document.getElementById('drawer'),bg=document.getElementById('drawer-bg');
+      const op=()=>{dr.classList.remove('translate-x-full');bg.classList.remove('opacity-0','pointer-events-none');document.body.style.overflow='hidden';};
+      const cl=()=>{dr.classList.add('translate-x-full');bg.classList.add('opacity-0','pointer-events-none');document.body.style.overflow='';};
+      mb.onclick=op;document.getElementById('drawer-close').onclick=cl;bg.onclick=cl;document.addEventListener('keydown',e=>{if(e.key==='Escape')cl();});
+    }
+    fetch(CONTENT_URL+"?v="+Date.now(),{cache:"no-store"}).then(r=>r.json()).then(c=>{
+      const imgUrl=p=>/^https?:\/\//.test(p)?p:(c.bucket_base+"/"+p);
+      const wa=c.contact?.whatsapp||'';
+      const TIPO=LANG==='en'?{blusa:'Tee',print:'Print',bandeira:'Flag'}:{blusa:'Blusa',print:'Quadro',bandeira:'Bandeira'};
+      const MSG=LANG==='en'?{blusa:'Hi, I want the tee with the photo ',print:'Hi, I want the print with the photo ',bandeira:'Hi, I want the flag with the photo '}:{blusa:'Olá, quero a blusa com a foto ',print:'Olá, quero o quadro com a foto ',bandeira:'Olá, quero a bandeira com a foto '};
+      const T={ title:LANG==='en'?'AI try-on':'Provador IA', badge:LANG==='en'?'AI preview':'Provador com IA',
+        sub:LANG==='en'?'Pick a product and a photo — AI shows you the result before you order.':'Escolha um produto e uma foto — a IA mostra o resultado antes de você pedir.',
+        step:LANG==='en'?'Now tap a photo to see it':'Agora toque numa foto para ver o resultado',
+        buy:LANG==='en'?'I want this':'Quero esta', genby:LANG==='en'?'AI-generated preview':'Prévia gerada por IA' };
+      document.getElementById('h1').textContent=T.title; document.getElementById('t').textContent=T.title+' — Hugo Carmo';
+      document.getElementById('badge').textContent=T.badge; document.getElementById('sub').textContent=T.sub; document.getElementById('step').textContent=T.step;
+      document.getElementById('r-buylbl').textContent=T.buy;
+      const fts=(c.photos||[]).filter(p=>p.section==='fotografias').sort((a,b)=>a.order-b.order);
+      const capOf=p=>(LANG==='en'&&p.caption_en)?p.caption_en:(p.caption||'');
+      // tipo pills
+      let selTipo=['blusa','print','bandeira'].includes(params.get('tipo'))?params.get('tipo'):'blusa';
+      let selPath=null, selCap='';
+      const order=['blusa','print','bandeira'];
+      const renderPills=()=>{ document.getElementById('tipo-pills').innerHTML=order.map(tp=>`<button data-tp="${tp}" class="px-4 py-1.5 rounded-full border border-white/20 text-sm ${tp===selTipo?'bg-white text-black':'text-white/80 hover:bg-white/10'} transition">${esc(TIPO[tp])}</button>`).join('');
+        document.querySelectorAll('[data-tp]').forEach(b=>b.addEventListener('click',()=>{ selTipo=b.dataset.tp; renderPills(); if(selPath) generate(selPath,selCap); })); };
+      renderPills();
+      // grid
+      document.getElementById('grid').innerHTML=fts.map(p=>`<button class="thumb group relative rounded-lg overflow-hidden aspect-square bg-white/5" data-path="${esc(p.path)}" data-cap="${esc(capOf(p))}"><img src="${imgUrl(p.path)}" alt="${esc(capOf(p))}" loading="lazy" class="w-full h-full object-cover transition group-hover:scale-105"></button>`).join('');
+      const waLink=()=>"https://api.whatsapp.com/send/?phone="+wa+"&text="+encodeURIComponent(MSG[selTipo]+'"'+selCap+'"')+"&type=phone_number&app_absent=0";
+      const MSGS=LANG==='en'?['Setting up the canvas…','Printing the artwork…','Almost there…']:['Preparando a arte…','Aplicando no produto…','Quase lá…'];
+      let msgTimer=null;
+      function generate(path, cap){
+        selPath=path; selCap=cap;
+        const R=document.getElementById('result'); R.classList.remove('hidden');
+        const img=document.getElementById('r-img'), load=document.getElementById('r-load'), err=document.getElementById('r-err');
+        img.classList.add('hidden'); err.classList.add('hidden'); err.classList.remove('flex'); load.classList.remove('hidden'); load.classList.add('flex');
+        document.getElementById('r-thumb').src=imgUrl(path);
+        document.getElementById('r-cap').textContent=cap; document.getElementById('r-tag').textContent=TIPO[selTipo]+' · '+T.genby;
+        document.getElementById('r-buy').classList.add('hidden');
+        R.scrollIntoView({behavior:'smooth',block:'start'});
+        let mi=0; document.getElementById('r-msg').textContent=MSGS[0]; clearInterval(msgTimer); msgTimer=setInterval(()=>{ mi=(mi+1)%MSGS.length; document.getElementById('r-msg').textContent=MSGS[mi]; },3500);
+        fetch('/api/mockup',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({path, tipo:selTipo})})
+          .then(async r=>{ const j=await r.json(); if(!r.ok) throw new Error(j.error||'erro'); return j; })
+          .then(j=>{ clearInterval(msgTimer); load.classList.add('hidden'); load.classList.remove('flex');
+            img.src=j.url+'?t='+Date.now(); img.onload=()=>img.classList.remove('hidden');
+            const buy=document.getElementById('r-buy'); buy.href=waLink(); buy.classList.remove('hidden');
+            try{ gtag&&gtag('event','mockup_view',{tipo:selTipo,cached:!!j.cached}); }catch(e){} })
+          .catch(e=>{ clearInterval(msgTimer); load.classList.add('hidden'); load.classList.remove('flex');
+            err.classList.remove('hidden'); err.classList.add('flex');
+            err.innerHTML=`<i data-lucide="alert-triangle" class="w-6 h-6 text-white/60"></i><p class="text-sm text-white/70">${esc(e.message)}</p><p class="text-xs text-white/40">${LANG==='en'?'Try another photo or come back soon.':'Tente outra foto ou volte em instantes.'}</p>`;
+            if(window.lucide)lucide.createIcons(); });
+      }
+      document.querySelectorAll('.thumb').forEach(b=>b.addEventListener('click',()=>{
+        document.querySelectorAll('.thumb').forEach(x=>x.classList.remove('ring-2','ring-white'));
+        b.classList.add('ring-2','ring-white');
+        generate(b.dataset.path, b.dataset.cap);
+      }));
+      chrome(c); if(window.lucide)lucide.createIcons();
+    }).catch(()=>{ chrome({}); if(window.lucide)lucide.createIcons(); });
+  </script>
+</body>
+</html>
