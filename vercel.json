@@ -3,6 +3,7 @@
   "cleanUrls": true,
   "trailingSlash": false,
   "rewrites": [
+    { "source": "/sitemap.xml", "destination": "/api/sitemap" },
     { "source": "/blog/:slug", "destination": "/post" },
     { "source": "/en/blog/:slug", "destination": "/post" },
     { "source": "/en/blog", "destination": "/blog" },
