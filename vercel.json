@@ -2,10 +2,14 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "cleanUrls": true,
   "trailingSlash": false,
+  "functions": {
+    "api/post.js": { "includeFiles": "post.html" }
+  },
   "rewrites": [
     { "source": "/sitemap.xml", "destination": "/api/sitemap" },
-    { "source": "/blog/:slug", "destination": "/post" },
-    { "source": "/en/blog/:slug", "destination": "/post" },
+    { "source": "/llms.txt", "destination": "/api/llms" },
+    { "source": "/blog/:slug", "destination": "/api/post?slug=:slug" },
+    { "source": "/en/blog/:slug", "destination": "/api/post?slug=:slug&lang=en" },
     { "source": "/en/blog", "destination": "/blog" },
     { "source": "/viagem/:slug", "destination": "/viagem" },
     { "source": "/en/viagem/:slug", "destination": "/viagem" },
