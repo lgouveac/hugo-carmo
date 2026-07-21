@@ -5,6 +5,14 @@
   "functions": {
     "api/post.js": { "includeFiles": "post.html" }
   },
+  "redirects": [
+    {
+      "source": "/:path*",
+      "has": [{ "type": "host", "value": "www.hugocarmo.com.br" }],
+      "destination": "https://hugocarmo.com.br/:path*",
+      "permanent": true
+    }
+  ],
   "rewrites": [
     { "source": "/sitemap.xml", "destination": "/api/sitemap" },
     { "source": "/llms.txt", "destination": "/api/llms" },
