@@ -1,0 +1,28 @@
+name: Radar de editais (Hugo)
+
+on:
+  schedule:
+    # Segunda-feira 11:07 UTC = 08:07 BRT (GitHub cron é sempre UTC; pode atrasar alguns minutos)
+    - cron: '7 11 * * 1'
+  workflow_dispatch:
+    inputs:
+      dry:
+        description: 'dry-run (cura mas NÃO envia e-mail)'
+        type: boolean
+        default: false
+
+jobs:
+  radar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Rodar radar
+        run: node scripts/radar.mjs
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          DRY: ${{ inputs.dry }}

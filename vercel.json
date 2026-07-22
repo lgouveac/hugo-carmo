@@ -29,8 +29,5 @@
     { "source": "/en/sobre", "destination": "/sobre" },
     { "source": "/en/faq", "destination": "/faq" },
     { "source": "/en", "destination": "/" }
-  ],
-  "crons": [
-    { "path": "/api/radar", "schedule": "7 11 * * 1" }
   ]
 }
