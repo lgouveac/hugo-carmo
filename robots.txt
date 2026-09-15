@@ -18,4 +18,4 @@ Allow: /
 User-agent: Google-Extended
 Allow: /
 
-Sitemap: https://hugocarmo.com.br/sitemap.xml
+Sitemap: https://www.hugocarmo.com.br/sitemap.xml

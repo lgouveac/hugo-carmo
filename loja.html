@@ -14,10 +14,10 @@
   <meta name="description" id="meta-desc" content="Loja de Hugo Carmo — prints fine art das fotografias (por tema), fotolivros, blusas e bandeiras. Tamanho personalizado, fechamento pelo WhatsApp.">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="robots" content="index, follow, max-image-preview:large">
-  <link rel="canonical" id="canonical" href="https://hugocarmo.com.br/loja">
-  <link rel="alternate" hreflang="pt-BR" href="https://hugocarmo.com.br/loja">
-  <link rel="alternate" hreflang="en" href="https://hugocarmo.com.br/en/loja">
-  <link rel="alternate" hreflang="x-default" href="https://hugocarmo.com.br/loja">
+  <link rel="canonical" id="canonical" href="https://www.hugocarmo.com.br/loja">
+  <link rel="alternate" hreflang="pt-BR" href="https://www.hugocarmo.com.br/loja">
+  <link rel="alternate" hreflang="en" href="https://www.hugocarmo.com.br/en/loja">
+  <link rel="alternate" hreflang="x-default" href="https://www.hugocarmo.com.br/loja">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Hugo Carmo">
   <meta property="og:title" id="og-title" content="Loja — Hugo Carmo">
@@ -72,7 +72,7 @@
     const slugify=s=>String(s||'').toLowerCase().normalize('NFKD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'');
     document.documentElement.lang=LANG==='en'?'en':'pt-BR';
     document.getElementById('yr').textContent=new Date().getFullYear();
-    document.getElementById('canonical').href='https://hugocarmo.com.br'+(LANG==='en'?'/en/loja':'/loja');
+    document.getElementById('canonical').href='https://www.hugocarmo.com.br'+(LANG==='en'?'/en/loja':'/loja');
     const params=new URLSearchParams(location.search);
     function chrome(c){
       const home=LANG==='en'?'/en':'/';

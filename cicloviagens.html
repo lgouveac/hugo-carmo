@@ -14,10 +14,10 @@
   <meta name="description" id="meta-desc" content="Cicloviagens de Hugo Carmo — séries fotográficas organizadas pelas viagens de bicicleta pelo Brasil e além.">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="robots" content="index, follow, max-image-preview:large">
-  <link rel="canonical" id="canonical" href="https://hugocarmo.com.br/cicloviagens">
-  <link rel="alternate" hreflang="pt-BR" href="https://hugocarmo.com.br/cicloviagens">
-  <link rel="alternate" hreflang="en" href="https://hugocarmo.com.br/en/cicloviagens">
-  <link rel="alternate" hreflang="x-default" href="https://hugocarmo.com.br/cicloviagens">
+  <link rel="canonical" id="canonical" href="https://www.hugocarmo.com.br/cicloviagens">
+  <link rel="alternate" hreflang="pt-BR" href="https://www.hugocarmo.com.br/cicloviagens">
+  <link rel="alternate" hreflang="en" href="https://www.hugocarmo.com.br/en/cicloviagens">
+  <link rel="alternate" hreflang="x-default" href="https://www.hugocarmo.com.br/cicloviagens">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Hugo Carmo">
   <meta property="og:title" id="og-title" content="Cicloviagens — Hugo Carmo">
@@ -56,7 +56,7 @@
     const locOf=cap=>{const p=String(cap||'').split(',').map(x=>x.trim()).filter(Boolean);if(!p.length)return '';if(/^\d{4}$/.test(p[p.length-1]))p.pop();return p[p.length-1]||'';};
     document.documentElement.lang=LANG==='en'?'en':'pt-BR';
     document.getElementById('yr').textContent=new Date().getFullYear();
-    document.getElementById('canonical').href='https://hugocarmo.com.br'+(LANG==='en'?'/en/cicloviagens':'/cicloviagens');
+    document.getElementById('canonical').href='https://www.hugocarmo.com.br'+(LANG==='en'?'/en/cicloviagens':'/cicloviagens');
     function chrome(c){
       const home=LANG==='en'?'/en':'/';
       const lh=document.getElementById('lnk-home'),lf=document.getElementById('lnk-foot'); if(lh)lh.href=home; if(lf)lf.href=home;

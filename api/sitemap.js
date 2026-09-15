@@ -3,7 +3,7 @@
 // sitemap automaticamente, sem precisar de commit/redeploy.
 // Exposto como /sitemap.xml via rewrite no vercel.json.
 
-const SITE = 'https://hugocarmo.com.br';
+const SITE = 'https://www.hugocarmo.com.br';
 const CONTENT_URL = 'https://gobslzsggskllmhzasti.supabase.co/storage/v1/object/public/photos/content.json';
 
 const STATIC_PAGES = [
