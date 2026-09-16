@@ -36,6 +36,7 @@ const HEIGHT = Number(arg("height", 1080));
 const SPEED = Number(arg("speed", Math.round(HEIGHT * 0.5))); // px por segundo
 const OUT = path.resolve(arg("out", path.join(BUILD, "hugo-carmo-site.mp4")));
 const ONLY = arg("only", "");           // ex.: --only /,/loja
+const CRF = String(Number(arg("crf", 23)));  // qualidade do mp4 (menor = melhor/maior)
 const KEEP_WEBM = flag("keep-webm");
 const SHOTS = flag("shots");             // diagnóstico: screenshots + erros, sem gravar
 
@@ -506,7 +507,7 @@ async function main() {
   await new Promise((resolve, reject) => {
     const p = spawn(
       ffmpeg,
-      ["-y", "-i", webm, "-c:v", "libx264", "-preset", "slow", "-crf", "20", "-pix_fmt", "yuv420p",
+      ["-y", "-i", webm, "-c:v", "libx264", "-preset", "slow", "-crf", CRF, "-pix_fmt", "yuv420p",
        "-vf", "fps=30", "-movflags", "+faststart", OUT],
       { stdio: ["ignore", "ignore", "inherit"] }
     );
