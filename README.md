@@ -86,3 +86,22 @@ O painel `/admin` precisa das funções serverless — rode com a Vercel CLI:
 npm i -g vercel
 vercel dev    # cria um .env local com as 3 variáveis acima
 ```
+
+## Vídeo do site (tour gravado)
+
+Gera um vídeo passeando por todas as páginas públicas (home/galeria, loja, temas,
+fotolivros, cicloviagens, provador, diário, cicloviagem, sobre e FAQ), com abertura
+do menu e do lightbox na home:
+
+```bash
+node scripts/site-video.mjs                    # 1920x1080 → .video-build/hugo-carmo-site.mp4
+node scripts/site-video.mjs --width 1080 --height 1920   # vertical (reels/stories)
+node scripts/site-video.mjs --speed 420 --out /tmp/tour.mp4
+node scripts/site-video.mjs --shots            # só screenshots + erros de cada página (diagnóstico)
+```
+
+O script sobe o site desta pasta num servidor local e resolve tudo offline: instala as
+ferramentas em `.video-build/tools` (Playwright, Tailwind, GSAP, Lucide, ffmpeg), gera o
+CSS do Tailwind a partir dos próprios arquivos (no lugar do CDN) e serve `content.json`
+e as fotos da pasta `images/` no lugar do Supabase. Imagens que só existem nos buckets
+(logo e fotos de produto) entram como substitutas do acervo local.
