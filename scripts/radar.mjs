@@ -95,7 +95,7 @@ function buildText(opps) {
     method: 'POST',
     headers: { Authorization: `Bearer ${RESEND}`, 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      from: 'Radar Hugo Carmo <lucas.carmo@flowcode.cc>', to: ['hugo.gcarmo@gmail.com'], reply_to: 'lucas.carmo@flowcode.cc',
+      from: 'Radar Hugo Carmo <arte@flowcode.cc>', to: ['hugo.gcarmo@gmail.com', 'lucas.carmo@flowcode.cc'], reply_to: 'arte@flowcode.cc',
       subject: 'Radar de oportunidades — editais gratuitos de fotografia',
       html: buildHtml(opps), text: buildText(opps),
     }),
