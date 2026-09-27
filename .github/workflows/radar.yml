@@ -13,6 +13,9 @@ on:
       check_id:
         description: '(debug) ID de e-mail do Resend pra checar status de entrega, em vez de rodar o radar'
         required: false
+      resend_id:
+        description: '(debug) ID de e-mail do Resend pra reenviar o mesmo conteúdo pro destinatário extra, em vez de rodar o radar'
+        required: false
 
 jobs:
   radar:
@@ -37,8 +40,31 @@ jobs:
           '
         env:
           RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+      - name: Reenviar e-mail existente pro destinatário extra (debug)
+        if: ${{ inputs.resend_id != '' }}
+        run: |
+          node -e '
+            (async () => {
+              const id = process.env.RESEND_ID;
+              const key = process.env.RESEND_API_KEY;
+              const r = await fetch(`https://api.resend.com/emails/${id}`, { headers: { Authorization: `Bearer ${key}` } });
+              const o = await r.json();
+              if (!r.ok) { console.error("Falha ao buscar original:", JSON.stringify(o)); process.exit(1); }
+              const r2 = await fetch("https://api.resend.com/emails", {
+                method: "POST",
+                headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
+                body: JSON.stringify({ from: o.from, to: ["lucas.carmo@flowcode.cc"], reply_to: o.reply_to, subject: o.subject, html: o.html, text: o.text }),
+              });
+              const j2 = await r2.json();
+              if (!r2.ok) { console.error("Falha ao reenviar:", JSON.stringify(j2)); process.exit(1); }
+              console.log("Reenviado. id=" + j2.id);
+            })();
+          '
+        env:
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          RESEND_ID: ${{ inputs.resend_id }}
       - name: Rodar radar
-        if: ${{ inputs.check_id == '' }}
+        if: ${{ inputs.check_id == '' && inputs.resend_id == '' }}
         run: node scripts/radar.mjs
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
