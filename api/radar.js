@@ -12,6 +12,21 @@ const PORTAIS = [
   ['Photo Contest Calendar', 'https://www.photocontestcalendar.com/'],
 ];
 
+// Pacote de inscrição: dados prontos pra copiar e colar nos formulários dos editais.
+const PACOTE = {
+  bioCurtaPt: 'Hugo Carmo (KINA) é um artista visual e fotógrafo brasileiro, baseado no Rio de Janeiro. Fotografa natureza, paisagem e cotidiano em ciclo-viagens pelo Brasil e pelo mundo, em preto & branco e cor.',
+  bioLongaPt: 'Através da fotografia, busco capturar momentos e transmitir emoções. Meu olhar se volta para a beleza da natureza e para o cotidiano urbano, permitindo-me conectar com as histórias que se desenrolam ao meu redor. Quero transportar o espectador para o local, fazendo com que experienciem a essência do momento registrado. Cada imagem é um convite para explorar, apreciar e preservar a natureza, assim como valorizar as relações humanas que encontramos pelo caminho.',
+  artistStatementEn: 'Hugo Carmo (KINA) is a Brazilian visual artist and photographer based in Rio de Janeiro. His work documents nature, everyday life and long-distance bicycle journeys across Brazil and abroad, moving between black-and-white and color. His ongoing series "Escombros" explores abandoned structures and ruins, examining memory, decay and the passage of time. His photographs have been exhibited in Austria, Germany and Brazil.',
+  localizacao: 'Rio de Janeiro, RJ — Brasil',
+  links: { site: 'https://www.hugocarmo.com.br', instagram: 'https://www.instagram.com/kina.com.br/' },
+  exposicoes: [
+    { year: '2017', text: 'Exposição Raiding Project — Raiding, Áustria.' },
+    { year: '2017', text: 'Exposição Artlab Munich — Munique, Alemanha.' },
+    { year: '2022', text: 'Ocupação EAV — Escola de Artes Visuais, Rio de Janeiro (curadoria Denise Cathilina).' },
+    { year: '2023', text: 'Primeiro Salão de Fotografia, Museu de Arte Moderna de Resende.' },
+  ],
+};
+
 const PROMPT = `Você é um radar semanal de oportunidades para o fotógrafo brasileiro Hugo Carmo (Rio de Janeiro; trabalho de viagem/ciclo-viagens, natureza, paisagem e documental, P&B e cor; série "Escombros" sobre ruínas). Hoje é ${new Date().toISOString().slice(0,10)}.
 
 Pesquise na web editais, concursos, grants e chamadas de EXPOSIÇÃO de fotografia que estejam ABERTOS AGORA, com INSCRIÇÃO 100% GRATUITA (sem taxa) e prazo NO FUTURO. Fontes boas: phmuseum.com/awards, lensculture.com/competitions, lenscratch.com, booooooom.com/open-calls, all-about-photo.com, theartlist.com, photocontestcalendar.com. Faça buscas como "free photography open call ${new Date().getFullYear()} no entry fee".
@@ -64,6 +79,15 @@ async function curate(OAI) {
 
 const esc = s => String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
+function pacoteHtml() {
+  const exp = PACOTE.exposicoes.map(e => `${e.year} — ${esc(e.text)}`).join('<br>');
+  return `<div style="margin:26px 0 4px;font-size:15px;font-weight:700;color:#0a0a0a;">📎 Pacote de inscrição (copie e cole)</div><table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border:1px solid #e4e4e7;border-radius:12px;margin:10px 0 4px;"><tr><td style="padding:16px 18px;font-size:13px;color:#3f3f46;line-height:1.7;"><strong>Bio curta (PT):</strong><br>${esc(PACOTE.bioCurtaPt)}<br><br><strong>Bio completa (PT):</strong><br>${esc(PACOTE.bioLongaPt)}<br><br><strong>Artist statement (EN):</strong><br>${esc(PACOTE.artistStatementEn)}<br><br><strong>Localização:</strong> ${esc(PACOTE.localizacao)}<br><strong>Site:</strong> <a href="${PACOTE.links.site}" style="color:#0a0a0a;">${PACOTE.links.site}</a><br><strong>Instagram:</strong> <a href="${PACOTE.links.instagram}" style="color:#0a0a0a;">${PACOTE.links.instagram}</a><br><br><strong>Exposições (pra campo de CV/exhibitions):</strong><br>${exp}</td></tr></table><div style="font-size:12px;color:#a1a1aa;line-height:1.6;margin:6px 0 0;">Cada plataforma pede campos diferentes — ajuste o tamanho do texto ao limite de caracteres do formulário.</div>`;
+}
+function pacoteText() {
+  const exp = PACOTE.exposicoes.map(e => `  ${e.year} — ${e.text}`).join('\n');
+  return `\nPacote de inscrição (copie e cole)\n\nBio curta (PT): ${PACOTE.bioCurtaPt}\n\nBio completa (PT): ${PACOTE.bioLongaPt}\n\nArtist statement (EN): ${PACOTE.artistStatementEn}\n\nLocalização: ${PACOTE.localizacao}\nSite: ${PACOTE.links.site}\nInstagram: ${PACOTE.links.instagram}\n\nExposições:\n${exp}\n`;
+}
+
 function card(o) {
   const [bg, tc] = o.urgent ? ['#fee2e2', '#991b1b'] : ['#dcfce7', '#166534'];
   const pill = (t, b, c) => `<span style="display:inline-block;background:${b};color:${c};font-size:12px;font-weight:600;padding:3px 10px;border-radius:999px;margin:0 6px 6px 0;">${esc(t)}</span>`;
@@ -73,17 +97,19 @@ function card(o) {
 
 function buildHtml(opps) {
   const cards = opps.map(card).join('');
+  const pacote = opps.length ? pacoteHtml() : '';
   const portais = `<div style="margin:22px 0 4px;font-size:15px;font-weight:700;color:#0a0a0a;">📌 Portais pra ficar de olho (sempre atualizados)</div><div style="font-size:13px;color:#3f3f46;line-height:1.9;">${PORTAIS.map(([n, u]) => `<a href="${u}" style="color:#0a0a0a;">${n}</a>`).join(' · ')}</div>`;
   const intro = opps.length
     ? `Oi Hugo! Separei oportunidades <strong>abertas agora</strong> e <strong>100% gratuitas</strong> (sem taxa de inscrição), pensando no seu trabalho de viagem, paisagem e documental. Confirme prazo e regras na página oficial antes de aplicar.`
     : `Oi Hugo! Esta semana não consegui confirmar novas chamadas gratuitas com segurança, mas deixo os portais sempre atualizados abaixo — vale uma passada de olho.`;
   const sub = opps.length ? `${opps.length} oportunidade(s) aberta(s) e 100% gratuita(s)` : 'portais de oportunidades';
-  return `<!doctype html><html><body style="margin:0;padding:0;background:#f4f4f5;"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f4f4f5;padding:24px 12px;"><tr><td align="center"><table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;background:#ffffff;border:1px solid #e4e4e7;border-radius:16px;overflow:hidden;font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;"><tr><td style="background:#0a0a0a;padding:26px 26px 22px;"><div style="font-size:11px;letter-spacing:2px;color:#a1a1aa;text-transform:uppercase;">Radar de oportunidades</div><div style="font-size:24px;font-weight:700;color:#ffffff;margin:8px 0 4px;line-height:1.25;">Editais gratuitos de fotografia &amp; exposições</div><div style="font-size:13px;color:#a1a1aa;">${sub}</div></td></tr><tr><td style="padding:24px 26px 8px;"><p style="font-size:14px;color:#3f3f46;line-height:1.6;margin:0 0 18px;">${intro}</p>${cards}${portais}<p style="font-size:12px;color:#a1a1aa;line-height:1.6;margin:22px 0 2px;border-top:1px solid #f0f0f1;padding-top:16px;">Curadoria de oportunidades gratuitas para Hugo Carmo · enviado por flowcode. As datas são informativas — confirme prazo e regras na página oficial de cada edital antes de aplicar.</p></td></tr></table></td></tr></table></body></html>`;
+  return `<!doctype html><html><body style="margin:0;padding:0;background:#f4f4f5;"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f4f4f5;padding:24px 12px;"><tr><td align="center"><table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;background:#ffffff;border:1px solid #e4e4e7;border-radius:16px;overflow:hidden;font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;"><tr><td style="background:#0a0a0a;padding:26px 26px 22px;"><div style="font-size:11px;letter-spacing:2px;color:#a1a1aa;text-transform:uppercase;">Radar de oportunidades</div><div style="font-size:24px;font-weight:700;color:#ffffff;margin:8px 0 4px;line-height:1.25;">Editais gratuitos de fotografia &amp; exposições</div><div style="font-size:13px;color:#a1a1aa;">${sub}</div></td></tr><tr><td style="padding:24px 26px 8px;"><p style="font-size:14px;color:#3f3f46;line-height:1.6;margin:0 0 18px;">${intro}</p>${cards}${pacote}${portais}<p style="font-size:12px;color:#a1a1aa;line-height:1.6;margin:22px 0 2px;border-top:1px solid #f0f0f1;padding-top:16px;">Curadoria de oportunidades gratuitas para Hugo Carmo · enviado por flowcode. As datas são informativas — confirme prazo e regras na página oficial de cada edital antes de aplicar.</p></td></tr></table></td></tr></table></body></html>`;
 }
 
 function buildText(opps) {
   let t = 'Radar de oportunidades — editais gratuitos de fotografia\n\nOi Hugo!\n\n';
   for (const o of opps) t += `- ${o.name}\n  Prazo: ${o.deadline} | Gratuito\n  ${o.desc || ''}\n  ${o.url}\n\n`;
+  if (opps.length) t += pacoteText() + '\n';
   t += 'Portais: ' + PORTAIS.map(([n, u]) => `${n} (${u})`).join(', ') + '\n\nConfirme prazo e regras na página oficial antes de aplicar. — flowcode';
   return t;
 }
