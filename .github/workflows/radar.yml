@@ -10,6 +10,9 @@ on:
         description: 'dry-run (cura mas NÃO envia e-mail)'
         type: boolean
         default: false
+      check_id:
+        description: '(debug) ID de e-mail do Resend pra checar status de entrega, em vez de rodar o radar'
+        required: false
 
 jobs:
   radar:
@@ -20,7 +23,22 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '20'
+      - name: Checar status de e-mail (debug)
+        if: ${{ inputs.check_id != '' }}
+        run: |
+          curl -s -H "Authorization: Bearer $RESEND_API_KEY" "https://api.resend.com/emails/${{ inputs.check_id }}" | node -e '
+            let d="";
+            process.stdin.on("data", c => d += c);
+            process.stdin.on("end", () => {
+              const j = JSON.parse(d);
+              delete j.html; delete j.text;
+              console.log(JSON.stringify(j, null, 2));
+            });
+          '
+        env:
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
       - name: Rodar radar
+        if: ${{ inputs.check_id == '' }}
         run: node scripts/radar.mjs
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
