@@ -35,7 +35,7 @@ export async function detect(buf) {
   const m = new Uint8Array(N);
   for (let i = 0, p = 0; i < N; i++, p += 3) {
     const r = data[p], g = data[p + 1], b = data[p + 2];
-    if (r > 150 && b > 150 && r - g > 90 && b - g > 90) m[i] = 1;
+    if (r > 150 && g < 80 && r - g > 120 && b - g > 60) m[i] = 1; // magenta/pink (a IA às vezes puxa pro pink)
   }
   const lab = new Int32Array(N); let best = { n: 0 }, id = 0;
   const st = new Int32Array(N);
@@ -88,7 +88,7 @@ export async function composite(tplBuf, photoBuf, kind) {
     layers.push({ input: rgba, raw: { width: B.w, height: B.h, channels: 4 }, left: B.x, top: B.y });
   } else {
     const bg = kind === 'mat' ? { r: 246, g: 245, b: 241 } : kind === 'fabric' ? { r: 244, g: 243, b: 239 } : d.around;
-    const margin = kind === 'mat' ? Math.round(Math.min(B.w, B.h) * 0.07) : kind === 'fabric' ? Math.round(Math.min(B.w, B.h) * 0.03) : 0;
+    const margin = kind === 'mat' ? Math.round(Math.min(B.w, B.h) * 0.04) : kind === 'fabric' ? Math.round(Math.min(B.w, B.h) * 0.03) : 0;
     const iw = B.w - 2 * margin, ih = B.h - 2 * margin;
     const img = await photo.resize(iw, ih, { fit: 'inside' }).toBuffer({ resolveWithObject: true });
     layers.push({ input: { create: { width: B.w, height: B.h, channels: 3, background: bg } }, left: B.x, top: B.y });
