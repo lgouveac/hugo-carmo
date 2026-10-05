@@ -8,6 +8,7 @@
   "rewrites": [
     { "source": "/sitemap.xml", "destination": "/api/sitemap" },
     { "source": "/llms.txt", "destination": "/api/llms" },
+    { "source": "/p/:id", "destination": "/api/share?id=:id" },
     { "source": "/blog/:slug", "destination": "/api/post?slug=:slug" },
     { "source": "/en/blog/:slug", "destination": "/api/post?slug=:slug&lang=en" },
     { "source": "/viagem/:slug", "destination": "/viagem" },

@@ -24,6 +24,9 @@
   <link rel="icon" type="image/png" href="https://neompzltxilcimodyvpd.supabase.co/storage/v1/object/public/flou//Captura%20de%20tela%202025-06-16%20224245.png">
   <link rel="apple-touch-icon" href="https://neompzltxilcimodyvpd.supabase.co/storage/v1/object/public/flou//Captura%20de%20tela%202025-06-16%20224245.png">
   <link rel="preconnect" href="https://gobslzsggskllmhzasti.supabase.co" crossorigin>
+  <link rel="preload" as="image" href="https://gobslzsggskllmhzasti.supabase.co/storage/v1/object/public/photos/up-logo-kina-transp-bc0c4ff7.png" fetchpriority="high">
+  <!-- Começa a baixar o conteúdo já no <head>, em paralelo com o resto (hero/logo aparecem mais cedo) -->
+  <script>window.__CONTENT=fetch("https://gobslzsggskllmhzasti.supabase.co/storage/v1/object/public/photos/content.json?v="+Date.now(),{cache:"no-store"}).then(function(r){if(!r.ok)throw new Error(r.status);return r.json();});</script>
   <!-- Open Graph (WhatsApp/Facebook/Instagram) -->
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Hugo Carmo">
@@ -130,7 +133,7 @@
     <div id="hero-marquee" class="absolute inset-0 w-full h-full flex overflow-hidden pointer-events-none select-none [mask-image:_linear-gradient(to_right,transparent_0,_black_128px,_black_calc(100%-128px),transparent_100%)] z-0"></div>
     <div class="hero-overlay"></div>
     <header class="hero-content w-full px-6 py-6 md:px-16 flex items-center justify-between gap-4 relative z-10">
-      <img id="logo" src="" alt="Hugo Carmo — KINA" class="h-16 md:h-24 w-auto object-contain">
+      <img id="logo" src="https://gobslzsggskllmhzasti.supabase.co/storage/v1/object/public/photos/up-logo-kina-transp-bc0c4ff7.png" alt="Hugo Carmo — KINA" width="313" height="85" fetchpriority="high" decoding="async" class="h-16 md:h-24 w-auto object-contain">
     </header>
     <div class="hero-content flex-1 flex items-center justify-center w-full px-4 sm:px-8 py-8 md:py-16">
       <div class="w-full max-w-6xl mx-auto text-center">
@@ -435,14 +438,16 @@
       if(c.faq?.items?.length){ const ld=document.getElementById('ld-faq'); if(ld) ld.textContent=JSON.stringify({"@context":"https://schema.org","@type":"FAQPage","mainEntity":c.faq.items.map(q=>({"@type":"Question","name":q.q,"acceptedAnswer":{"@type":"Answer","text":q.a}}))}); }
       try{ const prices=(c.products||[]).map(p=>parseFloat(String(p.price).replace(/[^0-9,]/g,'').replace(',','.'))).filter(n=>n>0); if(prices.length){ const ld=document.getElementById('ld-product'); if(ld){ const o=JSON.parse(ld.textContent); o.offers.lowPrice=String(Math.min(...prices)); ld.textContent=JSON.stringify(o); } } }catch(e){}
       // Logo + hero
-      document.getElementById('logo').src = c.logo || '';
+      { const lg=document.getElementById('logo'); if(c.logo && lg.getAttribute('src')!==c.logo) lg.src=c.logo; }
       document.getElementById('hero-title1').textContent = c.hero.title1 || '';
       document.getElementById('hero-title2').textContent = c.hero.title2 || '';
       document.getElementById('hero-subtitle').innerHTML = c.hero.subtitle || '';
       document.getElementById('hero-cta').textContent = c.hero.cta || 'Comprar obras';
       // Hero marquee
       const hi = (c.backgrounds?.hero_mode==='custom' && (c.backgrounds.hero_images||[]).length) ? c.backgrounds.hero_images.map(p=>({path:p})) : fotos().slice(0,5);
-      const strip = h => `<div class="flex-none flex animate-marquee space-x-4 pr-4"${h?' aria-hidden="true"':''}>`+hi.map(p=>`<img src="${imgUrl(p.path)}" alt="" class="h-full max-h-[100vh] rounded-2xl object-cover opacity-70">`).join('')+`</div>`;
+      // versão redimensionada pelo Supabase (≈3x mais leve que o arquivo original) pra faixa do hero
+      const heroSrc = p => /^https?:\/\//.test(p) ? p : (C.bucket_base.replace('/object/public/','/render/image/public/') + '/' + p + '?height=900&quality=70');
+      const strip = h => `<div class="flex-none flex animate-marquee space-x-4 pr-4"${h?' aria-hidden="true"':''}>`+hi.map((p,i)=>`<img src="${heroSrc(p.path)}" alt="" ${!h&&i<2?'fetchpriority="high"':'loading="lazy"'} decoding="async" class="h-full max-h-[100vh] rounded-2xl object-cover opacity-70">`).join('')+`</div>`;
       document.getElementById('hero-marquee').innerHTML = hi.length ? strip(false)+strip(true) : '';
       // Menu lateral (drawer) — cada categoria é uma página própria
       const PAGES = LANG==='en'
@@ -540,8 +545,7 @@
     modalImg.addEventListener('click', closeLightbox);
     document.addEventListener('keydown', e=>{ if(!modalBg.classList.contains('hidden') && (e.key==='Escape'||e.key==='Enter'||e.key===' ')) closeLightbox(); });
 
-    fetch(CONTENT_URL + "?v=" + Date.now(), {cache:"no-store"})
-      .then(r=>{ if(!r.ok) throw new Error(r.status); return r.json(); })
+    (window.__CONTENT || fetch(CONTENT_URL + "?v=" + Date.now(), {cache:"no-store"}).then(r=>{ if(!r.ok) throw new Error(r.status); return r.json(); }))
       .then(raw => render(LANG==='en' ? mergeEn(raw) : raw))
       .catch(err=>{ console.error("content load failed", err); document.getElementById('load-error').classList.remove('hidden'); });
   </script>

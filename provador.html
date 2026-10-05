@@ -70,7 +70,9 @@
         </div>
         <div class="p-5 flex flex-wrap items-center justify-between gap-3">
           <div><div id="r-cap" class="font-semibold"></div><div id="r-tag" class="text-white/50 text-xs"></div></div>
-          <div class="flex gap-2">
+          <div class="flex flex-wrap gap-2">
+            <button id="r-share" type="button" class="px-4 py-2.5 rounded-lg border border-white/25 text-sm font-semibold hover:bg-white/10 flex items-center gap-2 hidden"><i data-lucide="share-2" class="w-4 h-4"></i> <span id="r-sharelbl">Compartilhar</span></button>
+            <button id="r-dl" type="button" class="px-4 py-2.5 rounded-lg border border-white/25 text-sm font-semibold hover:bg-white/10 flex items-center gap-2 hidden"><i data-lucide="download" class="w-4 h-4"></i> <span id="r-dllbl">Baixar</span></button>
             <a id="r-buy" href="#" target="_blank" rel="noopener" class="px-5 py-2.5 rounded-lg bg-white text-black text-sm font-semibold hover:bg-white/90 flex items-center gap-2 hidden"><i data-lucide="message-circle" class="w-4 h-4"></i> <span id="r-buylbl">Quero esta</span></a>
           </div>
         </div>
@@ -131,9 +133,15 @@
         w.classList.toggle('hidden',!on); w.classList.toggle('flex',on);
         document.getElementById('room-lbl').textContent=LANG==='en'?'Room':'Cômodo';
         document.getElementById('room-pills').innerHTML=Object.keys(ROOM).map(r=>`<button data-room="${r}" class="${pillCls(r===selRoom)}">${esc(ROOM[r])}</button>`).join('');
-        document.querySelectorAll('[data-room]').forEach(b=>b.addEventListener('click',()=>{ selRoom=b.dataset.room; renderRooms(); if(selPath) generate(selPath,selCap); })); };
+        document.querySelectorAll('[data-room]').forEach(b=>b.addEventListener('click',()=>{ selRoom=b.dataset.room; renderRooms(); reset(); })); };
       const renderPills=()=>{ document.getElementById('tipo-pills').innerHTML=order.map(tp=>`<button data-tp="${tp}" class="${pillCls(tp===selTipo)}">${esc(TIPO[tp])}</button>`).join('');
-        document.querySelectorAll('[data-tp]').forEach(b=>b.addEventListener('click',()=>{ selTipo=b.dataset.tp; renderPills(); renderRooms(); if(selPath) generate(selPath,selCap); })); };
+        document.querySelectorAll('[data-tp]').forEach(b=>b.addEventListener('click',()=>{ selTipo=b.dataset.tp; renderPills(); renderRooms(); reset(); })); };
+      // trocar de tag NÃO regenera: limpa e pede uma nova foto, do zero
+      function reset(){ selPath=null; selCap=''; curUrl=''; clearInterval(msgTimer);
+        document.getElementById('result').classList.add('hidden');
+        document.querySelectorAll('.thumb').forEach(x=>x.classList.remove('ring-2','ring-white'));
+        document.getElementById('step').textContent=T.step; }
+      let curUrl='';
       renderPills(); renderRooms();
       // grid
       document.getElementById('grid').innerHTML=fts.map(p=>`<button class="thumb group relative rounded-lg overflow-hidden aspect-square bg-white/5" data-path="${esc(p.path)}" data-cap="${esc(capOf(p))}"><img src="${imgUrl(p.path)}" alt="${esc(capOf(p))}" loading="lazy" class="w-full h-full object-cover transition group-hover:scale-105"></button>`).join('');
@@ -147,25 +155,72 @@
         img.classList.add('hidden'); err.classList.add('hidden'); err.classList.remove('flex'); load.classList.remove('hidden'); load.classList.add('flex');
         document.getElementById('r-thumb').src=imgUrl(path);
         document.getElementById('r-cap').textContent=cap; document.getElementById('r-tag').textContent=TIPO[selTipo]+(selTipo==='ambiente'?' · '+ROOM[selRoom]:'')+' · '+T.genby;
-        document.getElementById('r-buy').classList.add('hidden');
+        ['r-buy','r-share','r-dl'].forEach(id=>document.getElementById(id).classList.add('hidden'));
         R.scrollIntoView({behavior:'smooth',block:'start'});
         let mi=0; document.getElementById('r-msg').textContent=MSGS[0]; clearInterval(msgTimer); msgTimer=setInterval(()=>{ mi=(mi+1)%MSGS.length; document.getElementById('r-msg').textContent=MSGS[mi]; },3500);
         fetch('/api/mockup',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({path, tipo:selTipo, room:selRoom})})
           .then(async r=>{ const j=await r.json(); if(!r.ok) throw new Error(j.error||'erro'); return j; })
-          .then(j=>{ clearInterval(msgTimer); load.classList.add('hidden'); load.classList.remove('flex');
-            img.src=j.url+'?t='+Date.now(); img.onload=()=>img.classList.remove('hidden');
-            const buy=document.getElementById('r-buy'); buy.href=waLink(); buy.classList.remove('hidden');
+          .then(j=>{ if(selPath!==path) return; clearInterval(msgTimer); showResult(j.url);
             try{ gtag&&gtag('event','mockup_view',{tipo:selTipo,room:selTipo==='ambiente'?selRoom:'',cached:!!j.cached}); }catch(e){} })
-          .catch(e=>{ clearInterval(msgTimer); load.classList.add('hidden'); load.classList.remove('flex');
+          .catch(e=>{ if(selPath!==path) return; clearInterval(msgTimer); load.classList.add('hidden'); load.classList.remove('flex');
             err.classList.remove('hidden'); err.classList.add('flex');
             err.innerHTML=`<i data-lucide="alert-triangle" class="w-6 h-6 text-white/60"></i><p class="text-sm text-white/70">${esc(e.message)}</p><p class="text-xs text-white/40">${LANG==='en'?'Try another photo or come back soon.':'Tente outra foto ou volte em instantes.'}</p>`;
             if(window.lucide)lucide.createIcons(); });
       }
+      // ---- resultado: mostrar + compartilhar + baixar ----
+      const idOf=u=>(String(u).split('/').pop()||'').replace(/\.png.*$/,'');
+      const shareUrl=()=>location.origin+'/p/'+idOf(curUrl)+(LANG==='en'?'?lang=en':'');
+      function showResult(url){
+        curUrl=url;
+        const img=document.getElementById('r-img'), load=document.getElementById('r-load');
+        load.classList.add('hidden'); load.classList.remove('flex');
+        img.src=url; img.alt=selCap; img.onload=()=>img.classList.remove('hidden');
+        const buy=document.getElementById('r-buy'); buy.href=waLink();
+        ['r-buy','r-share','r-dl'].forEach(id=>document.getElementById(id).classList.remove('hidden'));
+      }
+      document.getElementById('r-sharelbl').textContent=LANG==='en'?'Share':'Compartilhar';
+      document.getElementById('r-dllbl').textContent=LANG==='en'?'Download':'Baixar';
+      const flash=(id,txt)=>{ const el=document.getElementById(id), old=el.textContent; el.textContent=txt; setTimeout(()=>el.textContent=old,2200); };
+      document.getElementById('r-share').addEventListener('click', async ()=>{
+        if(!curUrl) return;
+        const url=shareUrl(), title=(LANG==='en'?'Look what I created with ':'Olha o que eu criei com ')+'Hugo Carmo — '+selCap;
+        try{ gtag&&gtag('event','mockup_share',{tipo:selTipo}); }catch(e){}
+        try{
+          if(navigator.share){
+            try{ const blob=await (await fetch(curUrl)).blob(); const f=new File([blob],idOf(curUrl)+'.png',{type:'image/png'});
+              if(navigator.canShare&&navigator.canShare({files:[f]})){ await navigator.share({files:[f],title,text:title+' '+url}); return; } }catch(e){ if(e.name==='AbortError') return; }
+            await navigator.share({title,text:title,url}); return;
+          }
+        }catch(e){ if(e.name==='AbortError') return; }
+        try{ await navigator.clipboard.writeText(url); flash('r-sharelbl',LANG==='en'?'Link copied!':'Link copiado!'); }
+        catch(e){ prompt(LANG==='en'?'Copy the link:':'Copie o link:',url); }
+      });
+      document.getElementById('r-dl').addEventListener('click', async ()=>{
+        if(!curUrl) return;
+        try{ const blob=await (await fetch(curUrl)).blob(); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='hugo-carmo-'+idOf(curUrl)+'.png'; document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(a.href),4000); }
+        catch(e){ window.open(curUrl,'_blank'); }
+      });
       document.querySelectorAll('.thumb').forEach(b=>b.addEventListener('click',()=>{
         document.querySelectorAll('.thumb').forEach(x=>x.classList.remove('ring-2','ring-white'));
         b.classList.add('ring-2','ring-white');
         generate(b.dataset.path, b.dataset.cap);
       }));
+      // ---- abrir uma criação compartilhada (?m=<id>) ----
+      const mId=params.get('m');
+      if(mId && /^[a-z0-9-]+__[a-z0-9-]+$/.test(mId)){
+        const [pslug,variant]=mId.split('__');
+        if(variant.startsWith('ambiente-')&&ROOM[variant.slice(9)]){ selTipo='ambiente'; selRoom=variant.slice(9); }
+        else if(order.includes(variant)) selTipo=variant;
+        renderPills(); renderRooms();
+        const sl=p=>p.replace(/\.[a-z0-9]+$/i,'').toLowerCase().replace(/[^a-z0-9]+/g,'-');
+        const ph=(c.photos||[]).find(p=>sl(p.path)===pslug);
+        selPath=ph?ph.path:null; selCap=ph?capOf(ph):'';
+        document.getElementById('result').classList.remove('hidden');
+        document.getElementById('r-cap').textContent=selCap;
+        document.getElementById('r-tag').textContent=TIPO[selTipo]+(selTipo==='ambiente'?' · '+ROOM[selRoom]:'')+' · '+T.genby;
+        showResult(c.bucket_base+'/mockups/'+mId+'.png');
+        document.getElementById('step').textContent=LANG==='en'?'Want your own? Pick a product and a photo below.':'Quer criar o seu? Escolha um produto e uma foto abaixo.';
+      }
       chrome(c); if(window.lucide)lucide.createIcons();
     }).catch(()=>{ chrome({}); if(window.lucide)lucide.createIcons(); });
   </script>
