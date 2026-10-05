@@ -4,5 +4,10 @@
   "private": true,
   "type": "module",
   "description": "Site e CMS do artista visual Hugo Carmo",
-  "engines": { "node": ">=18" }
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "sharp": "^0.33.5"
+  }
 }

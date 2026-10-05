@@ -117,7 +117,7 @@
       const T={ title:LANG==='en'?'AI try-on':'Provador IA', badge:LANG==='en'?'AI preview':'Provador com IA',
         sub:LANG==='en'?'Pick a product and a photo — AI shows you the result before you order.':'Escolha um produto e uma foto — a IA mostra o resultado antes de você pedir.',
         step:LANG==='en'?'Now tap a photo to see it':'Agora toque numa foto para ver o resultado',
-        buy:LANG==='en'?'I want this':'Quero esta', genby:LANG==='en'?'AI-generated preview':'Prévia gerada por IA' };
+        buy:LANG==='en'?'I want this':'Quero esta', genby:LANG==='en'?'Original photo · AI-made scene':'Foto original · cenário por IA' };
       document.getElementById('h1').textContent=T.title; document.getElementById('t').textContent=T.title+' — Hugo Carmo';
       document.getElementById('badge').textContent=T.badge; document.getElementById('sub').textContent=T.sub; document.getElementById('step').textContent=T.step;
       document.getElementById('r-buylbl').textContent=T.buy;
@@ -168,7 +168,7 @@
             if(window.lucide)lucide.createIcons(); });
       }
       // ---- resultado: mostrar + compartilhar + baixar ----
-      const idOf=u=>(String(u).split('/').pop()||'').replace(/\.png.*$/,'');
+      const idOf=u=>(String(u).split('/').pop()||'').replace(/\.(png|jpg).*$/,'');
       const shareUrl=()=>location.origin+'/p/'+idOf(curUrl)+(LANG==='en'?'?lang=en':'');
       function showResult(url){
         curUrl=url;
@@ -187,7 +187,7 @@
         try{ gtag&&gtag('event','mockup_share',{tipo:selTipo}); }catch(e){}
         try{
           if(navigator.share){
-            try{ const blob=await (await fetch(curUrl)).blob(); const f=new File([blob],idOf(curUrl)+'.png',{type:'image/png'});
+            try{ const blob=await (await fetch(curUrl)).blob(); const f=new File([blob],idOf(curUrl)+'.jpg',{type:blob.type||'image/jpeg'});
               if(navigator.canShare&&navigator.canShare({files:[f]})){ await navigator.share({files:[f],title,text:title+' '+url}); return; } }catch(e){ if(e.name==='AbortError') return; }
             await navigator.share({title,text:title,url}); return;
           }
@@ -197,7 +197,7 @@
       });
       document.getElementById('r-dl').addEventListener('click', async ()=>{
         if(!curUrl) return;
-        try{ const blob=await (await fetch(curUrl)).blob(); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='hugo-carmo-'+idOf(curUrl)+'.png'; document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(a.href),4000); }
+        try{ const blob=await (await fetch(curUrl)).blob(); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='hugo-carmo-'+idOf(curUrl)+(/\.png/.test(curUrl)?'.png':'.jpg'); document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(a.href),4000); }
         catch(e){ window.open(curUrl,'_blank'); }
       });
       document.querySelectorAll('.thumb').forEach(b=>b.addEventListener('click',()=>{
@@ -218,7 +218,9 @@
         document.getElementById('result').classList.remove('hidden');
         document.getElementById('r-cap').textContent=selCap;
         document.getElementById('r-tag').textContent=TIPO[selTipo]+(selTipo==='ambiente'?' · '+ROOM[selRoom]:'')+' · '+T.genby;
-        showResult(c.bucket_base+'/mockups/'+mId+'.png');
+        const ri=document.getElementById('r-img'), old=c.bucket_base+'/mockups/'+mId+'.png';
+        ri.onerror=()=>{ ri.onerror=null; curUrl=old; ri.src=old; }; // criações antigas (antes da v2)
+        showResult(c.bucket_base+'/mockups-v2/'+mId+'.jpg');
         document.getElementById('step').textContent=LANG==='en'?'Want your own? Pick a product and a photo below.':'Quer criar o seu? Escolha um produto e uma foto abaixo.';
       }
       chrome(c); if(window.lucide)lucide.createIcons();
