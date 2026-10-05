@@ -51,6 +51,10 @@
     </div>
 
     <div class="flex justify-center mb-2"><div id="tipo-pills" class="flex flex-wrap justify-center gap-2"></div></div>
+    <div id="room-wrap" class="hidden flex-col items-center mb-2">
+      <p id="room-lbl" class="text-xs uppercase tracking-widest text-white/40 mb-2 mt-2"></p>
+      <div id="room-pills" class="flex flex-wrap justify-center gap-2"></div>
+    </div>
     <p id="step" class="text-center text-white/50 text-sm mb-6"></p>
 
     <div id="result" class="hidden max-w-3xl mx-auto mb-10">
@@ -104,8 +108,10 @@
     fetch(CONTENT_URL+"?v="+Date.now(),{cache:"no-store"}).then(r=>r.json()).then(c=>{
       const imgUrl=p=>/^https?:\/\//.test(p)?p:(c.bucket_base+"/"+p);
       const wa=c.contact?.whatsapp||'';
-      const TIPO=LANG==='en'?{blusa:'Tee',print:'Print',bandeira:'Flag'}:{blusa:'Blusa',print:'Quadro',bandeira:'Bandeira'};
-      const MSG=LANG==='en'?{blusa:'Hi, I want the tee with the photo ',print:'Hi, I want the print with the photo ',bandeira:'Hi, I want the flag with the photo '}:{blusa:'Olá, quero a blusa com a foto ',print:'Olá, quero o quadro com a foto ',bandeira:'Olá, quero a bandeira com a foto '};
+      const TIPO=LANG==='en'?{blusa:'Tee',print:'Print',bandeira:'Flag',prancha:'Surfboard',ambiente:'Interiors (architects)'}:{blusa:'Blusa',print:'Quadro',bandeira:'Bandeira',prancha:'Prancha de surf',ambiente:'Ambientes (arquitetos)'};
+      const MSG=LANG==='en'?{blusa:'Hi, I want the tee with the photo ',print:'Hi, I want the print with the photo ',bandeira:'Hi, I want the flag with the photo ',prancha:'Hi, I want the surfboard with the photo ',ambiente:'Hi, I\'m an architect/designer and want the print for a project with the photo '}:{blusa:'Olá, quero a blusa com a foto ',print:'Olá, quero o quadro com a foto ',bandeira:'Olá, quero a bandeira com a foto ',prancha:'Olá, quero a prancha de surf com a foto ',ambiente:'Olá, sou arquiteto(a)/designer e quero o quadro para um projeto com a foto '};
+      const ROOM=LANG==='en'?{sala:'Living room',quarto:'Bedroom',escritorio:'Office',jantar:'Dining room',hotel:'Hotel lobby'}:{sala:'Sala',quarto:'Quarto',escritorio:'Escritório',jantar:'Sala de jantar',hotel:'Lobby de hotel'};
+      let selRoom='sala';
       const T={ title:LANG==='en'?'AI try-on':'Provador IA', badge:LANG==='en'?'AI preview':'Provador com IA',
         sub:LANG==='en'?'Pick a product and a photo — AI shows you the result before you order.':'Escolha um produto e uma foto — a IA mostra o resultado antes de você pedir.',
         step:LANG==='en'?'Now tap a photo to see it':'Agora toque numa foto para ver o resultado',
@@ -116,15 +122,22 @@
       const fts=(c.photos||[]).filter(p=>p.section==='fotografias').sort((a,b)=>a.order-b.order);
       const capOf=p=>(LANG==='en'&&p.caption_en)?p.caption_en:(p.caption||'');
       // tipo pills
-      let selTipo=['blusa','print','bandeira'].includes(params.get('tipo'))?params.get('tipo'):'blusa';
+      const order=['blusa','print','bandeira','prancha','ambiente'];
+      let selTipo=order.includes(params.get('tipo'))?params.get('tipo'):'blusa';
+      if(ROOM[params.get('room')]) selRoom=params.get('room');
       let selPath=null, selCap='';
-      const order=['blusa','print','bandeira'];
-      const renderPills=()=>{ document.getElementById('tipo-pills').innerHTML=order.map(tp=>`<button data-tp="${tp}" class="px-4 py-1.5 rounded-full border border-white/20 text-sm ${tp===selTipo?'bg-white text-black':'text-white/80 hover:bg-white/10'} transition">${esc(TIPO[tp])}</button>`).join('');
-        document.querySelectorAll('[data-tp]').forEach(b=>b.addEventListener('click',()=>{ selTipo=b.dataset.tp; renderPills(); if(selPath) generate(selPath,selCap); })); };
-      renderPills();
+      const pillCls=on=>`px-4 py-1.5 rounded-full border border-white/20 text-sm ${on?'bg-white text-black':'text-white/80 hover:bg-white/10'} transition`;
+      const renderRooms=()=>{ const w=document.getElementById('room-wrap'); const on=selTipo==='ambiente';
+        w.classList.toggle('hidden',!on); w.classList.toggle('flex',on);
+        document.getElementById('room-lbl').textContent=LANG==='en'?'Room':'Cômodo';
+        document.getElementById('room-pills').innerHTML=Object.keys(ROOM).map(r=>`<button data-room="${r}" class="${pillCls(r===selRoom)}">${esc(ROOM[r])}</button>`).join('');
+        document.querySelectorAll('[data-room]').forEach(b=>b.addEventListener('click',()=>{ selRoom=b.dataset.room; renderRooms(); if(selPath) generate(selPath,selCap); })); };
+      const renderPills=()=>{ document.getElementById('tipo-pills').innerHTML=order.map(tp=>`<button data-tp="${tp}" class="${pillCls(tp===selTipo)}">${esc(TIPO[tp])}</button>`).join('');
+        document.querySelectorAll('[data-tp]').forEach(b=>b.addEventListener('click',()=>{ selTipo=b.dataset.tp; renderPills(); renderRooms(); if(selPath) generate(selPath,selCap); })); };
+      renderPills(); renderRooms();
       // grid
       document.getElementById('grid').innerHTML=fts.map(p=>`<button class="thumb group relative rounded-lg overflow-hidden aspect-square bg-white/5" data-path="${esc(p.path)}" data-cap="${esc(capOf(p))}"><img src="${imgUrl(p.path)}" alt="${esc(capOf(p))}" loading="lazy" class="w-full h-full object-cover transition group-hover:scale-105"></button>`).join('');
-      const waLink=()=>"https://api.whatsapp.com/send/?phone="+wa+"&text="+encodeURIComponent(MSG[selTipo]+'"'+selCap+'"')+"&type=phone_number&app_absent=0";
+      const waLink=()=>"https://api.whatsapp.com/send/?phone="+wa+"&text="+encodeURIComponent(MSG[selTipo]+'"'+selCap+'"'+(selTipo==='ambiente'?' ('+ROOM[selRoom]+')':''))+"&type=phone_number&app_absent=0";
       const MSGS=LANG==='en'?['Setting up the canvas…','Printing the artwork…','Almost there…']:['Preparando a arte…','Aplicando no produto…','Quase lá…'];
       let msgTimer=null;
       function generate(path, cap){
@@ -133,16 +146,16 @@
         const img=document.getElementById('r-img'), load=document.getElementById('r-load'), err=document.getElementById('r-err');
         img.classList.add('hidden'); err.classList.add('hidden'); err.classList.remove('flex'); load.classList.remove('hidden'); load.classList.add('flex');
         document.getElementById('r-thumb').src=imgUrl(path);
-        document.getElementById('r-cap').textContent=cap; document.getElementById('r-tag').textContent=TIPO[selTipo]+' · '+T.genby;
+        document.getElementById('r-cap').textContent=cap; document.getElementById('r-tag').textContent=TIPO[selTipo]+(selTipo==='ambiente'?' · '+ROOM[selRoom]:'')+' · '+T.genby;
         document.getElementById('r-buy').classList.add('hidden');
         R.scrollIntoView({behavior:'smooth',block:'start'});
         let mi=0; document.getElementById('r-msg').textContent=MSGS[0]; clearInterval(msgTimer); msgTimer=setInterval(()=>{ mi=(mi+1)%MSGS.length; document.getElementById('r-msg').textContent=MSGS[mi]; },3500);
-        fetch('/api/mockup',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({path, tipo:selTipo})})
+        fetch('/api/mockup',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({path, tipo:selTipo, room:selRoom})})
           .then(async r=>{ const j=await r.json(); if(!r.ok) throw new Error(j.error||'erro'); return j; })
           .then(j=>{ clearInterval(msgTimer); load.classList.add('hidden'); load.classList.remove('flex');
             img.src=j.url+'?t='+Date.now(); img.onload=()=>img.classList.remove('hidden');
             const buy=document.getElementById('r-buy'); buy.href=waLink(); buy.classList.remove('hidden');
-            try{ gtag&&gtag('event','mockup_view',{tipo:selTipo,cached:!!j.cached}); }catch(e){} })
+            try{ gtag&&gtag('event','mockup_view',{tipo:selTipo,room:selTipo==='ambiente'?selRoom:'',cached:!!j.cached}); }catch(e){} })
           .catch(e=>{ clearInterval(msgTimer); load.classList.add('hidden'); load.classList.remove('flex');
             err.classList.remove('hidden'); err.classList.add('flex');
             err.innerHTML=`<i data-lucide="alert-triangle" class="w-6 h-6 text-white/60"></i><p class="text-sm text-white/70">${esc(e.message)}</p><p class="text-xs text-white/40">${LANG==='en'?'Try another photo or come back soon.':'Tente outra foto ou volte em instantes.'}</p>`;
