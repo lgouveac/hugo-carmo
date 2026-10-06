@@ -33,6 +33,22 @@ Hugo Carmo é um artista visual e fotógrafo do Rio de Janeiro, Brasil. Através
 - Ocupação EAV — Escola de Artes Visuais, Rio de Janeiro (2022, curadoria Denise Cathilina)
 - Primeiro Salão de Fotografia — Museu de Arte Moderna de Resende (2023)`;
 
+// Mesmas páginas de STATIC_PAGES em api/sitemap.js — tudo que está no sitemap
+// precisa estar aqui (a auditoria SEO/AEO compara os dois).
+const LINKS = `
+## Páginas
+
+- [Início](${SITE}/): apresentação do artista e das obras
+- [Loja de obras](${SITE}/loja): prints e quadros com moldura, tamanho personalizado
+- [Diário de viagem (blog)](${SITE}/blog): artigos sobre fotografia fine art, decoração e viagens
+- [Temas](${SITE}/temas): obras organizadas por tema
+- [Provador virtual](${SITE}/provador): visualize o quadro na sua parede antes de comprar
+- [Ciclo-viagens](${SITE}/cicloviagens): as viagens de bicicleta onde as fotografias nascem
+- [Fotolivros](${SITE}/fotolivros): livros de fotografia do artista
+- [Sobre Hugo Carmo](${SITE}/sobre): biografia, trajetória e exposições
+- [Perguntas frequentes](${SITE}/faq): prazos, entrega, molduras e tamanhos
+- Instagram: https://www.instagram.com/kina.com.br/`;
+
 export default async function handler(req, res) {
   try {
     const r = await fetch(`${CONTENT_URL}?v=${Date.now()}`, { cache: 'no-store' });
@@ -71,19 +87,3 @@ export default async function handler(req, res) {
     res.end(BASE + '\n' + LINKS + '\n');
   }
 }
-
-// Mesmas páginas de STATIC_PAGES em api/sitemap.js — tudo que está no sitemap
-// precisa estar aqui (a auditoria SEO/AEO compara os dois).
-const LINKS = `
-## Páginas
-
-- [Início](${SITE}/): apresentação do artista e das obras
-- [Loja de obras](${SITE}/loja): prints e quadros com moldura, tamanho personalizado
-- [Diário de viagem (blog)](${SITE}/blog): artigos sobre fotografia fine art, decoração e viagens
-- [Temas](${SITE}/temas): obras organizadas por tema (natureza, cidade, mar, série Escombros)
-- [Provador virtual](${SITE}/provador): visualize o quadro na sua parede antes de comprar
-- [Ciclo-viagens](${SITE}/cicloviagens): as viagens de bicicleta onde as fotografias nascem
-- [Fotolivros](${SITE}/fotolivros): livros de fotografia do artista
-- [Sobre Hugo Carmo](${SITE}/sobre): biografia, trajetória e exposições
-- [Perguntas frequentes](${SITE}/faq): prazos, entrega, molduras e tamanhos
-- Instagram: https://www.instagram.com/kina.com.br/`;
