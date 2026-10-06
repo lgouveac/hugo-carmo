@@ -58,12 +58,7 @@ export default async function handler(req, res) {
       }
     }
 
-    parts.push(`\n## Links
-
-- Site: ${SITE}/
-- Loja de obras: ${SITE}/loja
-- Provador virtual (visualize o quadro na sua parede): ${SITE}/provador
-- Instagram: https://www.instagram.com/kina.com.br/`);
+    parts.push(LINKS);
 
     res.statusCode = 200;
     res.setHeader('Content-Type', 'text/plain; charset=utf-8');
@@ -73,6 +68,22 @@ export default async function handler(req, res) {
     // Fallback: serve a base estática (nunca deixa o llms.txt fora do ar)
     res.statusCode = 200;
     res.setHeader('Content-Type', 'text/plain; charset=utf-8');
-    res.end(BASE + '\n');
+    res.end(BASE + '\n' + LINKS + '\n');
   }
 }
+
+// Mesmas páginas de STATIC_PAGES em api/sitemap.js — tudo que está no sitemap
+// precisa estar aqui (a auditoria SEO/AEO compara os dois).
+const LINKS = `
+## Páginas
+
+- [Início](${SITE}/): apresentação do artista e das obras
+- [Loja de obras](${SITE}/loja): prints e quadros com moldura, tamanho personalizado
+- [Diário de viagem (blog)](${SITE}/blog): artigos sobre fotografia fine art, decoração e viagens
+- [Temas](${SITE}/temas): obras organizadas por tema (natureza, cidade, mar, série Escombros)
+- [Provador virtual](${SITE}/provador): visualize o quadro na sua parede antes de comprar
+- [Ciclo-viagens](${SITE}/cicloviagens): as viagens de bicicleta onde as fotografias nascem
+- [Fotolivros](${SITE}/fotolivros): livros de fotografia do artista
+- [Sobre Hugo Carmo](${SITE}/sobre): biografia, trajetória e exposições
+- [Perguntas frequentes](${SITE}/faq): prazos, entrega, molduras e tamanhos
+- Instagram: https://www.instagram.com/kina.com.br/`;
