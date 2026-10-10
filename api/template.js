@@ -2,7 +2,7 @@
 // GET /api/template?name=<n>   → gera o cenário com IA se ainda não existir (nunca sobrescreve;
 //                                pra refazer, sobe o `v` dele em _provador.js) e devolve a caixa detectada.
 import { json } from './_lib.js';
-import { TEMPLATES, fileOf, detect } from './_provador.js';
+import { TEMPLATES, fileOf, partOf, detect, garmentAssets } from './_provador.js';
 
 export const config = { maxDuration: 300 };
 
@@ -34,6 +34,17 @@ export default async function handler(req, res) {
       });
       if (!up.ok) return json(res, 502, { error: 'Falha ao salvar: ' + (await up.text()).slice(0, 200) });
       created = true;
+    }
+    const put = (file, body) => fetch(`${SUPA}/storage/v1/object/photos/${file}`, {
+      method: 'POST', headers: { Authorization: `Bearer ${KEY}`, apikey: KEY, 'Content-Type': 'image/png', 'x-upsert': 'true' }, body,
+    });
+    if (t.kind === 'garment') { // peça lisa → máscara, dobras e sombra (pro editor e pro render)
+      const pub = `${SUPA}/storage/v1/object/public/photos/`;
+      if (created || !(await fetch(pub + partOf(name, 'mask'), { method: 'HEAD' })).ok) {
+        const g = await garmentAssets(buf);
+        await Promise.all(['mask', 'shade', 'shadow'].map(k => put(partOf(name, k), g[k])));
+      }
+      return json(res, 200, { name, url, created, parts: ['mask', 'shade', 'shadow'].map(k => pub + partOf(name, k)) });
     }
     let det = null;
     try { const d = await detect(buf); det = { box: d.box, fill: +d.fill.toFixed(3), ratio: +(d.box.w / d.box.h).toFixed(2) }; }
