@@ -28,18 +28,27 @@ TEMPLATES.prancha = { v: 1, kind: 'shape', size: '1024x1536', prompt: `Photoreal
 // Blusas: a IA gera a PEÇA lisa (branca, sobre fundo escuro) uma vez; dela saem máscara, sombreado
 // (dobras) e sombra. A cor do tecido e a foto são aplicadas por cima — no navegador (editor) e no
 // servidor (/api/mockup, mesma conta), então a obra não é redesenhada.
+// p = estampa "no peito" padrão: [linha onde mede o tronco, largura p/ foto horizontal, p/ vertical, topo] (frações da peça).
+// O editor (provador.html, PRN) usa os mesmos números.
+const SLEEVES = 'sleeves angled slightly outward, not touching the body';
 export const GARMENTS = {
-  camiseta: 'a classic crew-neck short-sleeve cotton t-shirt',
-  oversized: 'an oversized boxy streetwear t-shirt with dropped shoulders and wide short sleeves',
-  regata: 'a sleeveless crew-neck cotton tank top',
-  'manga-longa': 'a crew-neck long-sleeve cotton t-shirt with the sleeves angled slightly outward, not touching the body',
-  moletom: 'a crew-neck cotton fleece sweatshirt with ribbed cuffs and hem, sleeves angled slightly outward, not touching the body',
-  capuz: 'a pullover hoodie with the hood laid flat behind the neck, no drawstrings, no pocket, sleeves angled slightly outward, not touching the body',
+  camiseta: { d: 'a classic crew-neck short-sleeve cotton t-shirt' },
+  oversized: { d: 'an oversized boxy streetwear t-shirt with dropped shoulders and wide short sleeves' },
+  regata: { d: 'a sleeveless crew-neck cotton tank top' },
+  'manga-longa': { d: `a crew-neck long-sleeve cotton t-shirt with the ${SLEEVES}` },
+  camisa: { d: 'a short-sleeve button-up camp-collar shirt with a clearly visible collar and a front placket with small white buttons, fully buttoned', p: [0.45, 0.5, 0.42, 0.24] },
+  moletom: { d: `a crew-neck cotton fleece sweatshirt with ribbed cuffs and hem, ${SLEEVES}` },
+  capuz: { d: `a pullover hoodie with the hood laid flat behind the neck, no drawstrings, no pocket, ${SLEEVES}`, p: [0.5, 0.6, 0.48, 0.3] },
+  'baby-look': { d: "a women's fitted baby-look t-shirt with short cap sleeves and a soft scoop neckline, slim waist", p: [0.45, 0.6, 0.48, 0.24] },
+  cropped: { d: "a women's cropped t-shirt with short sleeves, boxy and short, ending above the waist", p: [0.5, 0.6, 0.48, 0.24] },
+  'regata-fem': { d: "a women's fitted tank top with thin shoulder straps and a scoop neckline", p: [0.5, 0.58, 0.46, 0.28] },
+  vestido: { d: "a women's short-sleeve t-shirt dress, straight cut, knee length", p: [0.3, 0.6, 0.48, 0.14] },
+  bone: { p: [0.4, 0.5, 0.38, 0.16], prompt: 'Photorealistic e-commerce product photo of a plain pure white six-panel baseball cap with a curved brim, completely blank — no logo, no text, no embroidery, no eyelets visible. Seen straight from the front at eye level, centered with generous margin, the two front panels facing the camera and the brim at the bottom. Background: a perfectly uniform solid very dark charcoal (#141414) surface. Soft even studio lighting showing realistic subtle fabric texture and seams.' },
 };
 export const COLORS = { branco: '#f4f3ef', off: '#e6dece', areia: '#c8b393', cinza: '#8e8e8c', marinho: '#1f2940', preto: '#262626' };
 export const SHIRT_BG = [236, 234, 229], SHADOW_DY = 10;
-for (const [g, d] of Object.entries(GARMENTS))
-  TEMPLATES[`peca-${g}`] = { v: 1, kind: 'garment', size: '1024x1024', prompt: `Photorealistic e-commerce flat-lay product photo of ${d}, plain pure white fabric, completely blank — no print, no graphic, no logo, no text, no visible label or tag. Laid perfectly flat and symmetrical, front side up, seen from directly above, centered with generous margin, the whole garment visible. Background: a perfectly uniform solid very dark charcoal (#141414) surface. Soft even studio lighting showing realistic subtle fabric folds and cotton texture.` };
+for (const [g, { d, prompt }] of Object.entries(GARMENTS))
+  TEMPLATES[`peca-${g}`] = { v: 1, kind: 'garment', size: '1024x1024', prompt: prompt || `Photorealistic e-commerce flat-lay product photo of ${d}, plain pure white fabric, completely blank — no print, no graphic, no logo, no text, no visible label or tag. Laid perfectly flat and symmetrical, front side up, seen from directly above, centered with generous margin, the whole garment visible. Background: a perfectly uniform solid very dark charcoal (#141414) surface. Soft even studio lighting showing realistic subtle fabric folds and cotton texture.` };
 
 export const fileOf = name => `templates/${name}.v${TEMPLATES[name].v}.png`;
 export const partOf = (name, part) => fileOf(name).replace(/\.png$/, `-${part}.png`);
@@ -164,16 +173,16 @@ export async function garmentAssets(buf) {
 }
 
 // Posição padrão da estampa (mesma conta do editor no navegador): 'peito' ou 'cheia'.
-export function shirtDefaults(alpha, W, H, mode, aspect) {
+export function shirtDefaults(alpha, W, H, mode, aspect, p = [0.45, 0.62, 0.5, 0.2]) {
   let x0 = W, y0 = H, x1 = 0, y1 = 0;
   for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) if (alpha[y * W + x] > 128) { if (x < x0) x0 = x; if (x > x1) x1 = x; if (y < y0) y0 = y; if (y > y1) y1 = y; }
   const bw = x1 - x0 + 1, bh = y1 - y0 + 1, cx = Math.round(x0 + bw / 2);
   if (mode === 'cheia') return { cx, cy: Math.round(y0 + bh / 2), w: Math.round(Math.max(bw, bh * aspect)) };
-  const ry = Math.round(y0 + bh * 0.45); let l = cx, r = cx;
+  const ry = Math.round(y0 + bh * p[0]); let l = cx, r = cx;
   while (l > 0 && alpha[ry * W + l - 1] > 128) l--;
   while (r < W - 1 && alpha[ry * W + r + 1] > 128) r++;
-  const torso = r - l + 1, w = Math.round(torso * (aspect >= 1 ? 0.62 : 0.5)), h = w / aspect;
-  return { cx, cy: Math.round(y0 + bh * 0.2 + h / 2), w };
+  const torso = r - l + 1, w = Math.round(torso * (aspect >= 1 ? p[1] : p[2])), h = w / aspect;
+  return { cx, cy: Math.round(y0 + bh * p[3] + h / 2), w };
 }
 
 // Render final da blusa (JPEG). Mesma composição do canvas do editor:

@@ -66,7 +66,7 @@ export default async function handler(req, res) {
         const { data: A, info } = await sharp(mask).extractChannel(3).raw().toBuffer({ resolveWithObject: true });
         const m = await sharp(srcBuf).rotate().metadata();
         const asp = (m.orientation || 1) >= 5 ? m.height / m.width : m.width / m.height;
-        ({ cx, cy, w } = shirtDefaults(A, info.width, info.height, shirt.mode, asp));
+        ({ cx, cy, w } = shirtDefaults(A, info.width, info.height, shirt.mode, asp, GARMENTS[shirt.g].p));
         variant = `blusa-${shirt.g}-${shirt.cor}-${cx}-${cy}-${w}`;
         const hit = await fetch(`${base}/mockups-v2/${slug}__${variant}.jpg`, { method: 'HEAD' });
         if (hit.ok) return json(res, 200, { url: `${base}/mockups-v2/${slug}__${variant}.jpg`, cached: true });
