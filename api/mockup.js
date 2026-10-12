@@ -1,6 +1,6 @@
 import sharp from 'sharp';
 import { readRawBody, json } from './_lib.js';
-import { ROOMS, TEMPLATES, GARMENTS, COLORS, fileOf, partOf, composite, renderShirt, shirtDefaults } from './_provador.js';
+import { ROOMS, TEMPLATES, GARMENTS, COLORS, fileOf, partOf, composite, renderShirt, shirtDefaults, fnv } from './_provador.js';
 
 export const config = { api: { bodyParser: false }, maxDuration: 60 };
 
@@ -18,7 +18,10 @@ export default async function handler(req, res) {
     let body = {};
     try { const raw = await readRawBody(req); body = raw.length ? JSON.parse(raw.toString()) : {}; } catch { return json(res, 400, { error: 'JSON inválido' }); }
     const tipo = String(body.tipo || '');
-    const path = String(body.path || '');
+    // várias fotos na mesma peça (até 4): a 1ª dá o nome do arquivo, o hash da composição faz o resto
+    const multi = tipo === 'blusa' && Array.isArray(body.layers) && body.layers.length > 1 ? body.layers : null;
+    if (multi && multi.length > 4) return json(res, 400, { error: 'Máximo de 4 fotos' });
+    const path = String(multi ? (multi[0] && multi[0].path) || '' : body.path || '');
     const room = String(body.room || 'sala');
     if (!TIPOS.includes(tipo)) return json(res, 400, { error: 'Tipo inválido' });
     if (tipo === 'ambiente' && !ROOMS[room]) return json(res, 400, { error: 'Cômodo inválido' });
@@ -30,7 +33,11 @@ export default async function handler(req, res) {
       if (!GARMENTS[g] || !COLORS[cor]) return json(res, 400, { error: 'Peça ou cor inválida' });
       const n = (v, lo, hi) => (v === undefined || v === null || v === '' || !Number.isFinite(+v)) ? null : Math.min(hi, Math.max(lo, Math.round(+v)));
       shirt = { g, cor, cx: n(body.cx, 0, 1024), cy: n(body.cy, 0, 1024), w: n(body.w, 40, 2400), mode: body.mode === 'cheia' ? 'cheia' : 'peito' };
-      if (shirt.cx !== null && shirt.cy !== null && shirt.w !== null) variant = `blusa-${g}-${cor}-${shirt.cx}-${shirt.cy}-${shirt.w}`;
+      if (multi) {
+        shirt.layers = multi.map(l => ({ path: String((l && l.path) || ''), cx: n(l && l.cx, 0, 1024), cy: n(l && l.cy, 0, 1024), w: n(l && l.w, 40, 2400) }));
+        if (shirt.layers.some(l => !/^[a-z0-9._-]+\.(jpe?g|png|webp)$/i.test(l.path) || l.cx === null || l.cy === null || l.w === null)) return json(res, 400, { error: 'Camada inválida' });
+        variant = `blusa-${g}-${cor}-m${fnv(shirt.layers.map(l => `${l.path}:${l.cx}:${l.cy}:${l.w}`).join('|'))}`;
+      } else if (shirt.cx !== null && shirt.cy !== null && shirt.w !== null) variant = `blusa-${g}-${cor}-${shirt.cx}-${shirt.cy}-${shirt.w}`;
     }
 
     const base = `${SUPA}/storage/v1/object/public/photos`;
@@ -62,7 +69,7 @@ export default async function handler(req, res) {
       if (parts.some(p => !p)) return json(res, 503, { error: 'Peça ainda não disponível' });
       const [mask, shade, shadow] = parts.map(p => Buffer.from(p));
       let { cx, cy, w } = shirt;
-      if (cx === null || cy === null || w === null) { // sem posição → padrão (peito/cheia)
+      if (!shirt.layers && (cx === null || cy === null || w === null)) { // sem posição → padrão (peito/cheia)
         const { data: A, info } = await sharp(mask).extractChannel(3).raw().toBuffer({ resolveWithObject: true });
         const m = await sharp(srcBuf).rotate().metadata();
         const asp = (m.orientation || 1) >= 5 ? m.height / m.width : m.width / m.height;
@@ -71,7 +78,13 @@ export default async function handler(req, res) {
         const hit = await fetch(`${base}/mockups-v2/${slug}__${variant}.jpg`, { method: 'HEAD' });
         if (hit.ok) return json(res, 200, { url: `${base}/mockups-v2/${slug}__${variant}.jpg`, cached: true });
       }
-      const out = await renderShirt({ mask, shade, shadow, photo: srcBuf, color: COLORS[shirt.cor], cx, cy, w });
+      let layers = [{ photo: srcBuf, cx, cy, w }];
+      if (shirt.layers) {
+        const bufs = await Promise.all(shirt.layers.slice(1).map(l => fetch(`${base}/${l.path}`).then(r => r.ok ? r.arrayBuffer() : null)));
+        if (bufs.some(b => !b)) return json(res, 404, { error: 'Foto não encontrada no acervo' });
+        layers = shirt.layers.map((l, i) => ({ photo: i ? Buffer.from(bufs[i - 1]) : srcBuf, cx: l.cx, cy: l.cy, w: l.w }));
+      }
+      const out = await renderShirt({ mask, shade, shadow, color: COLORS[shirt.cor], layers });
       return save(`mockups-v2/${slug}__${variant}.jpg`, out);
     }
 

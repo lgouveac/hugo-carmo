@@ -82,10 +82,15 @@
             <div id="ed-c" class="flex flex-wrap gap-3"></div>
           </section>
           <section>
-            <h3 id="ed-l-mode" class="text-sm font-semibold mb-3"></h3>
+            <div class="flex items-baseline justify-between mb-3"><h3 id="ed-l-mode" class="text-sm font-semibold"></h3><span id="ed-lcount" class="text-xs text-white/50"></span></div>
+            <div id="ed-layers" class="flex flex-wrap gap-2 mb-4"></div>
             <div id="ed-mode" class="grid grid-cols-2 gap-1 p-1 rounded-full bg-white/5 border border-white/10"></div>
             <div class="mt-4 flex items-center gap-3"><i data-lucide="minus" class="w-4 h-4 text-white/50"></i><input id="ed-size" type="range" min="60" max="1800" step="1" class="flex-1 accent-white" aria-label="Tamanho da estampa"><i data-lucide="plus" class="w-4 h-4 text-white/50"></i></div>
-            <button id="ed-center" type="button" class="mt-3 text-xs text-white/60 hover:text-white flex items-center gap-1.5"><i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i><span></span></button>
+            <div class="mt-3 flex flex-wrap gap-x-4 gap-y-2">
+              <button id="ed-center" type="button" class="text-xs text-white/60 hover:text-white disabled:opacity-30 flex items-center gap-1.5"><i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i><span></span></button>
+              <button id="ed-front" type="button" class="text-xs text-white/60 hover:text-white disabled:opacity-30 flex items-center gap-1.5"><i data-lucide="bring-to-front" class="w-3.5 h-3.5"></i><span></span></button>
+              <button id="ed-del" type="button" class="text-xs text-white/60 hover:text-red-300 disabled:opacity-30 flex items-center gap-1.5"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i><span></span></button>
+            </div>
           </section>
         </div>
         </div>
@@ -97,6 +102,13 @@
             <a id="r-buy" href="#" target="_blank" rel="noopener" class="px-5 py-2.5 rounded-lg bg-white text-black text-sm font-semibold hover:bg-white/90 flex items-center gap-2 hidden"><i data-lucide="message-circle" class="w-4 h-4"></i> <span id="r-buylbl">Quero esta</span></a>
           </div>
         </div>
+      </div>
+    </div>
+
+    <div id="pick" class="hidden fixed inset-0 z-[1200] bg-black/80 backdrop-blur-sm items-end sm:items-center justify-center p-0 sm:p-6">
+      <div class="w-full sm:max-w-3xl max-h-[85vh] flex flex-col bg-[#111110] border border-white/10 rounded-t-2xl sm:rounded-2xl overflow-hidden">
+        <div class="flex items-center justify-between px-5 py-4 border-b border-white/10"><h3 id="pick-t" class="font-semibold"></h3><button id="pick-x" type="button" aria-label="Fechar" class="w-9 h-9 rounded-full hover:bg-white/10 flex items-center justify-center"><i data-lucide="x" class="w-5 h-5"></i></button></div>
+        <div id="pick-grid" class="overflow-y-auto p-4 grid grid-cols-3 sm:grid-cols-5 gap-2"></div>
       </div>
     </div>
 
@@ -243,7 +255,9 @@
       const CORN=LANG==='en'?{branco:'White',off:'Off-white',areia:'Sand',cinza:'Grey',marinho:'Navy',preto:'Black'}:{branco:'Branco',off:'Off-white',areia:'Areia',cinza:'Cinza',marinho:'Marinho',preto:'Preto'};
       const MODES=LANG==='en'?{peito:'Chest print',cheia:'All-over print'}:{peito:'Estampa no peito',cheia:'Estampa cheia'};
       const SHIRT_BG='rgb(236,234,229)', SHADOW_DY=10, PECA_V=1; // PECA_V = versão das peças em _provador.js
-      const ED={on:false,g:'camiseta',cor:'branco',mode:'peito',cx:512,cy:400,w:300,photo:null,A:null,cache:{},tok:0};
+      // L = fotos na peça (a última fica por cima); sel = foto selecionada (-1 = nenhuma → sem quadro de seleção)
+      const ED={on:false,g:'camiseta',cor:'branco',mode:'peito',L:[],sel:-1,A:null,cache:{},tok:0}, MAXL=4;
+      const cur=()=>ED.L[ED.sel];
       const cv=document.getElementById('ed-cv'), ctx=cv.getContext('2d'), gc=document.createElement('canvas'), g2=gc.getContext('2d');
       const loadOnce=src=>new Promise((ok,no)=>{ const i=new Image(); i.crossOrigin='anonymous'; i.onload=()=>ok(i); i.onerror=no; i.src=src; });
       const loadImg=async src=>{ for(let k=0;;k++){ try{ return await loadOnce(k?src+(src.includes('?')?'&':'?')+'r='+k:src); }catch(e){ if(k>=2) throw e; await new Promise(r=>setTimeout(r,700*(k+1))); } } };
@@ -256,8 +270,8 @@
         for(let i=0;i<W*H;i++) A[i]=d[i*4+3];
         return ED.cache[g]={mask,shade,shadow,W,H,A};
       }
-      function defaults(a,mode){ // igual a shirtDefaults() no servidor
-        const {A,W,H}=a, asp=ED.photo.naturalWidth/ED.photo.naturalHeight; let x0=W,y0=H,x1=0,y1=0;
+      function defaults(a,mode,img){ // igual a shirtDefaults() no servidor
+        const {A,W,H}=a, asp=img.naturalWidth/img.naturalHeight; let x0=W,y0=H,x1=0,y1=0;
         for(let y=0;y<H;y++) for(let x=0;x<W;x++) if(A[y*W+x]>128){ if(x<x0)x0=x; if(x>x1)x1=x; if(y<y0)y0=y; if(y>y1)y1=y; }
         const bw=x1-x0+1, bh=y1-y0+1, cx=Math.round(x0+bw/2);
         if(mode==='cheia') return {cx, cy:Math.round(y0+bh/2), w:Math.round(Math.max(bw,bh*asp))};
@@ -266,48 +280,57 @@
         const w=Math.round((r-l+1)*(asp>=1?p[1]:p[2])), h=w/asp;
         return {cx, cy:Math.round(y0+bh*p[3]+h/2), w};
       }
-      const clampEd=()=>{ ED.cx=Math.min(1024,Math.max(0,Math.round(ED.cx))); ED.cy=Math.min(1024,Math.max(0,Math.round(ED.cy))); ED.w=Math.min(2400,Math.max(40,Math.round(ED.w))); };
-      const pRect=()=>{ const pw=ED.w, ph=ED.w*ED.photo.naturalHeight/ED.photo.naturalWidth; return {x:ED.cx-pw/2,y:ED.cy-ph/2,w:pw,h:ph}; };
-      const handlePt=()=>{ const r=pRect(), a=ED.a; return {x:Math.min(r.x+r.w,a.W-26),y:Math.min(r.y+r.h,a.H-26)}; };
+      const clampL=l=>{ l.cx=Math.min(1024,Math.max(0,Math.round(l.cx))); l.cy=Math.min(1024,Math.max(0,Math.round(l.cy))); l.w=Math.min(2400,Math.max(40,Math.round(l.w))); };
+      const clampEd=()=>ED.L.forEach(clampL);
+      const rectOf=l=>{ const ph=l.w*l.img.naturalHeight/l.img.naturalWidth; return {x:l.cx-l.w/2,y:l.cy-ph/2,w:l.w,h:ph}; };
+      const handlePt=()=>{ const r=rectOf(cur()), a=ED.a; return {x:Math.min(r.x+r.w,a.W-26),y:Math.min(r.y+r.h,a.H-26)}; };
+      const applyDefaults=l=>Object.assign(l,defaults(ED.a,ED.mode,l.img));
+      const hitAt=p=>{ for(let k=ED.L.length-1;k>=0;k--){ const r=rectOf(ED.L[k]); if(p.x>=r.x&&p.x<=r.x+r.w&&p.y>=r.y&&p.y<=r.y+r.h) return k; } return -1; };
       function draw(overlay=true){
-        const a=ED.a; if(!a||!ED.photo) return;
+        const a=ED.a; if(!a||!ED.L.length) return;
         if(cv.width!==a.W){ cv.width=gc.width=a.W; cv.height=gc.height=a.H; }
-        const r=pRect();
         g2.globalCompositeOperation='source-over'; g2.fillStyle=CORES[ED.cor]; g2.fillRect(0,0,a.W,a.H);
-        g2.imageSmoothingQuality='high'; g2.drawImage(ED.photo,r.x,r.y,r.w,r.h);
+        g2.imageSmoothingQuality='high'; ED.L.forEach(l=>{ const r=rectOf(l); g2.drawImage(l.img,r.x,r.y,r.w,r.h); });
         g2.globalCompositeOperation='multiply'; g2.drawImage(a.shade,0,0);
         g2.globalCompositeOperation='destination-in'; g2.drawImage(a.mask,0,0);
         ctx.globalCompositeOperation='source-over'; ctx.fillStyle=SHIRT_BG; ctx.fillRect(0,0,a.W,a.H);
         ctx.drawImage(a.shadow,0,SHADOW_DY); ctx.drawImage(gc,0,0);
-        if(overlay){
+        if(overlay&&cur()){ const r=rectOf(cur());
           ctx.save(); ctx.setLineDash([10,8]); ctx.lineWidth=2; ctx.strokeStyle='rgba(20,20,20,.55)'; ctx.strokeRect(r.x,r.y,r.w,r.h);
           const h=handlePt(); ctx.setLineDash([]); ctx.fillStyle='#fff'; ctx.strokeStyle='rgba(0,0,0,.6)'; ctx.lineWidth=3;
           ctx.beginPath(); ctx.arc(h.x,h.y,16,0,Math.PI*2); ctx.fill(); ctx.stroke();
           ctx.beginPath(); ctx.moveTo(h.x-6,h.y+6); ctx.lineTo(h.x+6,h.y-6); ctx.moveTo(h.x+1,h.y-6); ctx.lineTo(h.x+6,h.y-6); ctx.lineTo(h.x+6,h.y-1); ctx.moveTo(h.x-6,h.y+1); ctx.lineTo(h.x-6,h.y+6); ctx.lineTo(h.x-1,h.y+6); ctx.stroke();
           ctx.restore();
         }
-        document.getElementById('ed-size').value=ED.w;
+        const sz=document.getElementById('ed-size'); sz.disabled=!cur(); if(cur()) sz.value=cur().w;
+        ['ed-center','ed-front','ed-del'].forEach(id=>document.getElementById(id).disabled=!cur());
+        if(ED.L.length<2) document.getElementById('ed-front').disabled=true; if(ED.L.length<2) document.getElementById('ed-del').disabled=true;
         curUrl=c.bucket_base+'/mockups-v2/'+edId()+'.jpg';
         document.getElementById('r-tag').textContent=TIPO.blusa+' · '+GARM[ED.g]+' · '+CORN[ED.cor]+' · '+(LANG==='en'?'Original photo':'Foto original');
         document.getElementById('r-buy').href=waLink();
       }
       const slugOf=p=>p.replace(/\.[a-z0-9]+$/i,'').toLowerCase().replace(/[^a-z0-9]+/g,'-');
-      const edId=()=>slugOf(selPath)+'__blusa-'+ED.g+'-'+ED.cor+'-'+ED.cx+'-'+ED.cy+'-'+ED.w;
+      // mesmo id do servidor: 1 foto = posição no nome; várias = hash da composição (fnv() em api/_provador.js)
+      const fnv=s=>{ let h=0x811c9dc5; for(let i=0;i<s.length;i++){ h^=s.charCodeAt(i); h=Math.imul(h,0x01000193)>>>0; } return h.toString(16).padStart(8,'0'); };
+      const edId=()=>{ const L=ED.L, b=slugOf(L[0].path)+'__blusa-'+ED.g+'-'+ED.cor+'-';
+        return L.length===1 ? b+L[0].cx+'-'+L[0].cy+'-'+L[0].w : b+'m'+fnv(L.map(l=>l.path+':'+l.cx+':'+l.cy+':'+l.w).join('|')); };
+      const syncSel=()=>{ selPath=ED.L[0]?.path||null; selCap=ED.L.map(l=>l.cap).join(' + '); document.getElementById('r-cap').textContent=selCap; };
       let edRaf=0; const redraw=()=>{ clampEd(); cancelAnimationFrame(edRaf); edRaf=requestAnimationFrame(()=>draw()); };
       // render no servidor (mesma conta) pra criação ter link próprio /p/:id; o id é determinístico, então dá pra compartilhar na hora
       let edSaved='';
       function edSave(){ const id=edId(); if(edSaved===id) return; edSaved=id;
-        fetch('/api/mockup',{method:'POST',keepalive:true,headers:{'Content-Type':'application/json'},body:JSON.stringify({path:selPath,tipo:'blusa',garment:ED.g,color:ED.cor,cx:ED.cx,cy:ED.cy,w:ED.w})}).catch(()=>{ edSaved=''; });
+        const L=ED.L.map(({path,cx,cy,w})=>({path,cx,cy,w}));
+        fetch('/api/mockup',{method:'POST',keepalive:true,headers:{'Content-Type':'application/json'},body:JSON.stringify({path:L[0].path,tipo:'blusa',garment:ED.g,color:ED.cor,...L[0],...(L.length>1?{layers:L}:{})})}).catch(()=>{ edSaved=''; });
         try{ gtag&&gtag('event','mockup_view',{tipo:'blusa',garment:ED.g,color:ED.cor}); }catch(e){} }
       function edDownload(){ draw(false); cv.toBlob(b=>{ draw(); const a=document.createElement('a'); a.href=URL.createObjectURL(b); a.download='hugo-carmo-'+edId()+'.jpg'; document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(a.href),4000); },'image/jpeg',0.92); }
       async function setGarment(g){
         const tok=++ED.tok, prev=ED.g; ED.g=g; renderEdCtrls(); cv.style.opacity=.45;
         if(!ED.cache[g]) edHint(LANG==='en'?'Loading garment…':'Carregando a peça…');
-        try{ const a=await pecaAssets(g); if(tok!==ED.tok) return; ED.a=a; Object.assign(ED,defaults(a,ED.mode)); edShow(); redraw(); edHint(); }
+        try{ const a=await pecaAssets(g); if(tok!==ED.tok) return; ED.a=a; if(ED.L.length===1) applyDefaults(ED.L[0]); edShow(); redraw(); edHint(); }
         catch(e){ if(tok!==ED.tok) return; ED.g=prev; renderEdCtrls(); cv.style.opacity=1; edToast(LANG==='en'?'Could not load this garment — try again.':'Não deu pra carregar essa peça — tente de novo.'); }
       }
       const edShow=()=>{ const err=document.getElementById('r-err'); err.classList.add('hidden'); err.classList.remove('flex'); cv.classList.remove('hidden'); cv.style.opacity=1; };
-      const HINT=LANG==='en'?'Drag to move · pull the corner to resize':'Arraste para mover · puxe o canto para aumentar';
+      const HINT=LANG==='en'?'Tap a photo to edit · drag to move · pull the corner to resize':'Toque numa foto para editar · arraste · puxe o canto para aumentar';
       const hintEl=document.getElementById('ed-hint');
       function edHint(msg,warn){ hintEl.querySelector('span').textContent=msg||HINT; hintEl.classList.toggle('text-amber-300',!!warn); hintEl.classList.remove('hidden'); hintEl.style.opacity=1;
         clearTimeout(hintEl._t); if(warn) hintEl._t=setTimeout(()=>edHint(),3500); }
@@ -327,42 +350,72 @@
         const ML={...MODES, ...(ED.g==='bone'?{peito:LANG==='en'?'Front print':'Estampa na frente'}:{})};
         document.getElementById('ed-mode').innerHTML=Object.keys(ML).map(m=>`<button data-em="${m}" class="${seg(m===ED.mode)}">${ML[m]}</button>`).join('');
         document.getElementById('ed-gname').textContent=GARM[ED.g]; document.getElementById('ed-cname').textContent=CORN[ED.cor];
+        document.getElementById('ed-lcount').textContent=ED.L.length+'/'+MAXL+(LANG==='en'?' photos':' fotos');
+        document.getElementById('ed-layers').innerHTML=ED.L.map((l,i)=>`<button data-el="${i}" aria-label="${esc(l.cap)}" title="${esc(l.cap)}" class="w-14 h-14 rounded-lg overflow-hidden bg-white/5 border transition ${i===ED.sel?'border-white ring-2 ring-white':'border-white/15 hover:border-white/50'}"><img src="${imgUrl(l.path)}" alt="" class="w-full h-full object-cover"></button>`).join('')
+          +(ED.L.length<MAXL?`<button id="ed-add" type="button" class="w-14 h-14 rounded-lg border border-dashed border-white/30 text-white/70 hover:text-white hover:border-white flex flex-col items-center justify-center gap-0.5 text-[10px]"><i data-lucide="plus" class="w-4 h-4"></i>${LANG==='en'?'Photo':'Foto'}</button>`:'');
+        document.querySelectorAll('[data-el]').forEach(b=>b.onclick=()=>{ ED.sel=+b.dataset.el; renderEdCtrls(); redraw(); });
+        const ad=document.getElementById('ed-add'); if(ad) ad.onclick=openPick;
+        if(window.lucide) lucide.createIcons();
         document.querySelectorAll('[data-ek]').forEach(b=>b.onclick=()=>{ edCat=b.dataset.ek; if(CATS[edCat].length===1&&ED.g!==CATS[edCat][0]) setGarment(CATS[edCat][0]); else renderEdCtrls(); });
         document.querySelectorAll('[data-eg]').forEach(b=>b.onclick=()=>{ if(b.dataset.eg!==ED.g) setGarment(b.dataset.eg); });
         document.querySelectorAll('[data-ec]').forEach(b=>b.onclick=()=>{ ED.cor=b.dataset.ec; renderEdCtrls(); redraw(); });
-        document.querySelectorAll('[data-em]').forEach(b=>b.onclick=()=>{ ED.mode=b.dataset.em; renderEdCtrls(); if(ED.a){ Object.assign(ED,defaults(ED.a,ED.mode)); redraw(); } });
+        document.querySelectorAll('[data-em]').forEach(b=>b.onclick=()=>{ ED.mode=b.dataset.em; if(ED.sel<0) ED.sel=ED.L.length-1; if(ED.a&&cur()) applyDefaults(cur()); renderEdCtrls(); redraw(); });
       }
       document.getElementById('ed-l-g').textContent=LANG==='en'?'1 · Garment':'1 · Peça';
       document.getElementById('ed-l-c').textContent=LANG==='en'?'2 · Colour':'2 · Cor';
       document.getElementById('ed-l-mode').textContent=LANG==='en'?'3 · Print':'3 · Estampa';
       document.querySelector('#ed-center span').textContent=LANG==='en'?'Reset position':'Recentralizar';
-      document.getElementById('ed-center').addEventListener('click',()=>{ if(ED.a){ Object.assign(ED,defaults(ED.a,ED.mode)); redraw(); } });
+      document.querySelector('#ed-front span').textContent=LANG==='en'?'Bring to front':'Trazer pra frente';
+      document.querySelector('#ed-del span').textContent=LANG==='en'?'Remove photo':'Remover foto';
+      document.getElementById('ed-center').addEventListener('click',()=>{ if(ED.a&&cur()){ applyDefaults(cur()); redraw(); } });
+      document.getElementById('ed-front').addEventListener('click',()=>{ if(!cur()) return; ED.L.push(ED.L.splice(ED.sel,1)[0]); ED.sel=ED.L.length-1; syncSel(); renderEdCtrls(); redraw(); });
+      document.getElementById('ed-del').addEventListener('click',()=>{ if(!cur()||ED.L.length<2) return; ED.L.splice(ED.sel,1); ED.sel=-1; syncSel(); renderEdCtrls(); redraw(); });
+      // escolher mais uma foto do acervo
+      const pick=document.getElementById('pick');
+      document.getElementById('pick-t').textContent=LANG==='en'?'Add another photo':'Adicionar outra foto';
+      function openPick(){ document.getElementById('pick-grid').innerHTML=fts.map(p=>`<button data-pp="${esc(p.path)}" class="aspect-square rounded-lg overflow-hidden bg-white/5 hover:ring-2 hover:ring-white transition"><img src="${imgUrl(p.path)}" alt="${esc(capOf(p))}" loading="lazy" class="w-full h-full object-cover"></button>`).join('');
+        document.querySelectorAll('[data-pp]').forEach(b=>b.onclick=()=>{ closePick(); addLayer(b.dataset.pp); });
+        pick.classList.remove('hidden'); pick.classList.add('flex'); document.body.style.overflow='hidden'; }
+      function closePick(){ pick.classList.add('hidden'); pick.classList.remove('flex'); document.body.style.overflow=''; }
+      document.getElementById('pick-x').onclick=closePick; pick.addEventListener('click',e=>{ if(e.target===pick) closePick(); });
+      document.addEventListener('keydown',e=>{ if(e.key==='Escape') closePick(); });
+      async function addLayer(path){
+        if(ED.L.length>=MAXL||!ED.a) return; const ph=fts.find(p=>p.path===path); if(!ph) return;
+        edHint(LANG==='en'?'Loading photo…':'Carregando a foto…');
+        try{ const img=await loadImg(imgUrl(path)); const l={path,cap:capOf(ph),img}; ED.mode='peito'; applyDefaults(l);
+          const k=ED.L.length; l.w=Math.round(l.w*0.75); l.cx+=k*40; l.cy+=k*55; clampL(l);
+          ED.L.push(l); ED.sel=ED.L.length-1; syncSel(); renderEdCtrls(); redraw(); edHint(); }
+        catch(e){ edToast(LANG==='en'?'Could not load this photo — try again.':'Não deu pra carregar essa foto — tente de novo.'); }
+      }
       // layout: no desktop, peça à esquerda e controles à direita
       function edLayout(on){ const R=document.getElementById('result'), B=document.getElementById('r-body'), E=document.getElementById('ed');
         R.classList.toggle('max-w-3xl',!on); R.classList.toggle('max-w-6xl',on);
         ['md:grid','md:grid-cols-[minmax(0,1.2fr)_minmax(320px,1fr)]','md:items-start'].forEach(k=>B.classList.toggle(k,on));
         E.classList.toggle('hidden',!on); E.classList.toggle('flex',on); if(!on) hintEl.classList.add('hidden'); }
-      document.getElementById('ed-size').addEventListener('input',e=>{ ED.w=+e.target.value; redraw(); });
+      document.getElementById('ed-size').addEventListener('input',e=>{ if(cur()){ cur().w=+e.target.value; redraw(); } });
       // gestos: 1 dedo/mouse = mover (ou redimensionar pelo canto); 2 dedos = pinça; roda do mouse = zoom
       const ptrs=new Map(); let gest=null;
       const toCv=e=>{ const b=cv.getBoundingClientRect(); return {x:(e.clientX-b.left)*cv.width/b.width, y:(e.clientY-b.top)*cv.height/b.height}; };
       const startGesture=()=>{ const pts=[...ptrs.values()];
-        if(pts.length>=2){ const [a,b]=pts; gest={type:'pinch',d:Math.hypot(a.x-b.x,a.y-b.y)||1,w:ED.w,mx:(a.x+b.x)/2,my:(a.y+b.y)/2,cx:ED.cx,cy:ED.cy}; return; }
-        const p=pts[0], h=handlePt();
-        gest=Math.hypot(p.x-h.x,p.y-h.y)<44 ? {type:'resize',d:Math.hypot(p.x-ED.cx,p.y-ED.cy)||1,w:ED.w} : {type:'move',x:p.x,y:p.y,cx:ED.cx,cy:ED.cy}; };
+        if(pts.length>=2){ if(!cur()) return gest=null; const [a,b]=pts, l=cur(); gest={type:'pinch',d:Math.hypot(a.x-b.x,a.y-b.y)||1,w:l.w,mx:(a.x+b.x)/2,my:(a.y+b.y)/2,cx:l.cx,cy:l.cy}; return; }
+        const p=pts[0];
+        if(cur()){ const h=handlePt(); if(Math.hypot(p.x-h.x,p.y-h.y)<44) return gest={type:'resize',d:Math.hypot(p.x-cur().cx,p.y-cur().cy)||1,w:cur().w}; }
+        const k=hitAt(p); if(k!==ED.sel){ ED.sel=k; renderEdCtrls(); redraw(); } // tocar fora das fotos tira o quadro de seleção
+        gest=k>=0?{type:'move',x:p.x,y:p.y,cx:cur().cx,cy:cur().cy}:null; };
       cv.addEventListener('pointerdown',e=>{ if(!ED.a) return; edHintOff(); cv.setPointerCapture(e.pointerId); ptrs.set(e.pointerId,toCv(e)); startGesture(); e.preventDefault(); });
       cv.addEventListener('pointermove',e=>{
-        if(!ptrs.has(e.pointerId)){ if(ED.a){ const p=toCv(e), h=handlePt(); cv.style.cursor=Math.hypot(p.x-h.x,p.y-h.y)<44?'nwse-resize':'move'; } return; }
-        ptrs.set(e.pointerId,toCv(e)); const pts=[...ptrs.values()];
-        if(gest.type==='pinch'&&pts.length>=2){ const [a,b]=pts; ED.w=gest.w*Math.hypot(a.x-b.x,a.y-b.y)/gest.d; ED.cx=gest.cx+(a.x+b.x)/2-gest.mx; ED.cy=gest.cy+(a.y+b.y)/2-gest.my; }
-        else if(gest.type==='resize'){ const p=pts[0]; ED.w=gest.w*Math.hypot(p.x-ED.cx,p.y-ED.cy)/gest.d; }
-        else if(gest.type==='move'){ const p=pts[0]; ED.cx=gest.cx+p.x-gest.x; ED.cy=gest.cy+p.y-gest.y; }
+        if(!ptrs.has(e.pointerId)){ if(ED.a&&ED.L.length){ const p=toCv(e); let c='default';
+            if(cur()){ const h=handlePt(); if(Math.hypot(p.x-h.x,p.y-h.y)<44) c='nwse-resize'; } if(c==='default'&&hitAt(p)>=0) c='move'; cv.style.cursor=c; } return; }
+        ptrs.set(e.pointerId,toCv(e)); const pts=[...ptrs.values()], l=cur(); if(!gest||!l) return;
+        if(gest.type==='pinch'&&pts.length>=2){ const [a,b]=pts; l.w=gest.w*Math.hypot(a.x-b.x,a.y-b.y)/gest.d; l.cx=gest.cx+(a.x+b.x)/2-gest.mx; l.cy=gest.cy+(a.y+b.y)/2-gest.my; }
+        else if(gest.type==='resize'){ const p=pts[0]; l.w=gest.w*Math.hypot(p.x-l.cx,p.y-l.cy)/gest.d; }
+        else if(gest.type==='move'){ const p=pts[0]; l.cx=gest.cx+p.x-gest.x; l.cy=gest.cy+p.y-gest.y; }
         redraw(); });
       const endPtr=e=>{ if(!ptrs.delete(e.pointerId)) return; if(ptrs.size) startGesture(); else gest=null; };
       cv.addEventListener('pointerup',endPtr); cv.addEventListener('pointercancel',endPtr);
-      cv.addEventListener('wheel',e=>{ if(!ED.a) return; e.preventDefault(); ED.w*=Math.exp(-e.deltaY*0.0015); redraw(); },{passive:false});
+      cv.addEventListener('wheel',e=>{ if(!ED.a) return; const k=cur()?ED.sel:hitAt(toCv(e)); if(k<0) return; e.preventDefault(); if(k!==ED.sel){ ED.sel=k; renderEdCtrls(); } ED.L[k].w*=Math.exp(-e.deltaY*0.0015); redraw(); },{passive:false});
       async function openEditor(path, cap){
-        selPath=path; selCap=cap; ED.on=true; edSaved='';
+        selPath=path; selCap=cap; ED.on=true; edSaved=''; ED.L=[]; ED.sel=-1;
         const R=document.getElementById('result'); R.classList.remove('hidden');
         const img=document.getElementById('r-img'), load=document.getElementById('r-load'), err=document.getElementById('r-err');
         img.classList.add('hidden'); err.classList.add('hidden'); err.classList.remove('flex'); load.classList.remove('hidden'); load.classList.add('flex');
@@ -372,7 +425,7 @@
         R.scrollIntoView({behavior:'smooth',block:'start'});
         const tok=++ED.tok;
         try{ const [ph,a]=await Promise.all([loadImg(imgUrl(path)),pecaAssets(ED.g)]); if(tok!==ED.tok||selPath!==path) return;
-          ED.photo=ph; ED.a=a; Object.assign(ED,defaults(a,ED.mode)); clampEd();
+          ED.a=a; const l={path,cap,img:ph}; applyDefaults(l); clampL(l); ED.L=[l]; ED.sel=0; syncSel(); renderEdCtrls();
           load.classList.add('hidden'); load.classList.remove('flex'); edShow(); draw(); edHint();
           ['r-buy','r-share','r-dl'].forEach(id=>document.getElementById(id).classList.remove('hidden')); }
         catch(e){ if(tok===ED.tok){ load.classList.add('hidden'); load.classList.remove('flex'); edError(); } }

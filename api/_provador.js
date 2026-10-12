@@ -185,28 +185,34 @@ export function shirtDefaults(alpha, W, H, mode, aspect, p = [0.45, 0.62, 0.5, 0
   return { cx, cy: Math.round(y0 + bh * p[3] + h / 2), w };
 }
 
+// Hash curto e determinístico da composição com várias fotos (o editor calcula igual, pra ter o link na hora).
+export const fnv = s => { let h = 0x811c9dc5; for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 0x01000193) >>> 0; } return h.toString(16).padStart(8, '0'); };
+
 // Render final da blusa (JPEG). Mesma composição do canvas do editor:
-// fundo → sombra → [cor do tecido | foto] × sombreado, recortado pela máscara.
-export async function renderShirt({ mask, shade, shadow, photo, color, cx, cy, w }) {
+// fundo → sombra → [cor do tecido | fotos, na ordem (a última fica por cima)] × sombreado, recortado pela máscara.
+export async function renderShirt({ mask, shade, shadow, photo, color, cx, cy, w, layers }) {
+  layers = layers || [{ photo, cx, cy, w }];
   const { info } = await sharp(mask).raw().toBuffer({ resolveWithObject: true });
   const W = info.width, H = info.height;
   const [A, S, D] = await Promise.all([grey(mask, 3), grey(shade, 0), grey(shadow, 3)]);
-  const meta = await sharp(photo).rotate().metadata();
-  const [ow, oh] = (meta.orientation || 1) >= 5 ? [meta.height, meta.width] : [meta.width, meta.height];
-  const pw = Math.max(1, Math.round(w)), ph = Math.max(1, Math.round(w * oh / ow));
-  const px = Math.round(cx - pw / 2), py = Math.round(cy - ph / 2);
-  const P = await sharp(photo).rotate().toColourspace('srgb').resize(pw, ph, { fit: 'fill' }).removeAlpha().raw().toBuffer({ resolveWithObject: true });
-  const pc = P.info.channels;
+  const L = await Promise.all(layers.map(async l => {
+    const meta = await sharp(l.photo).rotate().metadata();
+    const [ow, oh] = (meta.orientation || 1) >= 5 ? [meta.height, meta.width] : [meta.width, meta.height];
+    const pw = Math.max(1, Math.round(l.w)), ph = Math.max(1, Math.round(l.w * oh / ow));
+    const P = await sharp(l.photo).rotate().toColourspace('srgb').resize(pw, ph, { fit: 'fill' }).removeAlpha().raw().toBuffer({ resolveWithObject: true });
+    return { pw, ph, px: Math.round(l.cx - pw / 2), py: Math.round(l.cy - ph / 2), d: P.data, pc: P.info.channels };
+  }));
   const col = [1, 3, 5].map(i => parseInt(color.slice(i, i + 2), 16));
   const out = Buffer.alloc(W * H * 3);
   for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) {
     const i = y * W + x, o = i * 3;
     const sa = y >= SHADOW_DY ? D[i - SHADOW_DY * W] / 255 : 0;
     const a = A[i] / 255, s = S[i] / 255;
-    const inP = x >= px && x < px + pw && y >= py && y < py + ph;
-    const q = inP ? ((y - py) * pw + (x - px)) * pc : 0;
+    let hit = null;
+    for (let k = L.length - 1; k >= 0; k--) { const l = L[k]; if (x >= l.px && x < l.px + l.pw && y >= l.py && y < l.py + l.ph) { hit = l; break; } }
+    const q = hit ? ((y - hit.py) * hit.pw + (x - hit.px)) * hit.pc : 0;
     for (let c = 0; c < 3; c++) {
-      const g = (inP ? P.data[q + (pc > 2 ? c : 0)] : col[c]) * s;
+      const g = (hit ? hit.d[q + (hit.pc > 2 ? c : 0)] : col[c]) * s;
       out[o + c] = Math.round(SHIRT_BG[c] * (1 - sa) * (1 - a) + g * a);
     }
   }
