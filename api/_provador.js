@@ -43,7 +43,7 @@ export const GARMENTS = {
   cropped: { d: "a women's cropped t-shirt with short sleeves, boxy and short, ending above the waist", p: [0.5, 0.6, 0.48, 0.24] },
   'regata-fem': { d: "a women's fitted tank top with thin shoulder straps and a scoop neckline", p: [0.5, 0.58, 0.46, 0.28] },
   vestido: { d: "a women's short-sleeve t-shirt dress, straight cut, knee length", p: [0.3, 0.6, 0.48, 0.14] },
-  bone: { p: [0.4, 0.5, 0.38, 0.16], prompt: 'Photorealistic e-commerce product photo of a plain pure white six-panel baseball cap with a curved brim, completely blank — no logo, no text, no embroidery, no eyelets visible. Seen straight from the front at eye level, centered with generous margin, the two front panels facing the camera and the brim at the bottom. Background: a perfectly uniform solid very dark charcoal (#141414) surface. Soft even studio lighting showing realistic subtle fabric texture and seams.' },
+  bone: { p: [0.4, 0.42, 0.32, 0.2], prompt: 'Photorealistic e-commerce product photo of a plain pure white six-panel baseball cap with a curved brim, completely blank — no logo, no text, no embroidery, no eyelets visible. Seen straight from the front at eye level, centered with generous margin, the two front panels facing the camera and the brim at the bottom. Background: a perfectly uniform solid very dark charcoal (#141414) surface. Soft even studio lighting showing realistic subtle fabric texture and seams.' },
 };
 export const COLORS = { branco: '#f4f3ef', off: '#e6dece', areia: '#c8b393', cinza: '#8e8e8c', marinho: '#1f2940', preto: '#262626' };
 export const SHIRT_BG = [236, 234, 229], SHADOW_DY = 10;

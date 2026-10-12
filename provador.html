@@ -59,6 +59,7 @@
 
     <div id="result" class="hidden max-w-3xl mx-auto mb-10">
       <div class="rounded-2xl overflow-hidden border border-white/10 bg-white/5">
+        <div id="r-body">
         <div class="relative aspect-square bg-black flex items-center justify-center">
           <img id="r-img" alt="" class="w-full h-full object-cover hidden">
           <canvas id="ed-cv" class="absolute inset-0 w-full h-full hidden touch-none cursor-move select-none"></canvas>
@@ -68,13 +69,25 @@
             <p id="r-msg" class="relative z-10 text-sm text-white/80"></p>
           </div>
           <div id="r-err" class="absolute inset-0 hidden flex-col items-center justify-center gap-2 p-6 text-center"></div>
+          <div id="ed-hint" class="hidden absolute bottom-3 left-1/2 -translate-x-1/2 max-w-[92%] px-3.5 py-1.5 rounded-full bg-black/70 backdrop-blur text-white text-xs pointer-events-none transition-opacity duration-500 flex items-center gap-2 text-center leading-snug w-max"><i data-lucide="move" class="w-3.5 h-3.5 shrink-0"></i><span></span></div>
         </div>
-        <div id="ed" class="hidden px-5 pt-5 pb-1 space-y-4 border-b border-white/10">
-          <p id="ed-hint" class="text-xs text-white/50 flex items-center gap-2"><i data-lucide="move" class="w-3.5 h-3.5"></i><span></span></p>
-          <div><p id="ed-l-mode" class="text-[11px] uppercase tracking-widest text-white/40 mb-2"></p><div id="ed-mode" class="flex flex-wrap gap-2"></div></div>
-          <div class="flex items-center gap-3"><i data-lucide="zoom-out" class="w-4 h-4 text-white/50"></i><input id="ed-size" type="range" min="60" max="1800" step="1" class="flex-1 accent-white"><i data-lucide="zoom-in" class="w-4 h-4 text-white/50"></i></div>
-          <div><p id="ed-l-g" class="text-[11px] uppercase tracking-widest text-white/40 mb-2"></p><div id="ed-g" class="flex flex-wrap gap-2"></div></div>
-          <div><p id="ed-l-c" class="text-[11px] uppercase tracking-widest text-white/40 mb-2"></p><div id="ed-c" class="flex flex-wrap gap-2.5"></div></div>
+        <div id="ed" class="hidden p-5 md:p-6 flex-col gap-7 border-t md:border-t-0 md:border-l border-white/10">
+          <section>
+            <div class="flex items-baseline justify-between mb-3"><h3 id="ed-l-g" class="text-sm font-semibold"></h3><span id="ed-gname" class="text-xs text-white/50"></span></div>
+            <div id="ed-cat" class="grid grid-cols-2 sm:flex gap-1 p-1 rounded-2xl sm:rounded-full bg-white/5 border border-white/10"></div>
+            <div id="ed-g" class="mt-3 grid grid-cols-4 gap-2"></div>
+          </section>
+          <section>
+            <div class="flex items-baseline justify-between mb-3"><h3 id="ed-l-c" class="text-sm font-semibold"></h3><span id="ed-cname" class="text-xs text-white/50"></span></div>
+            <div id="ed-c" class="flex flex-wrap gap-3"></div>
+          </section>
+          <section>
+            <h3 id="ed-l-mode" class="text-sm font-semibold mb-3"></h3>
+            <div id="ed-mode" class="grid grid-cols-2 gap-1 p-1 rounded-full bg-white/5 border border-white/10"></div>
+            <div class="mt-4 flex items-center gap-3"><i data-lucide="minus" class="w-4 h-4 text-white/50"></i><input id="ed-size" type="range" min="60" max="1800" step="1" class="flex-1 accent-white" aria-label="Tamanho da estampa"><i data-lucide="plus" class="w-4 h-4 text-white/50"></i></div>
+            <button id="ed-center" type="button" class="mt-3 text-xs text-white/60 hover:text-white flex items-center gap-1.5"><i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i><span></span></button>
+          </section>
+        </div>
         </div>
         <div class="p-5 flex flex-wrap items-center justify-between gap-3">
           <div><div id="r-cap" class="font-semibold"></div><div id="r-tag" class="text-white/50 text-xs"></div></div>
@@ -118,8 +131,8 @@
     fetch(CONTENT_URL+"?v="+Date.now(),{cache:"no-store"}).then(r=>r.json()).then(c=>{
       const imgUrl=p=>/^https?:\/\//.test(p)?p:(c.bucket_base+"/"+p);
       const wa=c.contact?.whatsapp||'';
-      const TIPO=LANG==='en'?{blusa:'Tee',print:'Print',bandeira:'Flag',prancha:'Surfboard',ambiente:'Interiors (architects)'}:{blusa:'Blusa',print:'Quadro',bandeira:'Bandeira',prancha:'Prancha de surf',ambiente:'Ambientes (arquitetos)'};
-      const MSG=LANG==='en'?{blusa:'Hi, I want the tee with the photo ',print:'Hi, I want the print with the photo ',bandeira:'Hi, I want the flag with the photo ',prancha:'Hi, I want the surfboard with the photo ',ambiente:'Hi, I\'m an architect/designer and want the print for a project with the photo '}:{blusa:'Olá, quero a blusa com a foto ',print:'Olá, quero o quadro com a foto ',bandeira:'Olá, quero a bandeira com a foto ',prancha:'Olá, quero a prancha de surf com a foto ',ambiente:'Olá, sou arquiteto(a)/designer e quero o quadro para um projeto com a foto '};
+      const TIPO=LANG==='en'?{blusa:'Apparel & caps',print:'Print',bandeira:'Flag',prancha:'Surfboard',ambiente:'Interiors (architects)'}:{blusa:'Roupas e boné',print:'Quadro',bandeira:'Bandeira',prancha:'Prancha de surf',ambiente:'Ambientes (arquitetos)'};
+      const MSG=LANG==='en'?{blusa:'Hi, I want the piece with the photo ',print:'Hi, I want the print with the photo ',bandeira:'Hi, I want the flag with the photo ',prancha:'Hi, I want the surfboard with the photo ',ambiente:'Hi, I\'m an architect/designer and want the print for a project with the photo '}:{blusa:'Olá, quero a peça com a foto ',print:'Olá, quero o quadro com a foto ',bandeira:'Olá, quero a bandeira com a foto ',prancha:'Olá, quero a prancha de surf com a foto ',ambiente:'Olá, sou arquiteto(a)/designer e quero o quadro para um projeto com a foto '};
       const ROOM=LANG==='en'?{sala:'Living room',quarto:'Bedroom',escritorio:'Office',jantar:'Dining room',hotel:'Hotel lobby'}:{sala:'Sala',quarto:'Quarto',escritorio:'Escritório',jantar:'Sala de jantar',hotel:'Lobby de hotel'};
       let selRoom='sala';
       const T={ title:LANG==='en'?'AI try-on':'Provador IA', badge:LANG==='en'?'AI preview':'Provador com IA',
@@ -219,7 +232,13 @@
       }));
       // ---- editor da blusa: a foto original sobre a peça (arrastar, aumentar, peça, cor, estampa cheia) ----
       // Mesma composição do servidor (api/_provador.js renderShirt): fundo → sombra → [cor | foto] × dobras, recortado pela máscara.
-      const GARM=LANG==='en'?{camiseta:'T-shirt',oversized:'Oversized',regata:'Tank top','manga-longa':'Long sleeve',moletom:'Sweatshirt',capuz:'Hoodie'}:{camiseta:'Camiseta',oversized:'Oversized',regata:'Regata','manga-longa':'Manga longa',moletom:'Moletom',capuz:'Moletom c/ capuz'};
+      const GARM=LANG==='en'?{camiseta:'T-shirt',oversized:'Oversized',regata:'Tank top','manga-longa':'Long sleeve',camisa:'Button-up shirt',moletom:'Sweatshirt',capuz:'Hoodie','baby-look':'Fitted tee',cropped:'Cropped','regata-fem':'Strappy tank',vestido:'T-shirt dress',bone:'Cap'}
+                            :{camiseta:'Camiseta',oversized:'Oversized',regata:'Regata','manga-longa':'Manga longa',camisa:'Camisa de botão',moletom:'Moletom',capuz:'Moletom c/ capuz','baby-look':'Baby look',cropped:'Cropped','regata-fem':'Regata alcinha',vestido:'Vestido camiseta',bone:'Boné'};
+      const CATS={camisetas:['camiseta','oversized','regata','manga-longa'],camisas:['camisa','moletom','capuz'],feminino:['baby-look','cropped','regata-fem','vestido'],bone:['bone']};
+      const CATN=LANG==='en'?{camisetas:'Tees',camisas:'Shirts & sweats',feminino:'Women',bone:'Cap'}:{camisetas:'Camisetas',camisas:'Camisa e moletom',feminino:'Feminino',bone:'Boné'};
+      // estampa "no peito" padrão por peça — mesmos números de GARMENTS[g].p em api/_provador.js
+      const PRN={camisa:[.45,.5,.42,.24],capuz:[.5,.6,.48,.3],'baby-look':[.45,.6,.48,.24],cropped:[.5,.6,.48,.24],'regata-fem':[.5,.58,.46,.28],vestido:[.3,.6,.48,.14],bone:[.4,.42,.32,.2]};
+      const catOf=g=>Object.keys(CATS).find(k=>CATS[k].includes(g));
       const CORES={branco:'#f4f3ef',off:'#e6dece',areia:'#c8b393',cinza:'#8e8e8c',marinho:'#1f2940',preto:'#262626'};
       const CORN=LANG==='en'?{branco:'White',off:'Off-white',areia:'Sand',cinza:'Grey',marinho:'Navy',preto:'Black'}:{branco:'Branco',off:'Off-white',areia:'Areia',cinza:'Cinza',marinho:'Marinho',preto:'Preto'};
       const MODES=LANG==='en'?{peito:'Chest print',cheia:'All-over print'}:{peito:'Estampa no peito',cheia:'Estampa cheia'};
@@ -242,10 +261,10 @@
         for(let y=0;y<H;y++) for(let x=0;x<W;x++) if(A[y*W+x]>128){ if(x<x0)x0=x; if(x>x1)x1=x; if(y<y0)y0=y; if(y>y1)y1=y; }
         const bw=x1-x0+1, bh=y1-y0+1, cx=Math.round(x0+bw/2);
         if(mode==='cheia') return {cx, cy:Math.round(y0+bh/2), w:Math.round(Math.max(bw,bh*asp))};
-        const ry=Math.round(y0+bh*0.45); let l=cx,r=cx;
+        const p=PRN[ED.g]||[.45,.62,.5,.2], ry=Math.round(y0+bh*p[0]); let l=cx,r=cx;
         while(l>0&&A[ry*W+l-1]>128) l--; while(r<W-1&&A[ry*W+r+1]>128) r++;
-        const w=Math.round((r-l+1)*(asp>=1?0.62:0.5)), h=w/asp;
-        return {cx, cy:Math.round(y0+bh*0.2+h/2), w};
+        const w=Math.round((r-l+1)*(asp>=1?p[1]:p[2])), h=w/asp;
+        return {cx, cy:Math.round(y0+bh*p[3]+h/2), w};
       }
       const clampEd=()=>{ ED.cx=Math.min(1024,Math.max(0,Math.round(ED.cx))); ED.cy=Math.min(1024,Math.max(0,Math.round(ED.cy))); ED.w=Math.min(2400,Math.max(40,Math.round(ED.w))); };
       const pRect=()=>{ const pw=ED.w, ph=ED.w*ED.photo.naturalHeight/ED.photo.naturalWidth; return {x:ED.cx-pw/2,y:ED.cy-ph/2,w:pw,h:ph}; };
@@ -283,26 +302,46 @@
       function edDownload(){ draw(false); cv.toBlob(b=>{ draw(); const a=document.createElement('a'); a.href=URL.createObjectURL(b); a.download='hugo-carmo-'+edId()+'.jpg'; document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(a.href),4000); },'image/jpeg',0.92); }
       async function setGarment(g){
         const tok=++ED.tok, prev=ED.g; ED.g=g; renderEdCtrls(); cv.style.opacity=.45;
-        try{ const a=await pecaAssets(g); if(tok!==ED.tok) return; ED.a=a; Object.assign(ED,defaults(a,ED.mode)); edShow(); redraw(); }
+        if(!ED.cache[g]) edHint(LANG==='en'?'Loading garment…':'Carregando a peça…');
+        try{ const a=await pecaAssets(g); if(tok!==ED.tok) return; ED.a=a; Object.assign(ED,defaults(a,ED.mode)); edShow(); redraw(); edHint(); }
         catch(e){ if(tok!==ED.tok) return; ED.g=prev; renderEdCtrls(); cv.style.opacity=1; edToast(LANG==='en'?'Could not load this garment — try again.':'Não deu pra carregar essa peça — tente de novo.'); }
       }
       const edShow=()=>{ const err=document.getElementById('r-err'); err.classList.add('hidden'); err.classList.remove('flex'); cv.classList.remove('hidden'); cv.style.opacity=1; };
-      function edToast(msg){ const h=document.querySelector('#ed-hint span'), old=h.dataset.t||h.textContent; h.dataset.t=old; h.textContent=msg; h.parentElement.classList.add('text-amber-300'); setTimeout(()=>{ h.textContent=old; h.parentElement.classList.remove('text-amber-300'); },3500); }
+      const HINT=LANG==='en'?'Drag to move · pull the corner to resize':'Arraste para mover · puxe o canto para aumentar';
+      const hintEl=document.getElementById('ed-hint');
+      function edHint(msg,warn){ hintEl.querySelector('span').textContent=msg||HINT; hintEl.classList.toggle('text-amber-300',!!warn); hintEl.classList.remove('hidden'); hintEl.style.opacity=1;
+        clearTimeout(hintEl._t); if(warn) hintEl._t=setTimeout(()=>edHint(),3500); }
+      const edHintOff=()=>{ hintEl.style.opacity=0; };
+      const edToast=msg=>edHint(msg,true);
       function edError(){ const err=document.getElementById('r-err'); cv.classList.add('hidden'); err.classList.remove('hidden'); err.classList.add('flex');
         err.innerHTML=`<p class="text-sm text-white/70">${LANG==='en'?'Could not load the garment. Try again soon.':'Não deu pra carregar a peça. Tente de novo em instantes.'}</p>`; }
+      let edCat='camisetas';
+      const thumbOf=g=>SUPA+'/storage/v1/render/image/public/photos/templates/peca-'+g+'.v'+PECA_V+'.png?width=200&height=200&resize=contain&quality=60';
       function renderEdCtrls(){
-        const pc=on=>`px-3.5 py-1.5 rounded-full border border-white/20 text-sm ${on?'bg-white text-black':'text-white/80 hover:bg-white/10'} transition`;
-        document.getElementById('ed-mode').innerHTML=Object.keys(MODES).map(m=>`<button data-em="${m}" class="${pc(m===ED.mode)}">${MODES[m]}</button>`).join('');
-        document.getElementById('ed-g').innerHTML=Object.keys(GARM).map(g=>`<button data-eg="${g}" class="${pc(g===ED.g)}">${GARM[g]}</button>`).join('');
-        document.getElementById('ed-c').innerHTML=Object.keys(CORES).map(k=>`<button data-ec="${k}" title="${CORN[k]}" aria-label="${CORN[k]}" class="w-8 h-8 rounded-full border border-white/30 ${k===ED.cor?'ring-2 ring-white ring-offset-2 ring-offset-black':''}" style="background:${CORES[k]}"></button>`).join('');
-        document.querySelectorAll('[data-em]').forEach(b=>b.onclick=()=>{ ED.mode=b.dataset.em; renderEdCtrls(); if(ED.a){ Object.assign(ED,defaults(ED.a,ED.mode)); redraw(); } });
-        document.querySelectorAll('[data-eg]').forEach(b=>b.onclick=()=>setGarment(b.dataset.eg));
+        const seg=on=>`flex-1 whitespace-nowrap px-3.5 py-1.5 rounded-full text-sm transition ${on?'bg-white text-black font-semibold':'text-white/70 hover:text-white'}`;
+        document.getElementById('ed-cat').innerHTML=Object.keys(CATS).map(k=>`<button data-ek="${k}" class="${seg(k===edCat)}">${CATN[k]}</button>`).join('');
+        document.getElementById('ed-g').innerHTML=CATS[edCat].map(g=>`<button data-eg="${g}" aria-label="${GARM[g]}" class="group flex flex-col items-center gap-1.5">
+            <span class="w-full aspect-square rounded-xl bg-[#141414] border ${g===ED.g?'border-white ring-1 ring-white':'border-white/10 group-hover:border-white/40'} overflow-hidden transition"><img src="${thumbOf(g)}" alt="" loading="lazy" class="w-full h-full object-contain p-1"></span>
+            <span class="text-[11px] leading-tight text-center ${g===ED.g?'text-white':'text-white/60'}">${GARM[g]}</span></button>`).join('');
+        document.getElementById('ed-c').innerHTML=Object.keys(CORES).map(k=>`<button data-ec="${k}" title="${CORN[k]}" aria-label="${CORN[k]}" class="w-9 h-9 rounded-full border border-white/25 transition ${k===ED.cor?'ring-2 ring-white ring-offset-2 ring-offset-[#151514] scale-105':'hover:scale-105'}" style="background:${CORES[k]}"></button>`).join('');
+        const ML={...MODES, ...(ED.g==='bone'?{peito:LANG==='en'?'Front print':'Estampa na frente'}:{})};
+        document.getElementById('ed-mode').innerHTML=Object.keys(ML).map(m=>`<button data-em="${m}" class="${seg(m===ED.mode)}">${ML[m]}</button>`).join('');
+        document.getElementById('ed-gname').textContent=GARM[ED.g]; document.getElementById('ed-cname').textContent=CORN[ED.cor];
+        document.querySelectorAll('[data-ek]').forEach(b=>b.onclick=()=>{ edCat=b.dataset.ek; if(CATS[edCat].length===1&&ED.g!==CATS[edCat][0]) setGarment(CATS[edCat][0]); else renderEdCtrls(); });
+        document.querySelectorAll('[data-eg]').forEach(b=>b.onclick=()=>{ if(b.dataset.eg!==ED.g) setGarment(b.dataset.eg); });
         document.querySelectorAll('[data-ec]').forEach(b=>b.onclick=()=>{ ED.cor=b.dataset.ec; renderEdCtrls(); redraw(); });
+        document.querySelectorAll('[data-em]').forEach(b=>b.onclick=()=>{ ED.mode=b.dataset.em; renderEdCtrls(); if(ED.a){ Object.assign(ED,defaults(ED.a,ED.mode)); redraw(); } });
       }
-      document.getElementById('ed-l-mode').textContent=LANG==='en'?'Print':'Estampa';
-      document.getElementById('ed-l-g').textContent=LANG==='en'?'Garment':'Peça';
-      document.getElementById('ed-l-c').textContent=LANG==='en'?'Colour':'Cor';
-      document.querySelector('#ed-hint span').textContent=LANG==='en'?'Drag the photo to move it · pull the corner (or pinch) to resize':'Arraste a foto para mover · puxe o canto (ou use dois dedos) para aumentar';
+      document.getElementById('ed-l-g').textContent=LANG==='en'?'1 · Garment':'1 · Peça';
+      document.getElementById('ed-l-c').textContent=LANG==='en'?'2 · Colour':'2 · Cor';
+      document.getElementById('ed-l-mode').textContent=LANG==='en'?'3 · Print':'3 · Estampa';
+      document.querySelector('#ed-center span').textContent=LANG==='en'?'Reset position':'Recentralizar';
+      document.getElementById('ed-center').addEventListener('click',()=>{ if(ED.a){ Object.assign(ED,defaults(ED.a,ED.mode)); redraw(); } });
+      // layout: no desktop, peça à esquerda e controles à direita
+      function edLayout(on){ const R=document.getElementById('result'), B=document.getElementById('r-body'), E=document.getElementById('ed');
+        R.classList.toggle('max-w-3xl',!on); R.classList.toggle('max-w-6xl',on);
+        ['md:grid','md:grid-cols-[minmax(0,1.2fr)_minmax(320px,1fr)]','md:items-start'].forEach(k=>B.classList.toggle(k,on));
+        E.classList.toggle('hidden',!on); E.classList.toggle('flex',on); if(!on) hintEl.classList.add('hidden'); }
       document.getElementById('ed-size').addEventListener('input',e=>{ ED.w=+e.target.value; redraw(); });
       // gestos: 1 dedo/mouse = mover (ou redimensionar pelo canto); 2 dedos = pinça; roda do mouse = zoom
       const ptrs=new Map(); let gest=null;
@@ -311,7 +350,7 @@
         if(pts.length>=2){ const [a,b]=pts; gest={type:'pinch',d:Math.hypot(a.x-b.x,a.y-b.y)||1,w:ED.w,mx:(a.x+b.x)/2,my:(a.y+b.y)/2,cx:ED.cx,cy:ED.cy}; return; }
         const p=pts[0], h=handlePt();
         gest=Math.hypot(p.x-h.x,p.y-h.y)<44 ? {type:'resize',d:Math.hypot(p.x-ED.cx,p.y-ED.cy)||1,w:ED.w} : {type:'move',x:p.x,y:p.y,cx:ED.cx,cy:ED.cy}; };
-      cv.addEventListener('pointerdown',e=>{ if(!ED.a) return; cv.setPointerCapture(e.pointerId); ptrs.set(e.pointerId,toCv(e)); startGesture(); e.preventDefault(); });
+      cv.addEventListener('pointerdown',e=>{ if(!ED.a) return; edHintOff(); cv.setPointerCapture(e.pointerId); ptrs.set(e.pointerId,toCv(e)); startGesture(); e.preventDefault(); });
       cv.addEventListener('pointermove',e=>{
         if(!ptrs.has(e.pointerId)){ if(ED.a){ const p=toCv(e), h=handlePt(); cv.style.cursor=Math.hypot(p.x-h.x,p.y-h.y)<44?'nwse-resize':'move'; } return; }
         ptrs.set(e.pointerId,toCv(e)); const pts=[...ptrs.values()];
@@ -329,17 +368,17 @@
         img.classList.add('hidden'); err.classList.add('hidden'); err.classList.remove('flex'); load.classList.remove('hidden'); load.classList.add('flex');
         document.getElementById('r-thumb').src=imgUrl(path); document.getElementById('r-msg').textContent=MSGS[0];
         document.getElementById('r-cap').textContent=cap;
-        document.getElementById('ed').classList.remove('hidden'); renderEdCtrls();
+        edCat=catOf(ED.g); edLayout(true); renderEdCtrls();
         R.scrollIntoView({behavior:'smooth',block:'start'});
         const tok=++ED.tok;
         try{ const [ph,a]=await Promise.all([loadImg(imgUrl(path)),pecaAssets(ED.g)]); if(tok!==ED.tok||selPath!==path) return;
           ED.photo=ph; ED.a=a; Object.assign(ED,defaults(a,ED.mode)); clampEd();
-          load.classList.add('hidden'); load.classList.remove('flex'); edShow(); draw();
+          load.classList.add('hidden'); load.classList.remove('flex'); edShow(); draw(); edHint();
           ['r-buy','r-share','r-dl'].forEach(id=>document.getElementById(id).classList.remove('hidden')); }
         catch(e){ if(tok===ED.tok){ load.classList.add('hidden'); load.classList.remove('flex'); edError(); } }
         if(window.lucide) lucide.createIcons();
       }
-      function closeEditor(){ ED.on=false; ED.tok++; cv.classList.add('hidden'); document.getElementById('ed').classList.add('hidden'); }
+      function closeEditor(){ ED.on=false; ED.tok++; cv.classList.add('hidden'); edLayout(false); }
       document.getElementById('r-buy').addEventListener('click',()=>{ if(ED.on) edSave(); });
       // ---- abrir uma criação compartilhada (?m=<id>) ----
       const mId=params.get('m');
@@ -360,6 +399,11 @@
         showResult(c.bucket_base+'/mockups-v2/'+mId+'.jpg');
         document.getElementById('step').textContent=LANG==='en'?'Want your own? Pick a product and a photo below.':'Quer criar o seu? Escolha um produto e uma foto abaixo.';
       }
+      // ---- deep link: /provador?foto=<path>&tipo=<tipo>&room=<cômodo> já abre com a foto escolhida (usado pela página da foto) ----
+      const fParam=params.get('foto');
+      if(fParam && !mId){ const ph=fts.find(p=>p.path===fParam); if(ph){ renderPills(); renderRooms();
+        const th=[...document.querySelectorAll('.thumb')].find(b=>b.dataset.path===ph.path); if(th) th.classList.add('ring-2','ring-white');
+        generate(ph.path, capOf(ph)); } }
       chrome(c); if(window.lucide)lucide.createIcons();
     }).catch(()=>{ chrome({}); if(window.lucide)lucide.createIcons(); });
   </script>
