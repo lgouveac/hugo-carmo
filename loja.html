@@ -111,7 +111,8 @@
       // ----- montar produtos -----
       const items=[];
       (c.photos||[]).filter(p=>p.section==='fotografias').sort((a,b)=>a.order-b.order).forEach(p=>{
-        items.push({tipo:'print', temas:(p.temas||[]), img:imgUrl(p.path), title:(LANG==='en'&&p.caption_en)?p.caption_en:(p.caption||''), price:printPrice, from:true});
+        items.push({tipo:'print', temas:(p.temas||[]), img:imgUrl(p.path), title:(LANG==='en'&&p.caption_en)?p.caption_en:(p.caption||''), price:printPrice, from:true,
+          page:(LANG==='en'?'/en':'')+'/foto/'+String(p.path).replace(/\.[a-z0-9]+$/i,'').toLowerCase().replace(/[^a-z0-9]+/g,'-')}); // página da foto (api/foto.js)
       });
       (c.fotolivros?.items||[]).forEach((p,i)=>{ const t=(LANG==='en'&&en.fotolivros&&en.fotolivros.items&&en.fotolivros.items[i])?{...p,...en.fotolivros.items[i]}:p;
         items.push({tipo:'fotolivro', temas:[], img:imgUrl(t.cover), title:t.title||'', price:t.price||'', from:false}); });
@@ -120,10 +121,10 @@
         if(tipo) items.push({tipo, temas:[], img:imgUrl(it.image), title:t.title||'', price:'', from:false}); });
       // ----- render cards -----
       const card=p=>`<div class="prod-card bg-gradient-to-br from-white/5 via-black/20 to-black/40 border border-white/10 rounded-2xl overflow-hidden flex flex-col" data-tipo="${p.tipo}" data-tema="${(p.temas||[]).join(' ')}">
-        <div class="aspect-square overflow-hidden"><img src="${esc(p.img)}" alt="${esc(p.title)}" loading="lazy" class="w-full h-full object-cover"></div>
+        ${p.page?`<a href="${p.page}" class="block aspect-square overflow-hidden"><img src="${esc(p.img)}" alt="${esc(p.title)}" loading="lazy" class="w-full h-full object-cover transition-transform duration-500 hover:scale-105"></a>`:`<div class="aspect-square overflow-hidden"><img src="${esc(p.img)}" alt="${esc(p.title)}" loading="lazy" class="w-full h-full object-cover"></div>`}
         <div class="flex-1 flex flex-col px-4 py-3">
           <div class="text-[11px] uppercase tracking-wider text-white/40 mb-1">${KICK[p.tipo]}</div>
-          <h3 class="text-sm font-semibold mb-2 leading-snug line-clamp-2">${esc(p.title)||'&nbsp;'}</h3>
+          <h3 class="text-sm font-semibold mb-2 leading-snug line-clamp-2">${p.page?`<a href="${p.page}" class="hover:underline underline-offset-2">${esc(p.title)}</a>`:(esc(p.title)||'&nbsp;')}</h3>
           <div class="flex items-end justify-between mt-auto gap-2">
             ${p.price?`<span class="flex flex-col leading-tight">${p.from?`<span class="text-[11px] text-gray-400">${esc(T.from)}</span>`:''}<span class="text-sm font-medium">${esc(p.price)}</span></span>`:'<span></span>'}
             <a href="${link(p.tipo,p.title)}" target="_blank" rel="noopener" class="shrink-0 px-3 py-1.5 rounded-lg bg-white text-black text-xs font-semibold hover:bg-white/90 flex items-center gap-1.5"><i data-lucide="message-circle" class="w-3.5 h-3.5"></i> ${esc(T.cta)}</a>

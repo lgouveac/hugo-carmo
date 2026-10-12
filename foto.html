@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-H1QFBNHHW3"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-H1QFBNHHW3');
+  </script>
+  <!-- Template da página de cada foto. Servido por /api/foto (rewrite /foto/:slug e /en/foto/:slug no vercel.json),
+       que preenche título, metas, OG, canonical, hreflang, JSON-LD e o conteúdo (#foto) no servidor. -->
+  <title id="t">Fotografia — Hugo Carmo</title>
+  <meta name="description" id="meta-desc" content="Fotografia fine art de Hugo Carmo.">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" id="robots" content="noindex, follow">
+  <meta name="author" content="Hugo Carmo">
+  <meta name="theme-color" content="#000000">
+  <link rel="canonical" id="canonical" href="https://www.hugocarmo.com.br/">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Hugo Carmo">
+  <meta property="og:locale" id="og-locale" content="pt_BR">
+  <meta property="og:title" id="og-title" content="Hugo Carmo — Artista Visual">
+  <meta property="og:description" id="og-desc" content="">
+  <meta property="og:url" id="og-url" content="https://www.hugocarmo.com.br/">
+  <meta property="og:image" id="og-image" content="https://gobslzsggskllmhzasti.supabase.co/storage/v1/object/public/photos/og-card.jpg">
+  <meta property="og:image:alt" id="og-image-alt" content="">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" id="tw-title" content="">
+  <meta name="twitter:image" id="tw-image" content="">
+  <link rel="icon" type="image/png" href="https://neompzltxilcimodyvpd.supabase.co/storage/v1/object/public/flou//Captura%20de%20tela%202025-06-16%20224245.png">
+  <link rel="preconnect" href="https://gobslzsggskllmhzasti.supabase.co" crossorigin>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+  <style>
+    body{font-family:'Inter',system-ui,sans-serif;background:#000}
+    #foto-img{opacity:0;transform:scale(.985);transition:opacity .7s ease,transform .9s cubic-bezier(.2,.7,.2,1)}
+    #foto-img.on{opacity:1;transform:none}
+    .mk-img{opacity:0;transition:opacity .4s}
+    .mk-img.on{opacity:1}
+  </style>
+  <script type="application/ld+json" id="ld-foto"></script>
+</head>
+<body class="bg-black text-white min-h-screen flex flex-col">
+  <header class="sticky top-0 z-[1100] w-full px-6 md:px-12 py-4 flex items-center justify-between bg-black/70 backdrop-blur border-b border-white/10">
+    <a href="/" id="lnk-home" class="font-mono tracking-[3px] text-lg">KINA</a>
+    <button id="menu-btn" aria-label="Menu" class="w-11 h-11 rounded-full border border-white/20 flex items-center justify-center hover:bg-white/10"><i data-lucide="menu" class="w-5 h-5"></i></button>
+  </header>
+  <div id="drawer-bg" class="fixed inset-0 z-[1099] bg-black/60 opacity-0 pointer-events-none transition-opacity duration-300"></div>
+  <aside id="drawer" class="fixed top-0 right-0 z-[1101] h-full w-[82%] max-w-sm bg-[#0b0b0a] border-l border-white/10 translate-x-full transition-transform duration-300 flex flex-col" aria-hidden="true">
+    <div class="flex items-center justify-between px-6 py-5 border-b border-white/10"><span class="font-mono tracking-[3px] text-lg">KINA</span><button id="drawer-close" aria-label="Fechar menu" class="w-10 h-10 rounded-full hover:bg-white/10 flex items-center justify-center"><i data-lucide="x" class="w-5 h-5"></i></button></div>
+    <nav id="drawer-nav" class="flex-1 overflow-y-auto px-4 py-4 flex flex-col"></nav>
+    <div id="drawer-foot" class="px-6 py-5 border-t border-white/10 flex items-center justify-between gap-3"></div>
+  </aside>
+
+  <main id="foto" class="flex-1 w-full"><p class="text-center text-white/50 py-24">—</p></main>
+
+  <footer class="w-full border-t border-white/10 py-8 px-4 md:px-16 text-center text-white/50 text-sm"><a href="/" id="lnk-foot" class="hover:text-white">© <span id="yr"></span> Hugo Carmo — Artista Visual</a></footer>
+
+  <script>window.__FOTO=null;</script>
+  <script>
+    // Conteúdo já vem renderizado do servidor (api/foto.js). Aqui só: menu, ícones, animações, setas do teclado e GA4.
+    const F=window.__FOTO||{};
+    const LANG=F.lang==='en'||document.documentElement.lang==='en'?'en':'pt';
+    document.getElementById('yr').textContent=new Date().getFullYear();
+    // Sem SSR (ex.: /foto sem slug) → manda para a galeria
+    if(!window.__FOTO){ location.replace(LANG==='en'?'/en#galeria':'/#galeria'); }
+    function chrome(c){
+      const home=LANG==='en'?'/en':'/';
+      const lh=document.getElementById('lnk-home'),lf=document.getElementById('lnk-foot'); if(lh)lh.href=home; if(lf)lf.href=home;
+      const P=LANG==='en'
+        ?[['/en','Photography'],['/en/temas','Themes'],['/en/provador','AI try-on'],['/en/cicloviagens','Journeys'],['/en/loja','Shop'],['/en/fotolivros','Photo books'],['/en/blog','Travel diary'],['/en/sobre','About'],['/en/faq','FAQ']]
+        :[['/','Fotografias'],['/temas','Temas'],['/provador','Provador IA'],['/cicloviagens','Cicloviagens'],['/loja','Loja'],['/fotolivros','Fotolivros'],['/blog','Diário'],['/sobre','Sobre'],['/faq','FAQ']];
+      const cur=(location.pathname.replace(/\/+$/,'')||'/');
+      document.getElementById('drawer-nav').innerHTML=P.map(([h,l])=>`<a href="${h}" class="px-3 py-3 rounded-lg text-lg ${cur===h.replace(/\/+$/,'')?'bg-white/10 text-white':'text-white/80 hover:bg-white/5 hover:text-white'} transition">${l}</a>`).join('');
+      // troca de idioma leva para a MESMA foto no outro idioma
+      const alt=F.alt||(LANG==='en'?'/':'/en');
+      const lang=`<a href="${alt}" class="text-sm font-semibold border border-white/20 rounded px-3 py-1.5 hover:bg-white/10">${LANG==='en'?'PT':'EN'}</a>`;
+      document.getElementById('drawer-foot').innerHTML=`<div class="flex items-center gap-3"><a href="${c.contact?.instagram_url||'#'}" target="_blank" rel="noopener" aria-label="Instagram" class="w-9 h-9 flex items-center justify-center rounded-full border border-white/15 text-white/70 hover:text-white hover:bg-white/10"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg></a><a href="https://wa.me/${c.contact?.whatsapp||''}" target="_blank" rel="noopener" aria-label="WhatsApp" class="w-9 h-9 flex items-center justify-center rounded-full border border-white/15 text-white/70 hover:text-white hover:bg-white/10"><i data-lucide="message-circle" class="w-4 h-4"></i></a></div>${lang}`;
+      const mb=document.getElementById('menu-btn'),dr=document.getElementById('drawer'),bg=document.getElementById('drawer-bg');
+      const op=()=>{dr.classList.remove('translate-x-full');bg.classList.remove('opacity-0','pointer-events-none');document.body.style.overflow='hidden';};
+      const cl=()=>{dr.classList.add('translate-x-full');bg.classList.add('opacity-0','pointer-events-none');document.body.style.overflow='';};
+      mb.onclick=op;document.getElementById('drawer-close').onclick=cl;bg.onclick=cl;document.addEventListener('keydown',e=>{if(e.key==='Escape')cl();});
+    }
+    chrome(F); if(window.lucide)lucide.createIcons();
+    // foto principal: aparece suave quando carrega
+    const im=document.getElementById('foto-img');
+    if(im){ const on=()=>im.classList.add('on'); if(im.complete&&im.naturalWidth) on(); else { im.addEventListener('load',on); im.addEventListener('error',on); } }
+    // miniaturas do provador: só mostram se o mockup já existe no cache (senão fica o ícone)
+    document.querySelectorAll('.mk-img').forEach(i=>{ const ok=()=>i.classList.add('on'), ko=()=>i.remove();
+      if(i.complete) (i.naturalWidth?ok():ko()); else { i.addEventListener('load',ok); i.addEventListener('error',ko); } });
+    // ← → navegam entre as fotos
+    document.addEventListener('keydown',e=>{ if(e.target.closest&&e.target.closest('input,textarea'))return; if(!document.getElementById('drawer').classList.contains('translate-x-full'))return;
+      const a=e.key==='ArrowLeft'?document.getElementById('prev-link'):e.key==='ArrowRight'?document.getElementById('next-link'):null; if(a) location.href=a.href; });
+    // GA4
+    document.querySelectorAll('[data-ev]').forEach(a=>a.addEventListener('click',()=>{ try{ gtag('event',a.dataset.ev,{foto:F.path||'',tipo:a.dataset.tipo||''}); }catch(e){} }));
+  </script>
+</body>
+</html>

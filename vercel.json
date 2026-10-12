@@ -3,7 +3,8 @@
   "cleanUrls": true,
   "trailingSlash": false,
   "functions": {
-    "api/post.js": { "includeFiles": "post.html" }
+    "api/post.js": { "includeFiles": "post.html" },
+    "api/foto.js": { "includeFiles": "foto.html" }
   },
   "rewrites": [
     { "source": "/sitemap.xml", "destination": "/api/sitemap" },
@@ -11,6 +12,8 @@
     { "source": "/p/:id", "destination": "/api/share?id=:id" },
     { "source": "/blog/:slug", "destination": "/api/post?slug=:slug" },
     { "source": "/en/blog/:slug", "destination": "/api/post?slug=:slug&lang=en" },
+    { "source": "/foto/:slug", "destination": "/api/foto?slug=:slug" },
+    { "source": "/en/foto/:slug", "destination": "/api/foto?slug=:slug&lang=en" },
     { "source": "/viagem/:slug", "destination": "/viagem" },
     { "source": "/en/viagem/:slug", "destination": "/viagem" },
     { "source": "/en/blog", "destination": "/blog" },

@@ -190,8 +190,9 @@
       <i data-lucide="x" class="w-6 h-6 text-white"></i>
     </button>
     <figure class="flex flex-col items-center gap-3">
-      <img id="modal-img" src="" alt="" class="modal-img-fullscreen max-w-[90vw] max-h-[85vh] object-contain rounded-lg" tabindex="0" />
+      <img id="modal-img" src="" alt="" class="modal-img-fullscreen max-w-[90vw] max-h-[80vh] object-contain rounded-lg" tabindex="0" />
       <figcaption id="modal-caption" class="text-white/70 text-sm"></figcaption>
+      <a id="modal-page" href="#" class="hidden items-center gap-2 px-4 py-2 rounded-full bg-white text-black text-sm font-semibold hover:bg-white/90"><span id="modal-page-lbl">Ver página da foto</span> <span aria-hidden="true">→</span></a>
     </figure>
   </div>
 
@@ -228,9 +229,13 @@
     const locOf = cap => { const p=String(cap||'').split(',').map(x=>x.trim()).filter(Boolean); if(!p.length) return ''; if(/^\d{4}$/.test(p[p.length-1])) p.pop(); return p[p.length-1]||''; };
 
     const capOf = p => (LANG==='en' && p.caption_en) ? p.caption_en : (p.caption||'');
-    const figHTML = p => { const cap=capOf(p); return `
+    // página exclusiva de cada foto: /foto/<slug> (api/foto.js)
+    const fotoSlug = p => String(p||'').replace(/\.[a-z0-9]+$/i,'').toLowerCase().replace(/[^a-z0-9]+/g,'-');
+    const fotoHref = p => (LANG==='en'?'/en':'')+'/foto/'+fotoSlug(p.path);
+    const figHTML = p => { const cap=capOf(p), isF=p.section==='fotografias'; return `
       <figure data-temas="${(p.temas||[]).join(' ')}" class="tema-fig group card-clickable relative mb-3 break-inside-avoid overflow-hidden rounded-xl bg-white/5">
-        <img src="${imgUrl(p.path)}" alt="${esc(cap)}" loading="lazy" data-lightbox data-caption="${esc(cap)}" class="bw-img w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]">
+        <img src="${imgUrl(p.path)}" alt="${esc(cap)}" loading="lazy" data-lightbox data-caption="${esc(cap)}"${isF?` data-foto="${fotoHref(p)}"`:''} class="bw-img w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]">
+        ${isF?`<a href="${fotoHref(p)}" aria-label="${LANG==='en'?'Open photo page':'Ver página da foto'}: ${esc(cap)}" title="${LANG==='en'?'Open photo page':'Ver página da foto'}" class="hidden sm:flex absolute top-2 right-2 z-10 w-9 h-9 items-center justify-center rounded-full bg-black/55 border border-white/20 backdrop-blur text-white opacity-0 group-hover:opacity-100 focus:opacity-100 transition"><i data-lucide="arrow-up-right" class="w-4 h-4"></i></a>`:''}
         ${cap?`<figcaption class="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent px-4 pt-10 pb-3 text-sm text-white/90 opacity-0 translate-y-2 transition-all duration-300 group-hover:opacity-100 group-hover:translate-y-0">${esc(cap)}</figcaption>`:''}
       </figure>`; };
 
@@ -537,9 +542,11 @@
     // Lightbox
     const modalBg=document.getElementById('modal-bg'), modalImg=document.getElementById('modal-img'), modalCap=document.getElementById('modal-caption');
     let zoomAnim=null;
-    function openLightbox(src,cap){ modalImg.src=src; modalImg.alt=cap||''; modalCap.textContent=cap||''; modalBg.classList.remove('hidden'); modalBg.setAttribute('aria-hidden','false'); setTimeout(()=>modalImg.focus(),120); gsap.set(modalImg,{scale:1.01,opacity:0}); gsap.to(modalImg,{opacity:1,duration:.5,ease:"power2.out"}); if(zoomAnim)zoomAnim.kill(); zoomAnim=gsap.to(modalImg,{scale:1.1,x:'1vw',y:'-.5vw',duration:8,ease:"power1.inOut",yoyo:true,repeat:-1}); }
+    const modalPage=document.getElementById('modal-page');
+    function openLightbox(src,cap,page){ modalImg.src=src; modalImg.alt=cap||''; modalCap.textContent=cap||'';
+      if(page){ modalPage.href=page; document.getElementById('modal-page-lbl').textContent=LANG==='en'?'Open photo page — try-on & buy':'Ver página da foto — provador e compra'; modalPage.classList.remove('hidden'); modalPage.classList.add('inline-flex'); } else { modalPage.classList.add('hidden'); modalPage.classList.remove('inline-flex'); } modalBg.classList.remove('hidden'); modalBg.setAttribute('aria-hidden','false'); setTimeout(()=>modalImg.focus(),120); gsap.set(modalImg,{scale:1.01,opacity:0}); gsap.to(modalImg,{opacity:1,duration:.5,ease:"power2.out"}); if(zoomAnim)zoomAnim.kill(); zoomAnim=gsap.to(modalImg,{scale:1.1,x:'1vw',y:'-.5vw',duration:8,ease:"power1.inOut",yoyo:true,repeat:-1}); }
     function closeLightbox(){ gsap.to(modalImg,{opacity:0,scale:.98,y:20,duration:.28,ease:"power2.in",onComplete:()=>{ modalBg.classList.add('hidden'); modalBg.setAttribute('aria-hidden','true'); modalImg.src=''; if(zoomAnim)zoomAnim.kill(); }}); }
-    function bindLightbox(){ document.querySelectorAll('[data-lightbox]').forEach(img=> img.addEventListener('click', ()=>openLightbox(img.src, img.getAttribute('data-caption')))); }
+    function bindLightbox(){ document.querySelectorAll('[data-lightbox]').forEach(img=> img.addEventListener('click', ()=>openLightbox(img.src, img.getAttribute('data-caption'), img.getAttribute('data-foto')))); }
     document.getElementById('modal-close').addEventListener('click', closeLightbox);
     modalBg.addEventListener('click', e=>{ if(e.target===modalBg) closeLightbox(); });
     modalImg.addEventListener('click', closeLightbox);

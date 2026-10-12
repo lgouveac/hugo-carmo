@@ -42,6 +42,13 @@ export default async function handler(req, res) {
       });
     }
 
+    // Página de cada fotografia (/foto/:slug) — PT e EN
+    const fotoSlug = p => String(p || '').replace(/\.[a-z0-9]+$/i, '').toLowerCase().replace(/[^a-z0-9]+/g, '-');
+    const fotos = (c.photos || []).filter(p => p.section === 'fotografias' && p.path).sort((a, b) => (a.order || 0) - (b.order || 0));
+    for (const pre of ['', '/en']) {
+      for (const p of fotos) urls.push({ loc: `${SITE}${pre}/foto/${fotoSlug(p.path)}`, lastmod: today, priority: pre ? '0.5' : '0.6' });
+    }
+
     for (const col of c.collections || []) {
       if (col.visible === false || !col.slug) continue;
       urls.push({ loc: `${SITE}/viagem/${col.slug}`, lastmod: today, priority: '0.6' });

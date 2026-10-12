@@ -66,6 +66,19 @@ export default async function handler(req, res) {
       }
     }
 
+    // Uma página por fotografia (/foto/:slug) — legenda, temas, provador e conteúdo relacionado
+    const fotoSlug = p => String(p || '').replace(/\.[a-z0-9]+$/i, '').toLowerCase().replace(/[^a-z0-9]+/g, '-');
+    const fotos = (c.photos || []).filter(p => p.section === 'fotografias' && p.path).sort((a, b) => (a.order || 0) - (b.order || 0));
+    if (fotos.length) {
+      const temaPt = Object.fromEntries((c.temas || []).map(t => [t.slug, t.pt]));
+      parts.push('\n## Fotografias (uma página por obra)\n');
+      parts.push('Cada fotografia tem sua página, com print/quadro à venda e atalhos do Provador IA (blusa, quadro, bandeira, prancha, ambientes):\n');
+      for (const p of fotos) {
+        const tm = (p.temas || []).map(t => temaPt[t] || t).join(', ');
+        parts.push(`- [${p.caption || fotoSlug(p.path)}](${SITE}/foto/${fotoSlug(p.path)}) ([EN](${SITE}/en/foto/${fotoSlug(p.path)}))${tm ? `: tema ${tm}` : ''}`);
+      }
+    }
+
     const cols = (c.collections || []).filter(x => x.visible !== false && x.slug);
     if (cols.length) {
       parts.push('\n## Séries de viagem\n');
